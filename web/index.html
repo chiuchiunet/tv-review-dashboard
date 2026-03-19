@@ -4,59 +4,203 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TV 評論創作室</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;600;700&family=Noto+Serif+HK:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #15151e;
-            --bg-secondary: #1e1e2e;
-            --bg-card: #252538;
-            --text-primary: #ffffff;
-            --text-secondary: #a0a0b0;
-            --accent: #e10600;
-            --success: #00ff88;
-            --border: #333350;
+            /* Sidebar - 永遠深色 */
+            --sidebar-bg: #18181B;
+            --sidebar-text: #FAFAF8;
+            --sidebar-text-muted: #A1A1AA;
+            
+            /* Main Content - 淺色模式 */
+            --main-bg-light: #FAFAF8;
+            --main-text-light: #18181B;
+            --main-text-muted-light: #71717A;
+            
+            /* Main Content - 深色模式 */
+            --main-bg-dark: #18181B;
+            --main-text-dark: #FAFAF8;
+            --main-text-muted-dark: #A1A1AA;
+            
+            /* Accent */
+            --accent: #DC2626;
+            --accent-hover: #B91C1C;
+            
+            /* 當前模式 */
+            --bg-main: var(--main-bg-light);
+            --text-main: var(--main-text-light);
+            --text-muted: var(--main-text-muted-light);
+            
+            /* Typography */
+            --font-heading: 'Noto Serif HK', serif;
+            --font-body: 'Noto Sans HK', sans-serif;
         }
+        
+        [data-theme="dark"] {
+            --bg-main: var(--main-bg-dark);
+            --text-main: var(--main-text-dark);
+            --text-muted: var(--main-text-muted-dark);
+        }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
+            font-family: var(--font-body);
+            background: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+        }
+        
+        /* Sidebar - 永遠深色 */
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+        }
+        
+        .sidebar-logo {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .sidebar-logo span { color: var(--accent); }
+        
+        .sidebar-subtitle {
+            color: var(--sidebar-text-muted);
+            font-size: 0.8rem;
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+        }
+        
+        .nav-item {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .nav-item.active {
+            background: var(--accent);
+        }
+        
+        .nav-item .icon { font-size: 1.1rem; }
+        
+        .sidebar-footer {
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            color: var(--sidebar-text-muted);
+            font-size: 0.85rem;
+        }
+        
+        .theme-toggle button {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: var(--sidebar-text);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 2rem 3rem;
             min-height: 100vh;
         }
-        .header {
-            background: linear-gradient(135deg, var(--bg-secondary) 0%, #1a1a2e 100%);
-            padding: 2rem;
-            border-bottom: 3px solid var(--accent);
-            text-align: center;
+        
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
         }
-        .header h1 {
+        
+        .main-title {
+            font-family: var(--font-heading);
             font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-        .header h1 span { color: var(--accent); }
-        .header p { color: var(--text-secondary); }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
+            font-weight: 600;
         }
         
+        .new-article-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .new-article-btn:hover {
+            background: var(--accent-hover);
+        }
+        
+        /* Filters */
         .filters {
             display: flex;
             gap: 1rem;
             margin-bottom: 2rem;
             flex-wrap: wrap;
         }
+        
         .filters select, .filters input {
             padding: 0.6rem 1rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-main);
             border-radius: 8px;
+            font-family: var(--font-body);
             font-size: 0.95rem;
         }
-        .filters input { flex: 1; min-width: 200px; }
         
+        .filters input { 
+            flex: 1; 
+            min-width: 200px;
+            background: transparent;
+        }
+        
+        /* Article List */
         .article-list {
             display: flex;
             flex-direction: column;
@@ -64,17 +208,18 @@
         }
         
         .article-card {
-            background: var(--bg-card);
+            background: transparent;
             border-radius: 12px;
             padding: 1.5rem;
-            border: 1px solid var(--border);
+            border: 1px solid var(--text-muted);
             cursor: pointer;
             transition: all 0.3s;
         }
+        
         .article-card:hover {
             border-color: var(--accent);
-            transform: translateY(-2px);
         }
+        
         .article-card .platform {
             display: inline-block;
             background: var(--accent);
@@ -83,83 +228,129 @@
             border-radius: 4px;
             font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
         }
+        
         .article-card h3 {
+            font-family: var(--font-heading);
             font-size: 1.3rem;
             margin-bottom: 0.5rem;
         }
+        
         .article-card .meta {
-            color: var(--text-secondary);
+            color: var(--text-muted);
             font-size: 0.85rem;
         }
+        
         .article-card .preview {
-            color: var(--text-secondary);
+            color: var(--text-muted);
             margin-top: 0.75rem;
             font-size: 0.9rem;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         
-        /* Article Detail View */
+        /* Article Detail */
         .article-detail {
             display: none;
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 2rem;
-            border: 1px solid var(--border);
         }
+        
         .article-detail.active { display: block; }
+        
         .back-btn {
             display: inline-block;
             padding: 0.5rem 1rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-main);
             border-radius: 6px;
             cursor: pointer;
             margin-bottom: 1.5rem;
+            font-family: var(--font-body);
             font-size: 0.9rem;
         }
+        
         .back-btn:hover { border-color: var(--accent); }
+        
         .article-detail h2 {
-            font-size: 1.8rem;
+            font-family: var(--font-heading);
+            font-size: 2rem;
             margin-bottom: 1rem;
         }
+        
         .article-detail .meta {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--text-muted);
         }
+        
         .article-detail .content {
+            font-family: var(--font-body);
             line-height: 1.8;
-            font-size: 1rem;
+            font-size: 1.05rem;
         }
-        .article-detail .content p { margin-bottom: 1rem; }
+        
+        .article-detail .content p { margin-bottom: 1.2rem; }
+        
         .article-detail .content h4 {
-            margin: 1.5rem 0 0.5rem;
+            font-family: var(--font-heading);
+            margin: 2rem 0 0.75rem;
             color: var(--accent);
+            font-size: 1.2rem;
         }
         
         .empty-state {
             text-align: center;
-            padding: 3rem;
-            color: var(--text-secondary);
+            padding: 4rem 2rem;
+            color: var(--text-muted);
         }
         
+        /* Responsive */
         @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            .filters { flex-direction: column; }
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 1.5rem; }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <h1>📺 TV <span>評論創作室</span></h1>
-        <p>HK Television Reviews Archive</p>
-    </header>
+    <!-- Sidebar - 深色導航區 -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">📺 TV<span>評論</span></div>
+        <div class="sidebar-subtitle">創作工作室</div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-item active">
+                <span class="icon">📋</span> 全部文章
+            </div>
+            <div class="nav-item">
+                <span class="icon">➕</span> 新建文章
+            </div>
+            <div class="nav-item">
+                <span class="icon">🏷️</span> 分類
+            </div>
+            <div class="nav-item">
+                <span class="icon">📊</span> 數據分析
+            </div>
+            <div class="nav-item">
+                <span class="icon">⚙️</span> 設定
+            </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <div class="theme-toggle">
+                <span>🌙 深色模式</span>
+                <button onclick="toggleTheme()">切換</button>
+            </div>
+        </div>
+    </aside>
 
-    <main class="container" id="mainView">
+    <!-- Main Content - 閱讀區 -->
+    <main class="main-content" id="mainView">
+        <div class="main-header">
+            <h1 class="main-title">全部文章</h1>
+            <button class="new-article-btn">＋ 新建文章</button>
+        </div>
+        
         <div class="filters">
             <select id="platformFilter">
                 <option value="">全部平台</option>
@@ -169,22 +360,34 @@
             </select>
             <input type="text" id="searchInput" placeholder="搜尋文章...">
         </div>
+        
         <div class="article-list" id="articleList">
             <div class="empty-state">載入中...</div>
         </div>
     </main>
 
-    <main class="container" id="detailView">
+    <!-- Article Detail View -->
+    <main class="main-content article-detail" id="detailView">
         <button class="back-btn" onclick="showList()">← 返回列表</button>
         <div id="articleContent"></div>
     </main>
 
     <script>
+        // Theme toggle
+        function toggleTheme() {
+            const body = document.body;
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.setAttribute('data-theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+            }
+        }
+        
         // Articles data
         const articles = [
             {
                 id: 1,
-                title: "《正義女神》— TVB 既「創新」又一次胎死腹中？",
+                title: "《正義女神》— 佘詩曼都救唔到既節奏問題",
                 platform: "TVB",
                 date: "2026-03-19",
                 focus: "題材定位 + 劇本深度 + 節奏問題",
@@ -196,7 +399,7 @@
 <p>套劇打正旗號係「法律劇」，但睇落去，你會發現佢更似一套「情感劇」。案件本身應該有既法律辯論、道德抉擇，全部讓路俾主角既內心掙扎。呢個唔係話情感元素唔可以加，而係當法律橋段變成「推進感情既工具」，套劇既專業性就自然流失。觀眾想睇既係法庭上既攻防，實際睇到既係office入邊既情感糾葛。</p>
 
 <h4>節奏：時快時慢，唔係大問題，但反映出結構失衡</h4>
-<p>開場兩集的確幾紧凑——案件推進快、人物交代也算清晰。但進入中段後，問題就開始浮現。一來就係大案點題，跟住落去就變成單元形式，每集搞一個細case。呢種處理唔算錯，但細節明顯唔夠——案件来得快，去得更快，觀眾根本冇時間投入。有啲案件處理得太表面，仿佛只係為咗「帶出」主角既情感線咁。</p>
+<p>開場兩集的确幾紧凑——案件推進快、人物交代也算清晰。但進入中段後，問題就開始浮現。一來就係大案點題，跟住落去就變成單元形式，每集搞一個細case。呢種處理唔算錯，但細節明顯唔夠——案件来得快，去得更快，觀眾根本冇時間投入。有啲案件處理得太表面，仿佛只係為咗「帶出」主角既情感線咁。</p>
 
 <h4>演員：有新鮮感，但角色深度不足</h4>
 <p>新面孔既加入絕對係好消息。馬貫東、蔣祖曼呢啲新面孔確實為套劇帶來啲生氣。但問題在於，角色設定本身就缺乏深度——新人既功能往往只係「推動劇情」，而非「成為劇情」。TVB 呢幾年既問題就係咁：唔係冇新人，而係唔知點樣用新人。</p>
@@ -207,7 +410,7 @@
             },
             {
                 id: 2,
-                title: "《臥底嬌娃》— TVB 既「輕」之過？",
+                title: "《臥底嬌娃》— 市場定位兩邊唔到岸既典型",
                 platform: "TVB",
                 date: "2026-03-19",
                 focus: "班底實力 + 市場定位 + 製作野心",
