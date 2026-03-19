@@ -9,10 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;600;700&family=Noto+Serif+HK:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #FAFAF8;
-            --text: #18181B;
-            --text-muted: #71717A;
-            --accent: #DC2626;
+            --bg: #F5F5F0;
+            --card-bg: #FFFFFF;
+            --text: #2D2D2D;
+            --text-muted: #6B7280;
+            --accent: #E63946;
+            --accent-light: #FFE5E7;
+            --border: #E5E5E0;
+            --shadow: rgba(0,0,0,0.08);
             --font-heading: 'Noto Serif HK', serif;
             --font-body: 'Noto Sans HK', sans-serif;
         }
@@ -29,30 +33,40 @@
         .container {
             max-width: 720px;
             margin: 0 auto;
-            padding: 24px 20px 60px;
+            padding: 40px 20px 60px;
         }
         
         header {
-            margin-bottom: 24px;
+            margin-bottom: 32px;
+            text-align: center;
         }
         
         header h1 {
             font-family: var(--font-heading);
-            font-size: 1.75rem;
-            margin-bottom: 4px;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+        
+        header .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
         
         .search-box {
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
         
         .search-box input {
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #E4E4E7;
-            border-radius: 8px;
+            padding: 14px 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
             font-size: 1rem;
             font-family: var(--font-body);
+            background: var(--card-bg);
+            transition: border-color 0.2s;
         }
         
         .search-box input:focus {
@@ -62,20 +76,27 @@
         
         .platform-filter {
             display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
+            gap: 10px;
+            margin-bottom: 24px;
+            justify-content: center;
             flex-wrap: wrap;
         }
         
         .filter-btn {
-            padding: 8px 16px;
-            border: 1px solid var(--text-muted);
-            background: transparent;
+            padding: 10px 20px;
+            border: 2px solid var(--border);
+            background: var(--card-bg);
             color: var(--text-muted);
-            border-radius: 20px;
+            border-radius: 24px;
             cursor: pointer;
-            font-size: 0.875rem;
+            font-size: 0.9rem;
+            font-weight: 500;
             transition: all 0.2s;
+        }
+        
+        .filter-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
         }
         
         .filter-btn.active {
@@ -85,48 +106,51 @@
         }
         
         .article-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px var(--shadow);
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid var(--border);
         }
         
         .article-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
         }
         
         .platform {
             display: inline-block;
-            padding: 4px 10px;
-            background: var(--accent);
-            color: white;
-            border-radius: 4px;
-            font-size: 0.7rem;
+            padding: 5px 12px;
+            background: var(--accent-light);
+            color: var(--accent);
+            border-radius: 6px;
+            font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
         }
         
         .article-card h3 {
             font-family: var(--font-heading);
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             line-height: 1.4;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            color: var(--text);
         }
         
         .article-card .meta {
             color: var(--text-muted);
-            font-size: 0.8rem;
-            margin-bottom: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
         }
         
         .article-card .preview {
             color: var(--text-muted);
-            font-size: 0.9rem;
-            line-height: 1.5;
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
         
         /* Modal */
@@ -137,9 +161,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             z-index: 1000;
             overflow-y: auto;
+            backdrop-filter: blur(4px);
         }
         
         .modal.active {
@@ -147,64 +172,81 @@
         }
         
         .modal-content {
-            background: white;
+            background: var(--card-bg);
             max-width: 680px;
-            margin: 24px auto;
-            border-radius: 16px;
-            padding: 28px;
+            margin: 40px auto;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         
         .modal-close {
             position: fixed;
-            top: 16px;
-            right: 16px;
-            background: white;
+            top: 20px;
+            right: 20px;
+            background: var(--card-bg);
             border: none;
             font-size: 1.5rem;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px var(--shadow);
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        
+        .modal-close:hover {
+            background: var(--accent);
+            color: white;
         }
         
         .modal .platform {
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
         
         .modal h2 {
             font-family: var(--font-heading);
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             line-height: 1.4;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            color: var(--text);
         }
         
         .modal .meta {
             color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-bottom: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
         }
         
         .modal .article-content {
-            font-size: 1rem;
-            line-height: 1.8;
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: var(--text);
         }
         
         .modal .article-content h3 {
             font-family: var(--font-heading);
-            font-size: 1.15rem;
-            margin: 20px 0 10px;
+            font-size: 1.2rem;
+            margin: 28px 0 14px;
+            color: var(--accent);
         }
         
         .modal .article-content h4 {
             font-family: var(--font-heading);
-            font-size: 1rem;
-            margin: 16px 0 8px;
+            font-size: 1.05rem;
+            margin: 22px 0 10px;
+        }
+        
+        .modal .article-content p {
+            margin-bottom: 16px;
         }
         
         .empty-state {
             text-align: center;
-            padding: 48px 20px;
+            padding: 60px 20px;
             color: var(--text-muted);
         }
     </style>
@@ -213,6 +255,7 @@
     <div class="container">
         <header>
             <h1>📺 TV 評論創作室</h1>
+            <span class="subtitle">2026年03月19日</span>
         </header>
         
         <div class="search-box">
