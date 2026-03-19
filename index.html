@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F1 Live Dashboard</title>
+    <title>F1 Race Dashboard</title>
     <style>
         :root {
             --bg-primary: #15151e;
@@ -12,9 +12,7 @@
             --text-primary: #ffffff;
             --text-secondary: #a0a0b0;
             --accent: #e10600;
-            --accent-hover: #ff3030;
             --success: #00ff88;
-            --warning: #ffcc00;
             --border: #333350;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,25 +23,47 @@
             min-height: 100vh;
         }
         .header {
-            background: var(--bg-secondary);
-            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, #1a1a2e 100%);
+            padding: 1.5rem 2rem;
+            border-bottom: 3px solid var(--accent);
+        }
+        .header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid var(--accent);
+            margin-bottom: 1rem;
         }
         .header h1 {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
         .header h1 span { color: var(--accent); }
+        .session-select {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .session-select label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .session-select select {
+            padding: 0.6rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            min-width: 280px;
+            cursor: pointer;
+        }
+        .session-select select:hover { border-color: var(--accent); }
         .refresh-indicator {
-            font-size: 0.875rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
         }
-        .refresh-indicator.refreshing { color: var(--warning); }
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -51,139 +71,180 @@
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 1.5rem;
         }
         .card {
             background: var(--bg-card);
-            border-radius: 12px;
-            padding: 1.25rem;
+            border-radius: 16px;
+            padding: 1.5rem;
             border: 1px solid var(--border);
         }
+        .card:hover { border-color: var(--accent); transition: 0.3s; }
         .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
             padding-bottom: 0.75rem;
             border-bottom: 1px solid var(--border);
         }
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        .positions-table, .lap-table, .pit-table, .comparison-table, .team-table {
-            width: 100%;
-            border-collapse: collapse;
+        .race-info {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
         }
-        .positions-table th, .lap-table th, .pit-table th, .comparison-table th, .team-table th {
+        .race-info h2 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .race-info .subtitle {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th {
             text-align: left;
-            padding: 0.5rem;
+            padding: 0.6rem;
             color: var(--text-secondary);
             font-size: 0.75rem;
             text-transform: uppercase;
             font-weight: 600;
         }
-        .positions-table td, .lap-table td, .pit-table td, .comparison-table td, .team-table td {
-            padding: 0.625rem 0.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .positions-table tr:hover, .lap-table tr:hover { background: rgba(255,255,255,0.03); }
-        .pos { font-weight: 700; width: 40px; }
-        .driver { display: flex; align-items: center; gap: 0.5rem; }
-        .driver-code { font-weight: 600; }
+        td { padding: 0.7rem 0.5rem; border-bottom: 1px solid var(--border); }
+        tr:hover { background: rgba(255,255,255,0.03); }
+        .pos { font-weight: 700; font-size: 1.1rem; width: 45px; }
+        .driver { display: flex; align-items: center; gap: 0.6rem; }
+        .team-color { width: 4px; height: 28px; border-radius: 2px; }
+        .driver-code { font-weight: 600; font-size: 1rem; }
         .driver-name { font-size: 0.8rem; color: var(--text-secondary); }
-        .team-color { width: 4px; height: 24px; border-radius: 2px; flex-shrink: 0; }
-        .gap { font-family: monospace; color: var(--text-secondary); }
-        .gap.leader { color: var(--success); }
-        .lap-time { font-weight: 600; font-family: monospace; }
+        .gap { font-family: 'Courier New', monospace; color: var(--text-secondary); }
+        .gap.leader { color: var(--success); font-weight: 600; }
+        .lap-time { font-weight: 600; font-family: 'Courier New', monospace; }
         .lap-time.fastest { color: var(--success); }
         .sector { color: var(--text-secondary); font-size: 0.85rem; }
         .pit-stop {
             display: inline-block;
             background: var(--accent);
             color: white;
-            padding: 0.2rem 0.5rem;
+            padding: 0.25rem 0.6rem;
             border-radius: 4px;
             font-size: 0.8rem;
             font-weight: 600;
         }
-        .pit-time { font-family: monospace; }
+        .pit-time { font-family: 'Courier New', monospace; }
         .pit-time.good { color: var(--success); }
         .pit-time.bad { color: var(--accent); }
-        .comparison-selectors {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
+        .comparison-selectors { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
         .comparison-selectors select {
             flex: 1;
-            padding: 0.5rem;
+            padding: 0.6rem;
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             color: var(--text-primary);
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 0.9rem;
         }
         .team-entry { display: flex; align-items: center; gap: 0.75rem; }
         .team-logo {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: 700;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
         .team-name { font-weight: 600; }
-        .team-points { font-family: monospace; font-weight: 600; color: var(--accent); }
+        .team-points { font-family: 'Courier New', monospace; font-weight: 600; color: var(--accent); }
         .loading, .error, .no-data { text-align: center; padding: 2rem; color: var(--text-secondary); }
         .error { color: var(--accent); }
+        .race-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        .status-complete { background: var(--success); color: #000; }
+        .status-upcoming { background: var(--accent); color: white; }
+        .status-live { background: #ff4444; color: white; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         @media (max-width: 768px) {
             .container { padding: 1rem; }
             .grid { grid-template-columns: 1fr; }
             .header { padding: 1rem; }
-            .header h1 { font-size: 1.2rem; }
+            .header-top { flex-direction: column; gap: 1rem; }
+            .session-select { flex-direction: column; width: 100%; }
+            .session-select select { width: 100%; min-width: auto; }
         }
     </style>
 </head>
 <body>
     <header class="header">
-        <h1>🏎️ F1 <span>Live Dashboard</span></h1>
-        <div class="refresh-indicator" id="refreshIndicator">Last updated: --</div>
+        <div class="header-top">
+            <h1>🏎️ F1 <span>Race Dashboard</span></h1>
+            <div class="refresh-indicator" id="refreshIndicator">Loading...</div>
+        </div>
+        <div class="session-select">
+            <label>🏁 Select Race:</label>
+            <select id="sessionSelect">
+                <option value="">Loading sessions...</option>
+            </select>
+        </div>
     </header>
+
     <main class="container">
+        <div class="race-info" id="raceInfo">
+            <div class="loading">Select a race to view data</div>
+        </div>
+
         <div class="grid">
             <div class="card">
-                <div class="card-header"><div class="card-title">🏎️ Live Positions</div></div>
-                <div id="positions"><div class="loading">Loading positions...</div></div>
+                <div class="card-header"><div class="card-title">📊 Race Results</div></div>
+                <div id="positions"><div class="no-data">Select a race</div></div>
             </div>
+
             <div class="card">
-                <div class="card-header"><div class="card-title">⏱️ Lap Times</div></div>
-                <div id="lapTimes"><div class="loading">Loading lap times...</div></div>
+                <div class="card-header"><div class="card-title">⏱️ Fastest Laps</div></div>
+                <div id="lapTimes"><div class="no-data">Select a race</div></div>
             </div>
+
             <div class="card">
                 <div class="card-header"><div class="card-title">🛞 Pit Stops</div></div>
-                <div id="pitStops"><div class="loading">Loading pit stops...</div></div>
+                <div id="pitStops"><div class="no-data">Select a race</div></div>
             </div>
+
             <div class="card">
                 <div class="card-header"><div class="card-title">👥 Driver Comparison</div></div>
                 <div class="comparison-selectors">
-                    <select id="driver1"><option value="">Select Driver 1</option></select>
-                    <select id="driver2"><option value="">Select Driver 2</option></select>
+                    <select id="driver1"><option value="">Driver 1</option></select>
+                    <select id="driver2"><option value="">Driver 2</option></select>
                 </div>
-                <div id="comparison"><div class="no-data">Select two drivers to compare</div></div>
+                <div id="comparison"><div class="no-data">Select two drivers</div></div>
             </div>
+
             <div class="card" style="grid-column: 1 / -1;">
-                <div class="card-header"><div class="card-title">🏁 Constructor Standings</div></div>
-                <div id="teamStandings"><div class="loading">Loading team standings...</div></div>
+                <div class="card-header"><div class="card-title">🏆 Constructor Standings</div></div>
+                <div id="teamStandings"><div class="no-data">Select a race</div></div>
             </div>
         </div>
     </main>
+
     <script>
         const API_BASE = 'https://api.openf1.org/v1';
         const TEAM_COLORS = {
@@ -193,7 +254,8 @@
         };
         
         let currentSessionKey = null;
-        let cachedData = { positions: [], laps: [], pit: [], drivers: [], intervals: [] };
+        let sessions = [];
+        let allDrivers = [];
 
         async function fetchWithTimeout(url, timeout = 15000) {
             const controller = new AbortController();
@@ -209,18 +271,61 @@
             }
         }
 
-        async function getLatestSession() {
+        async function loadSessions() {
+            const select = document.getElementById('sessionSelect');
             try {
-                const sessions = await fetchWithTimeout(`${API_BASE}/sessions?year=2026&session_type=Race`);
-                if (sessions && sessions.length > 0) {
-                    // Get the most recent race session
-                    currentSessionKey = sessions[0].session_key;
-                    return currentSessionKey;
+                // Get 2026 sessions
+                sessions = await fetchWithTimeout(`${API_BASE}/sessions?year=2026&order_by=date_start`);
+                
+                if (!Array.isArray(sessions) || sessions.length === 0) {
+                    select.innerHTML = '<option value="">No sessions found</option>';
+                    return;
                 }
-            } catch (e) {
-                console.log('No session found, trying any session...');
+
+                // Filter for race weekends
+                const raceSessions = sessions.filter(s => 
+                    s.session_type === 'Race' || s.session_type === 'Qualifying' || s.session_type === 'Sprint Race'
+                );
+
+                let html = '<option value="">🏁 Select a race weekend...</option>';
+                
+                // Group by meeting
+                let currentMeeting = null;
+                raceSessions.forEach(s => {
+                    const meetingName = s.meeting_name || s.location || 'Unknown';
+                    if (currentMeeting !== meetingName) {
+                        currentMeeting = meetingName;
+                        html += `<option value="" disabled>━━━ ${meetingName} ━━━</option>`;
+                    }
+                    const status = getSessionStatus(s);
+                    const icon = s.session_type === 'Race' ? '🏁' : s.session_type === 'Qualifying' ? '🎯' : '⚡';
+                    html += `<option value="${s.session_key}">${icon} ${s.session_type} - ${formatDate(s.date_start)} ${status}</option>`;
+                });
+
+                select.innerHTML = html;
+                select.addEventListener('change', (e) => {
+                    currentSessionKey = e.target.value;
+                    if (currentSessionKey) refresh();
+                });
+
+            } catch (error) {
+                select.innerHTML = `<option value="">Error: ${error.message}</option>`;
             }
-            return null;
+        }
+
+        function getSessionStatus(session) {
+            const now = new Date();
+            const start = new Date(session.date_start);
+            const end = session.date_end ? new Date(session.date_end) : new Date(start.getTime() + 2*60*60*1000);
+            
+            if (now < start) return '(Upcoming)';
+            if (now > end) return '';
+            return '(LIVE)';
+        }
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
         }
 
         function getTeamColor(teamName) {
@@ -244,45 +349,62 @@
             return `+${mins}:${secs.padStart(2, '0')}`;
         }
 
+        async function loadRaceInfo() {
+            const container = document.getElementById('raceInfo');
+            if (!currentSessionKey) {
+                container.innerHTML = '<div class="no-data">Select a race to view data</div>';
+                return;
+            }
+
+            try {
+                const session = sessions.find(s => s.session_key == currentSessionKey);
+                if (!session) throw new Error('Session not found');
+
+                const status = getSessionStatus(session);
+                const statusClass = status === '(LIVE)' ? 'status-live' : status === '(Upcoming)' ? 'status-upcoming' : 'status-complete';
+
+                container.innerHTML = `
+                    <h2>${session.meeting_name || 'F1 Race'}<span class="race-status ${statusClass}">${status}</span></h2>
+                    <div class="subtitle">📍 ${session.location || 'Unknown'} | 🗓️ ${formatDate(session.date_start)} | ${session.session_type || 'Race'}</div>
+                `;
+
+            } catch (error) {
+                container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
         async function loadPositions() {
             const container = document.getElementById('positions');
-            try {
-                let url = `${API_BASE}/position`;
-                if (currentSessionKey) url += `?session_key=${currentSessionKey}`;
-                const positions = await fetchWithTimeout(url);
-                const drivers = await fetchWithTimeout(`${API_BASE}/drivers`);
-                let intervals = [];
-                try {
-                    if (currentSessionKey) {
-                        intervals = await fetchWithTimeout(`${API_BASE}/intervals?session_key=${currentSessionKey}`);
-                    }
-                } catch(e) { intervals = []; }
+            if (!currentSessionKey) return;
 
-                if (!positions || positions.length === 0) {
-                    container.innerHTML = '<div class="no-data">No race in progress</div>';
+            try {
+                const positions = await fetchWithTimeout(`${API_BASE}/position?session_key=${currentSessionKey}`);
+                const drivers = await fetchWithTimeout(`${API_BASE}/drivers?session_key=${currentSessionKey}`);
+                
+                if (!Array.isArray(positions) || positions.length === 0) {
+                    container.innerHTML = '<div class="no-data">No position data</div>';
                     return;
                 }
 
                 const driverMap = {};
                 if (Array.isArray(drivers)) drivers.forEach(d => driverMap[d.driver_number] = d);
-                const intervalMap = {};
-                if (Array.isArray(intervals)) intervals.forEach(i => intervalMap[i.driver_number] = i);
 
                 const sorted = [...positions].sort((a, b) => a.position - b.position);
-                let html = '<table class="positions-table"><thead><tr><th>Pos</th><th>Driver</th><th>Gap</th></tr></thead><tbody>';
+
+                let html = '<table><thead><tr><th>Pos</th><th>Driver</th><th>Gap</th></tr></thead><tbody>';
                 sorted.forEach((pos, idx) => {
                     const driver = driverMap[pos.driver_number];
-                    const interval = intervalMap[pos.driver_number];
                     const team = driver?.team_name || 'Unknown';
                     const color = getTeamColor(team);
                     const name = driver ? `${driver.first_name} ${driver.last_name}` : `Driver ${pos.driver_number}`;
                     const code = driver?.driver_code || `${pos.driver_number}`;
-                    const gap = idx === 0 ? 'Leader' : formatGap(interval?.gap_to_leader);
+                    const gap = idx === 0 ? 'Leader' : formatGap(pos.gap_to_leader);
+                    
                     html += `<tr><td class="pos">${pos.position}</td><td><div class="driver"><div class="team-color" style="background:${color}"></div><div><div class="driver-code">${code}</div><div class="driver-name">${name}</div></div></div></td><td class="gap ${idx===0?'leader':''}">${gap}</td></tr>`;
                 });
                 html += '</tbody></table>';
                 container.innerHTML = html;
-                cachedData.positions = sorted;
+
             } catch (error) {
                 container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
             }
@@ -290,13 +412,13 @@
 
         async function loadLapTimes() {
             const container = document.getElementById('lapTimes');
+            if (!currentSessionKey) return;
+
             try {
-                let url = `${API_BASE}/laps`;
-                if (currentSessionKey) url += `?session_key=${currentSessionKey}`;
-                const laps = await fetchWithTimeout(url);
+                const laps = await fetchWithTimeout(`${API_BASE}/laps?session_key=${currentSessionKey}&limit=500`);
                 
                 if (!Array.isArray(laps) || laps.length === 0) {
-                    container.innerHTML = '<div class="no-data">No lap data available</div>';
+                    container.innerHTML = '<div class="no-data">No lap data</div>';
                     return;
                 }
 
@@ -309,7 +431,7 @@
                 const sorted = Object.values(latestLaps).filter(l => l.lap_duration).sort((a, b) => a.lap_duration - b.lap_duration);
                 const fastestTime = sorted[0]?.lap_duration;
 
-                let html = '<table class="lap-table"><thead><tr><th>Driver</th><th>Lap</th><th>Time</th><th>S1</th><th>S2</th><th>S3</th></tr></thead><tbody>';
+                let html = '<table><thead><tr><th>Driver</th><th>Lap</th><th>Time</th><th>S1</th><th>S2</th><th>S3</th></tr></thead><tbody>';
                 sorted.slice(0, 20).forEach(lap => {
                     const isFastest = lap.lap_duration === fastestTime;
                     const code = lap.driver_code || `${lap.driver_number}`;
@@ -317,7 +439,7 @@
                 });
                 html += '</tbody></table>';
                 container.innerHTML = html;
-                cachedData.laps = sorted;
+
             } catch (error) {
                 container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
             }
@@ -325,18 +447,18 @@
 
         async function loadPitStops() {
             const container = document.getElementById('pitStops');
+            if (!currentSessionKey) return;
+
             try {
-                let url = `${API_BASE}/pit`;
-                if (currentSessionKey) url += `?session_key=${currentSessionKey}`;
-                const pits = await fetchWithTimeout(url);
+                const pits = await fetchWithTimeout(`${API_BASE}/pit?session_key=${currentSessionKey}`);
                 
                 if (!Array.isArray(pits) || pits.length === 0) {
-                    container.innerHTML = '<div class="no-data">No pit stop data</div>';
+                    container.innerHTML = '<div class="no-data">No pit stops</div>';
                     return;
                 }
 
                 const sorted = [...pits].sort((a, b) => new Date(b.pit_in_time) - new Date(a.pit_in_time));
-                let html = '<table class="pit-table"><thead><tr><th>Driver</th><th>Stop</th><th>Time</th></tr></thead><tbody>';
+                let html = '<table><thead><tr><th>Driver</th><th>Stop</th><th>Time</th></tr></thead><tbody>';
                 sorted.slice(0, 15).forEach(pit => {
                     const code = pit.driver_code || `${pit.driver_number}`;
                     const pitTime = pit.pit_duration ? pit.pit_duration.toFixed(2) : '--';
@@ -345,21 +467,32 @@
                 });
                 html += '</tbody></table>';
                 container.innerHTML = html;
+
             } catch (error) {
                 container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
             }
         }
 
         async function loadDriversForComparison() {
+            if (!currentSessionKey) return;
+            
             try {
-                const drivers = await fetchWithTimeout(`${API_BASE}/drivers`);
+                const drivers = await fetchWithTimeout(`${API_BASE}/drivers?session_key=${currentSessionKey}`);
+                const positions = await fetchWithTimeout(`${API_BASE}/position?session_key=${currentSessionKey}`);
+                
                 if (!Array.isArray(drivers) || drivers.length === 0) return;
 
                 const select1 = document.getElementById('driver1');
                 const select2 = document.getElementById('driver2');
-                const uniqueDrivers = [...new Set(cachedData.positions.map(p => p.driver_number))].map(num => drivers.find(d => d.driver_number === num)).filter(d => d);
+                
+                // Get drivers who participated
+                const driverNums = new Set(positions.map(p => p.driver_number));
+                const activeDrivers = drivers.filter(d => driverNums.has(d.driver_number));
 
-                uniqueDrivers.forEach(driver => {
+                select1.innerHTML = '<option value="">Driver 1</option>';
+                select2.innerHTML = '<option value="">Driver 2</option>';
+
+                activeDrivers.forEach(driver => {
                     const code = driver.driver_code;
                     const name = `${driver.first_name} ${driver.last_name}`;
                     const option = `<option value="${code}">${code} - ${name}</option>`;
@@ -369,36 +502,36 @@
 
                 select1.addEventListener('change', updateComparison);
                 select2.addEventListener('change', updateComparison);
-            } catch (error) { console.error('Error loading drivers:', error); }
+
+            } catch (error) { console.error('Error:', error); }
         }
 
         async function updateComparison() {
-            const driver1 = document.getElementById('driver1').value;
-            const driver2 = document.getElementById('driver2').value;
+            const d1 = document.getElementById('driver1').value;
+            const d2 = document.getElementById('driver2').value;
             const container = document.getElementById('comparison');
 
-            if (!driver1 || !driver2) {
-                container.innerHTML = '<div class="no-data">Select two drivers to compare</div>';
+            if (!d1 || !d2 || !currentSessionKey) {
+                container.innerHTML = '<div class="no-data">Select two drivers</div>';
                 return;
             }
 
             try {
-                let url = `${API_BASE}/laps`;
-                if (currentSessionKey) url += `?session_key=${currentSessionKey}`;
-                const laps = await fetchWithTimeout(url);
+                const laps = await fetchWithTimeout(`${API_BASE}/laps?session_key=${currentSessionKey}&limit=500`);
                 
                 if (!Array.isArray(laps) || laps.length === 0) {
-                    container.innerHTML = '<div class="no-data">No lap data available</div>';
+                    container.innerHTML = '<div class="no-data">No lap data</div>';
                     return;
                 }
 
-                const d1Laps = laps.filter(l => l.driver_code === driver1).sort((a, b) => b.lap_number - a.lap_number);
-                const d2Laps = laps.filter(l => l.driver_code === driver2).sort((a, b) => b.lap_number - a.lap_number);
+                const d1Laps = laps.filter(l => l.driver_code === d1).sort((a, b) => b.lap_number - a.lap_number);
+                const d2Laps = laps.filter(l => l.driver_code === d2).sort((a, b) => b.lap_number - a.lap_number);
                 const d1Recent = d1Laps.slice(0, 5);
                 const d2Recent = d2Laps.slice(0, 5);
 
-                let html = '<table class="comparison-table"><thead><tr><th>Lap</th><th class="driver-cell">'+driver1+'</th><th class="driver-cell">'+driver2+'</th><th>Diff</th></tr></thead><tbody>';
+                let html = '<table><thead><tr><th>Lap</th><th>'+d1+'</th><th>'+d2+'</th><th>Diff</th></tr></thead><tbody>';
                 const maxLaps = Math.max(d1Recent.length, d2Recent.length);
+                
                 for (let i = 0; i < maxLaps; i++) {
                     const l1 = d1Recent[i], l2 = d2Recent[i];
                     const lapNum = l1?.lap_number || l2?.lap_number || i + 1;
@@ -413,6 +546,7 @@
                 }
                 html += '</tbody></table>';
                 container.innerHTML = html;
+
             } catch (error) {
                 container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
             }
@@ -420,17 +554,14 @@
 
         async function loadTeamStandings() {
             const container = document.getElementById('teamStandings');
+            if (!currentSessionKey) return;
+
             try {
-                const drivers = await fetchWithTimeout(`${API_BASE}/drivers`);
-                let positions = [];
-                try {
-                    let url = `${API_BASE}/position`;
-                    if (currentSessionKey) url += `?session_key=${currentSessionKey}`;
-                    positions = await fetchWithTimeout(url);
-                } catch(e) { positions = []; }
+                const drivers = await fetchWithTimeout(`${API_BASE}/drivers?session_key=${currentSessionKey}`);
+                const positions = await fetchWithTimeout(`${API_BASE}/position?session_key=${currentSessionKey}`);
                 
                 if (!Array.isArray(drivers) || drivers.length === 0) {
-                    container.innerHTML = '<div class="no-data">No driver data</div>';
+                    container.innerHTML = '<div class="no-data">No data</div>';
                     return;
                 }
 
@@ -448,37 +579,32 @@
                 }
 
                 const sorted = Object.entries(teamPoints).sort((a, b) => b[1] - a[1]);
-                let html = '<table class="team-table"><thead><tr><th>Pos</th><th>Team</th><th>Points</th></tr></thead><tbody>';
+                let html = '<table><thead><tr><th>Pos</th><th>Team</th><th>Points</th></tr></thead><tbody>';
                 sorted.forEach(([team, pts], idx) => {
                     const color = getTeamColor(team);
                     html += `<tr><td class="pos">${idx+1}</td><td><div class="team-entry"><div class="team-logo" style="background:${color}">${team.substring(0,3).toUpperCase()}</div><div class="team-name">${team}</div></div></td><td class="team-points">${pts}</td></tr>`;
                 });
                 html += '</tbody></table>';
                 container.innerHTML = html;
+
             } catch (error) {
                 container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
             }
         }
 
-        function updateRefreshIndicator() {
-            const indicator = document.getElementById('refreshIndicator');
-            indicator.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
-            indicator.classList.add('refreshing');
-            setTimeout(() => indicator.classList.remove('refreshing'), 500);
+        function updateIndicator() {
+            document.getElementById('refreshIndicator').textContent = `Updated: ${new Date().toLocaleTimeString()}`;
         }
 
         async function refresh() {
-            // Try to get session first if we don't have one
-            if (!currentSessionKey) await getLatestSession();
-            updateRefreshIndicator();
-            await Promise.all([loadPositions(), loadLapTimes(), loadPitStops(), loadTeamStandings()]);
+            if (!currentSessionKey) return;
+            updateIndicator();
+            await Promise.all([loadRaceInfo(), loadPositions(), loadLapTimes(), loadPitStops(), loadTeamStandings()]);
             await loadDriversForComparison();
         }
 
-        // Initial load
-        refresh();
-        // Auto-refresh every 30 seconds to avoid rate limit
-        setInterval(refresh, 30000);
+        // Initialize
+        loadSessions();
     </script>
 </body>
 </html>
