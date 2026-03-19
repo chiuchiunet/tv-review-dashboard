@@ -1,40 +1,104 @@
 #!/usr/bin/env python3
 """
 TV Review Dashboard Generator
-自動從 database 讀取評論，generate HTML dashboard
+直接從 md file 讀取評論內容，generate HTML dashboard
 """
 
-import sqlite3
-import json
+import os
+import re
 from datetime import datetime
 
-DB_PATH = "/home/ubuntu/.openclaw/workspace-creation/data/creation.db"
+TV_REVIEWS_DIR = "/home/ubuntu/.openclaw/workspace-creation/tv-reviews"
 OUTPUT_PATH = "/home/ubuntu/.openclaw/workspace-creation/web/index.html"
 
 def get_reviews():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM tv_reviews ORDER BY id DESC")
-    rows = cursor.fetchall()
-    conn.close()
-    return [dict(row) for row in rows]
+    """從 md files 讀取評論"""
+    reviews = []
+    files = sorted(os.listdir(TV_REVIEWS_DIR), reverse=True)
+    
+    for i, filename in enumerate(files, 1):
+        if not filename.endswith('.md'):
+            continue
+            
+        filepath = os.path.join(TV_REVIEWS_DIR, filename)
+        with open(filepath, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Extract frontmatter
+        title = ""
+        platform = ""
+        
+        # Parse frontmatter
+        lines = content.split('\n')
+        in_frontmatter = False
+        frontmatter = {}
+        body_start = 0
+        
+        for j, line in enumerate(lines):
+            if line.strip() == '---':
+                if not in_frontmatter:
+                    in_frontmatter = True
+                else:
+                    body_start = j + 1
+                continue
+            if in_frontmatter and ':' in line:
+                key, val = line.split(':', 1)
+                frontmatter[key.strip()] = val.strip()
+        
+        title = frontmatter.get('title', filename.replace('.md', ''))
+        platform = frontmatter.get('platform', 'TVB')
+        
+        # Extract article body (after ## 文章 or first heading)
+        body = '\n'.join(lines[body_start:])
+        
+        # Find article section
+        article_match = re.search(r'##\s*文章\s*\n+(.+?)(?=##|\Z)', body, re.DOTALL)
+        if article_match:
+            article = article_match.group(1).strip()
+        else:
+            # If no ## 文章, use whole body minus headers
+            article = re.sub(r'^#.+\n', '', body, flags=re.MULTILINE).strip()
+        
+        # Clean article - convert markdown to HTML-ish
+        article = article.replace('\n\n', '</p><p>')
+        article = f'<p>{article}</p>'
+        article = re.sub(r'### (.+)', r'<h4>\1</h4>', article)
+        article = re.sub(r'## (.+)', r'<h3>\1</h3>', article)
+        
+        # Preview - first 120 chars
+        preview_text = re.sub('<[^>]+>', '', article)  # strip HTML
+        preview = preview_text[:120] + '...' if len(preview_text) > 120 else preview_text
+        
+        # Extract date from filename
+        date_match = re.match(r'(\d{4}-\d{2}-\d{2})', filename)
+        date = date_match.group(1) if date_match else '2026-03-19'
+        
+        reviews.append({
+            'id': i,
+            'title': title,
+            'platform': platform,
+            'date': date,
+            'focus': frontmatter.get('tags', ''),
+            'preview': preview,
+            'article': article
+        })
+    
+    return reviews
+
+def escape_js(text):
+    """Escape text for JavaScript string"""
+    return text.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n').replace('\r', '')
 
 def generate_article_html(review):
     """Generate article object for JS"""
-    # Extract preview (first 100 chars from article field or generate)
-    article = review.get('article', '')
-    preview = article[:120] + '...' if len(article) > 120 else article
-    
-    # Convert to JS format
     return f"""{{
                 id: {review['id']},
-                title: "{review['title']}",
-                platform: "{review['platform']}",
+                title: "{escape_js(review['title'])}",
+                platform: "{escape_js(review['platform'])}",
                 date: "{review['date']}",
-                focus: "{review['focus']}",
-                preview: "{preview}",
-                content: `<p>{article}</p>`
+                focus: "{escape_js(review['focus'])}",
+                preview: "{escape_js(review['preview'])}",
+                content: `{review['article']} `
             }}"""
 
 def generate_html(articles):
@@ -282,6 +346,18 @@ def generate_html(articles):
             font-size: 1rem;
         }}
         
+        .modal .content h3 {{
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            margin: 24px 0 12px;
+        }}
+        
+        .modal .content h4 {{
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            margin: 20px 0 8px;
+        }}
+        
         .empty-state {{
             text-align: center;
             padding: 48px;
@@ -366,7 +442,7 @@ def generate_html(articles):
                 <div class="article-card" onclick="showArticle(${{article.id}})">
                     <span class="platform">${{article.platform}}</span>
                     <h3>${{article.title}}</h3>
-                    <div class="meta">📅 ${{article.date}} | 🔍 ${{article.focus}}</div>
+                    <div class="meta">📅 ${{article.date}}</div>
                     <p class="preview">${{article.preview}}</p>
                 </div>
             `).join('');
@@ -394,7 +470,7 @@ def generate_html(articles):
             if (!article) return;
             
             document.getElementById('modalTitle').textContent = article.title;
-            document.getElementById('modalMeta').textContent = `${{article.platform}} | 📅 ${{article.date}} | 🔍 ${{article.focus}}`;
+            document.getElementById('modalMeta').textContent = `${{article.platform}} | 📅 ${{article.date}}`;
             document.getElementById('modalContent').innerHTML = article.content;
             document.getElementById('articleModal').classList.add('active');
         }}
