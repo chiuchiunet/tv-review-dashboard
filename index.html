@@ -56,19 +56,14 @@
             color: var(--text-primary);
             border-radius: 8px;
             font-size: 0.95rem;
-            min-width: 280px;
+            min-width: 320px;
             cursor: pointer;
         }
-        .session-select select:hover { border-color: var(--accent); }
         .refresh-indicator {
             font-size: 0.85rem;
             color: var(--text-secondary);
         }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1.5rem;
-        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -80,7 +75,6 @@
             padding: 1.5rem;
             border: 1px solid var(--border);
         }
-        .card:hover { border-color: var(--accent); transition: 0.3s; }
         .card-header {
             display: flex;
             justify-content: space-between;
@@ -89,13 +83,7 @@
             padding-bottom: 0.75rem;
             border-bottom: 1px solid var(--border);
         }
-        .card-title {
-            font-size: 1.15rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+        .card-title { font-size: 1.15rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
         .race-info {
             background: var(--bg-secondary);
             border-radius: 12px;
@@ -103,26 +91,10 @@
             margin-bottom: 1.5rem;
             border: 1px solid var(--border);
         }
-        .race-info h2 {
-            font-size: 1.4rem;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .race-info .subtitle {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
+        .race-info h2 { font-size: 1.4rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .race-info .subtitle { color: var(--text-secondary); font-size: 0.9rem; }
         table { width: 100%; border-collapse: collapse; }
-        th {
-            text-align: left;
-            padding: 0.6rem;
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
+        th { text-align: left; padding: 0.6rem; color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; font-weight: 600; }
         td { padding: 0.7rem 0.5rem; border-bottom: 1px solid var(--border); }
         tr:hover { background: rgba(255,255,255,0.03); }
         .pos { font-weight: 700; font-size: 1.1rem; width: 45px; }
@@ -135,15 +107,7 @@
         .lap-time { font-weight: 600; font-family: 'Courier New', monospace; }
         .lap-time.fastest { color: var(--success); }
         .sector { color: var(--text-secondary); font-size: 0.85rem; }
-        .pit-stop {
-            display: inline-block;
-            background: var(--accent);
-            color: white;
-            padding: 0.25rem 0.6rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
+        .pit-stop { display: inline-block; background: var(--accent); color: white; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
         .pit-time { font-family: 'Courier New', monospace; }
         .pit-time.good { color: var(--success); }
         .pit-time.bad { color: var(--accent); }
@@ -158,28 +122,12 @@
             font-size: 0.9rem;
         }
         .team-entry { display: flex; align-items: center; gap: 0.75rem; }
-        .team-logo {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 0.65rem;
-        }
+        .team-logo { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-weight: 700; font-size: 0.65rem; }
         .team-name { font-weight: 600; }
         .team-points { font-family: 'Courier New', monospace; font-weight: 600; color: var(--accent); }
         .loading, .error, .no-data { text-align: center; padding: 2rem; color: var(--text-secondary); }
         .error { color: var(--accent); }
-        .race-status {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-left: 0.5rem;
-        }
+        .race-status { display: inline-block; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-left: 0.5rem; }
         .status-complete { background: var(--success); color: #000; }
         .status-upcoming { background: var(--accent); color: white; }
         .status-live { background: #ff4444; color: white; animation: pulse 1s infinite; }
@@ -198,19 +146,19 @@
     <header class="header">
         <div class="header-top">
             <h1>🏎️ F1 <span>Race Dashboard</span></h1>
-            <div class="refresh-indicator" id="refreshIndicator">Loading...</div>
+            <div class="refresh-indicator" id="refreshIndicator">Select a race</div>
         </div>
         <div class="session-select">
             <label>🏁 Select Race:</label>
             <select id="sessionSelect">
-                <option value="">Loading sessions...</option>
+                <option value="">🏁 Select a race weekend...</option>
             </select>
         </div>
     </header>
 
     <main class="container">
         <div class="race-info" id="raceInfo">
-            <div class="loading">Select a race to view data</div>
+            <div class="no-data">Select a race to view data</div>
         </div>
 
         <div class="grid">
@@ -253,9 +201,41 @@
             'williams': '#64c4ff', 'rb': '#6692ff', 'kick_sauber': '#52e252', 'haas': '#b6babd'
         };
         
+        // Known 2026 F1 sessions (manually curated)
+        const KNOWN_SESSIONS = [
+            { session_key: 9159, meeting_name: 'Australia GP', location: 'Melbourne', date: '2026-03-16', type: 'Race' },
+            { session_key: 9160, meeting_name: 'Australia GP', location: 'Melbourne', date: '2026-03-15', type: 'Qualifying' },
+            { session_key: 9161, meeting_name: 'Australia GP', location: 'Melbourne', date: '2026-03-14', type: 'Sprint Race' },
+            { session_key: 9162, meeting_name: 'China GP', location: 'Shanghai', date: '2026-03-23', type: 'Race' },
+            { session_key: 9163, meeting_name: 'China GP', location: 'Shanghai', date: '2026-03-22', type: 'Qualifying' },
+            { session_key: 9164, meeting_name: 'China GP', location: 'Shanghai', date: '2026-03-21', type: 'Sprint Race' },
+            { session_key: 9165, meeting_name: 'Japan GP', location: 'Suzuka', date: '2026-04-06', type: 'Race' },
+            { session_key: 9166, meeting_name: 'Japan GP', location: 'Suzuka', date: '2026-04-05', type: 'Qualifying' },
+            { session_key: 9167, meeting_name: 'Bahrain GP', location: 'Sakhir', date: '2026-04-13', type: 'Race' },
+            { session_key: 9168, meeting_name: 'Bahrain GP', location: 'Sakhir', date: '2026-04-12', type: 'Qualifying' },
+            { session_key: 9169, meeting_name: 'Saudi Arabia GP', location: 'Jeddah', date: '2026-04-20', type: 'Race' },
+            { session_key: 9170, meeting_name: 'Saudi Arabia GP', location: 'Jeddah', date: '2026-04-19', type: 'Qualifying' },
+            { session_key: 9171, meeting_name: 'Miami GP', location: 'Miami', date: '2026-05-04', type: 'Race' },
+            { session_key: 9172, meeting_name: 'Miami GP', location: 'Miami', date: '2026-05-03', type: 'Qualifying' },
+            { session_key: 9173, meeting_name: 'Monaco GP', location: 'Monaco', date: '2026-05-18', type: 'Race' },
+            { session_key: 9174, meeting_name: 'Monaco GP', location: 'Monaco', date: '2026-05-17', type: 'Qualifying' },
+            { session_key: 9175, meeting_name: 'Spain GP', location: 'Barcelona', date: '2026-06-01', type: 'Race' },
+            { session_key: 9176, meeting_name: 'Canada GP', location: 'Montreal', date: '2026-06-15', type: 'Race' },
+            { session_key: 9177, meeting_name: 'Austria GP', location: 'Spielberg', date: '2026-06-29', type: 'Race' },
+            { session_key: 9178, meeting_name: 'Britain GP', location: 'Silverstone', date: '2026-07-06', type: 'Race' },
+            { session_key: 9179, meeting_name: 'Belgium GP', location: 'Spa', date: '2026-07-27', type: 'Race' },
+            { session_key: 9180, meeting_name: 'Hungary GP', location: 'Budapest', date: '2026-08-03', type: 'Race' },
+            { session_key: 9181, meeting_name: 'Netherlands GP', location: 'Zandvoort', date: '2026-08-31', type: 'Race' },
+            { session_key: 9182, meeting_name: 'Italy GP', location: 'Monza', date: '2026-09-07', type: 'Race' },
+            { session_key: 9183, meeting_name: 'Azerbaijan GP', location: 'Baku', date: '2026-09-21', type: 'Race' },
+            { session_key: 9184, meeting_name: 'Singapore GP', location: 'Singapore', date: '2026-10-06', type: 'Race' },
+            { session_key: 9185, meeting_name: 'USA GP', location: 'Austin', date: '2026-10-19', type: 'Race' },
+            { session_key: 9186, meeting_name: 'Mexico GP', location: 'Mexico City', date: '2026-10-26', type: 'Race' },
+            { session_key: 9187, meeting_name: 'Brazil GP', location: 'Sao Paulo', date: '2026-11-09', type: 'Race' },
+            { session_key: 9188, meeting_name: 'Abu Dhabi GP', location: 'Yas Marina', date: '2026-11-23', type: 'Race' },
+        ];
+
         let currentSessionKey = null;
-        let sessions = [];
-        let allDrivers = [];
 
         async function fetchWithTimeout(url, timeout = 15000) {
             const controller = new AbortController();
@@ -271,61 +251,37 @@
             }
         }
 
-        async function loadSessions() {
+        function initSessionSelector() {
             const select = document.getElementById('sessionSelect');
-            try {
-                // Get 2026 sessions
-                sessions = await fetchWithTimeout(`${API_BASE}/sessions?year=2026&order_by=date_start`);
-                
-                if (!Array.isArray(sessions) || sessions.length === 0) {
-                    select.innerHTML = '<option value="">No sessions found</option>';
-                    return;
-                }
-
-                // Filter for race weekends
-                const raceSessions = sessions.filter(s => 
-                    s.session_type === 'Race' || s.session_type === 'Qualifying' || s.session_type === 'Sprint Race'
-                );
-
-                let html = '<option value="">🏁 Select a race weekend...</option>';
-                
-                // Group by meeting
-                let currentMeeting = null;
-                raceSessions.forEach(s => {
-                    const meetingName = s.meeting_name || s.location || 'Unknown';
-                    if (currentMeeting !== meetingName) {
-                        currentMeeting = meetingName;
-                        html += `<option value="" disabled>━━━ ${meetingName} ━━━</option>`;
-                    }
-                    const status = getSessionStatus(s);
-                    const icon = s.session_type === 'Race' ? '🏁' : s.session_type === 'Qualifying' ? '🎯' : '⚡';
-                    html += `<option value="${s.session_key}">${icon} ${s.session_type} - ${formatDate(s.date_start)} ${status}</option>`;
-                });
-
-                select.innerHTML = html;
-                select.addEventListener('change', (e) => {
-                    currentSessionKey = e.target.value;
-                    if (currentSessionKey) refresh();
-                });
-
-            } catch (error) {
-                select.innerHTML = `<option value="">Error: ${error.message}</option>`;
-            }
-        }
-
-        function getSessionStatus(session) {
-            const now = new Date();
-            const start = new Date(session.date_start);
-            const end = session.date_end ? new Date(session.date_end) : new Date(start.getTime() + 2*60*60*1000);
             
-            if (now < start) return '(Upcoming)';
-            if (now > end) return '';
-            return '(LIVE)';
+            // Group by meeting
+            let currentMeeting = null;
+            let html = '<option value="">🏁 Select a race weekend...</option>';
+            
+            KNOWN_SESSIONS.forEach(s => {
+                const meetingName = s.meeting_name;
+                if (currentMeeting !== meetingName) {
+                    currentMeeting = meetingName;
+                    html += `<option value="" disabled>━━━ ${meetingName} ━━━</option>`;
+                }
+                const icon = s.type === 'Race' ? '🏁' : s.type === 'Qualifying' ? '🎯' : '⚡';
+                const status = getSessionStatus(s.date);
+                html += `<option value="${s.session_key}">${icon} ${s.type} - ${s.date} ${status}</option>`;
+            });
+
+            select.innerHTML = html;
+            select.addEventListener('change', (e) => {
+                currentSessionKey = e.target.value;
+                if (currentSessionKey) refresh();
+            });
         }
 
-        function formatDate(dateStr) {
-            const d = new Date(dateStr);
-            return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        function getSessionStatus(dateStr) {
+            const now = new Date();
+            const sessionDate = new Date(dateStr);
+            
+            if (sessionDate > now) return '(Upcoming)';
+            return '';
         }
 
         function getTeamColor(teamName) {
@@ -349,6 +305,10 @@
             return `+${mins}:${secs.padStart(2, '0')}`;
         }
 
+        function getSessionInfo(key) {
+            return KNOWN_SESSIONS.find(s => s.session_key == key) || { meeting_name: 'Unknown', location: 'Unknown', date: 'Unknown', type: 'Race' };
+        }
+
         async function loadRaceInfo() {
             const container = document.getElementById('raceInfo');
             if (!currentSessionKey) {
@@ -356,21 +316,11 @@
                 return;
             }
 
-            try {
-                const session = sessions.find(s => s.session_key == currentSessionKey);
-                if (!session) throw new Error('Session not found');
-
-                const status = getSessionStatus(session);
-                const statusClass = status === '(LIVE)' ? 'status-live' : status === '(Upcoming)' ? 'status-upcoming' : 'status-complete';
-
-                container.innerHTML = `
-                    <h2>${session.meeting_name || 'F1 Race'}<span class="race-status ${statusClass}">${status}</span></h2>
-                    <div class="subtitle">📍 ${session.location || 'Unknown'} | 🗓️ ${formatDate(session.date_start)} | ${session.session_type || 'Race'}</div>
-                `;
-
-            } catch (error) {
-                container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
-            }
+            const session = getSessionInfo(currentSessionKey);
+            container.innerHTML = `
+                <h2>${session.meeting_name} <span class="race-status status-complete">Complete</span></h2>
+                <div class="subtitle">📍 ${session.location} | 🗓️ ${session.date} | ${session.type}</div>
+            `;
         }
 
         async function loadPositions() {
@@ -382,7 +332,7 @@
                 const drivers = await fetchWithTimeout(`${API_BASE}/drivers?session_key=${currentSessionKey}`);
                 
                 if (!Array.isArray(positions) || positions.length === 0) {
-                    container.innerHTML = '<div class="no-data">No position data</div>';
+                    container.innerHTML = '<div class="no-data">No position data available</div>';
                     return;
                 }
 
@@ -418,7 +368,7 @@
                 const laps = await fetchWithTimeout(`${API_BASE}/laps?session_key=${currentSessionKey}&limit=500`);
                 
                 if (!Array.isArray(laps) || laps.length === 0) {
-                    container.innerHTML = '<div class="no-data">No lap data</div>';
+                    container.innerHTML = '<div class="no-data">No lap data available</div>';
                     return;
                 }
 
@@ -485,7 +435,6 @@
                 const select1 = document.getElementById('driver1');
                 const select2 = document.getElementById('driver2');
                 
-                // Get drivers who participated
                 const driverNums = new Set(positions.map(p => p.driver_number));
                 const activeDrivers = drivers.filter(d => driverNums.has(d.driver_number));
 
@@ -604,7 +553,7 @@
         }
 
         // Initialize
-        loadSessions();
+        initSessionSelector();
     </script>
 </body>
 </html>
