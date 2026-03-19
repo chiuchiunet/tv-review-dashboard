@@ -9,69 +9,58 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;600;700&family=Noto+Serif+HK:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --sidebar-bg: #18181B;
-            --sidebar-text: #FAFAF8;
-            --sidebar-text-muted: #A1A1AA;
-            --main-bg: #FAFAF8;
-            --main-text: #18181B;
-            --main-text-muted: #71717A;
+            --bg: #FAFAF8;
+            --text: #18181B;
+            --text-muted: #71717A;
             --accent: #DC2626;
             --font-heading: 'Noto Serif HK', serif;
             --font-body: 'Noto Sans HK', sans-serif;
-            --sidebar-width: 280px;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: var(--font-body);
-            background: var(--main-bg);
-            color: var(--main-text);
-            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
         }
         
-        /* Mobile First - Hidden sidebar by default */
-        .sidebar {
-            display: none;
-        }
-        
-        .main {
-            padding: 20px;
-            max-width: 800px;
+        .container {
+            max-width: 720px;
             margin: 0 auto;
+            padding: 24px 20px 60px;
         }
         
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
+        header {
+            margin-bottom: 32px;
+            padding-bottom: 20px;
             border-bottom: 1px solid #E4E4E7;
         }
         
-        .header h1 {
+        header h1 {
             font-family: var(--font-heading);
-            font-size: 1.5rem;
+            font-size: 1.75rem;
+            margin-bottom: 4px;
         }
         
-        .header .date {
-            color: var(--main-text-muted);
-            font-size: 0.875rem;
+        header .date {
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
         
         .platform-filter {
             display: flex;
             gap: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             flex-wrap: wrap;
         }
         
         .filter-btn {
             padding: 8px 16px;
-            border: 1px solid var(--main-text-muted);
+            border: 1px solid var(--text-muted);
             background: transparent;
-            color: var(--main-text-muted);
+            color: var(--text-muted);
             border-radius: 20px;
             cursor: pointer;
             font-size: 0.875rem;
@@ -84,24 +73,14 @@
             color: white;
         }
         
-        .article-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+        .article {
+            margin-bottom: 40px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid #E4E4E7;
         }
         
-        .article-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .article-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        .article:last-child {
+            border-bottom: none;
         }
         
         .platform {
@@ -112,268 +91,95 @@
             border-radius: 4px;
             font-size: 0.7rem;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
         
-        .article-card h3 {
+        .article h2 {
             font-family: var(--font-heading);
-            font-size: 1.1rem;
-            margin-bottom: 8px;
+            font-size: 1.4rem;
             line-height: 1.4;
-        }
-        
-        .meta {
-            color: var(--main-text-muted);
-            font-size: 0.8rem;
             margin-bottom: 8px;
         }
         
-        .preview {
-            color: var(--main-text-muted);
-            font-size: 0.9rem;
-            line-height: 1.5;
+        .article .meta {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 16px;
         }
         
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-        
-        .modal.active {
-            display: block;
-        }
-        
-        .modal-content {
-            background: white;
-            padding: 24px;
-            max-width: 100%;
-            height: 100%;
-            overflow-y: auto;
-        }
-        
-        .modal-close {
-            position: fixed;
-            top: 16px;
-            right: 16px;
-            background: white;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            z-index: 1001;
-        }
-        
-        .modal h2 {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-            padding-right: 40px;
-        }
-        
-        .modal .meta {
-            margin-bottom: 20px;
-        }
-        
-        .modal .content {
-            line-height: 1.8;
+        .article .content {
             font-size: 1rem;
+            line-height: 1.8;
         }
         
-        .modal .content h3 {
+        .article .content h3 {
             font-family: var(--font-heading);
             font-size: 1.15rem;
+            margin: 24px 0 12px;
+        }
+        
+        .article .content h4 {
+            font-family: var(--font-heading);
+            font-size: 1rem;
             margin: 20px 0 10px;
         }
         
-        .modal .content h4 {
-            font-family: var(--font-heading);
-            font-size: 1rem;
-            margin: 16px 0 8px;
+        .article .content p {
+            margin-bottom: 16px;
         }
         
         .empty-state {
             text-align: center;
             padding: 48px 20px;
-            color: var(--main-text-muted);
-        }
-        
-        /* Desktop */
-        @media (min-width: 768px) {
-            .sidebar {
-                display: flex;
-                flex-direction: column;
-                width: var(--sidebar-width);
-                background: var(--sidebar-bg);
-                padding: 24px;
-                position: fixed;
-                height: 100vh;
-                overflow-y: auto;
-            }
-            
-            .sidebar h1 {
-                font-family: var(--font-heading);
-                color: var(--sidebar-text);
-                font-size: 1.5rem;
-                margin-bottom: 8px;
-            }
-            
-            .sidebar .subtitle {
-                color: var(--sidebar-text-muted);
-                font-size: 0.875rem;
-                margin-bottom: 32px;
-            }
-            
-            .stats {
-                margin-top: auto;
-                padding-top: 24px;
-                border-top: 1px solid #3F3F46;
-            }
-            
-            .stats-item {
-                display: flex;
-                justify-content: space-between;
-                color: var(--sidebar-text-muted);
-                font-size: 0.875rem;
-                margin-bottom: 8px;
-            }
-            
-            .main {
-                margin-left: var(--sidebar-width);
-                padding: 32px 48px;
-                max-width: none;
-            }
-            
-            .header h1 {
-                font-size: 1.75rem;
-            }
-            
-            .modal-content {
-                border-radius: 16px;
-                padding: 32px;
-                max-width: 800px;
-                margin: 48px auto;
-                height: auto;
-                max-height: 90vh;
-            }
-            
-            .modal-close {
-                position: absolute;
-                background: transparent;
-                box-shadow: none;
-            }
+            color: var(--text-muted);
         }
     </style>
 </head>
 <body>
-    <aside class="sidebar">
-        <h1>📺 TV 評論創作室</h1>
-        <p class="subtitle">電視劇評分析 · 2026-03-19</p>
+    <div class="container">
+        <header>
+            <h1>📺 TV 評論創作室</h1>
+            <span class="date">2026-03-19</span>
+        </header>
         
         <div class="platform-filter">
-            <button class="filter-btn active" onclick="filterByPlatform('all')">全部</button>
-            <button class="filter-btn" onclick="filterByPlatform('TVB')">TVB</button>
-            <button class="filter-btn" onclick="filterByPlatform('ViuTV')">ViuTV</button>
+            <button class="filter-btn active" onclick="filterBy('all')">全部</button>
+            <button class="filter-btn" onclick="filterBy('TVB')">TVB</button>
+            <button class="filter-btn" onclick="filterBy('ViuTV')">ViuTV</button>
         </div>
         
-        <div class="stats">
-            <div class="stats-item">
-                <span>總評論數</span>
-                <span id="totalCount">3</span>
-            </div>
-            <div class="stats-item">
-                <span>TVB</span>
-                <span id="tvbCount">2</span>
-            </div>
-            <div class="stats-item">
-                <span>ViuTV</span>
-                <span id="viutvCount">1</span>
-            </div>
-        </div>
-    </aside>
-    
-    <main class="main">
-        <div class="header">
-            <div>
-                <h1>全部評論</h1>
-                <span class="date">2026-03-19</span>
-            </div>
-        </div>
-        
-        <div class="platform-filter" style="display:none;">
-            <button class="filter-btn active" onclick="filterByPlatform('all')">全部</button>
-            <button class="filter-btn" onclick="filterByPlatform('TVB')">TVB</button>
-            <button class="filter-btn" onclick="filterByPlatform('ViuTV')">ViuTV</button>
-        </div>
-        
-        <div class="article-list" id="articleList"></div>
-    </main>
-    
-    <div class="modal" id="articleModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">×</button>
-            <h2 id="modalTitle"></h2>
-            <div class="meta" id="modalMeta"></div>
-            <div class="content" id="modalContent"></div>
+        <div id="articleList">
+                        <article class="article">
+                <span class="platform">ViuTV</span>
+                <h2>《足球女將2》— 續作的尷尬與ViuTV的隱憂</h2>
+                <div class="meta">📅 2026-03-19</div>
+                <div class="content">
+                    <p>曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。</p>
+                </div>
+            </article>
+            <article class="article">
+                <span class="platform">TVB</span>
+                <h2>《臥底嬌娃》— 市場定位兩邊唔到岸既典型</h2>
+                <div class="meta">📅 2026-03-19</div>
+                <div class="content">
+                    <p>《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。</p>
+                </div>
+            </article>
+            <article class="article">
+                <span class="platform">TVB</span>
+                <h2>《正義女神》— 佘詩曼都救唔到既節奏問題</h2>
+                <div class="meta">📅 2026-03-19</div>
+                <div class="content">
+                    <p>《正義女神》卡士強勁——佘詩曼回歸，陳煒、譚耀文坐鎮，再加上「《新聞女王》班底」呢個賣點，聽落就知係TVB既年度大製作。但睇完成之後，你會發現問題唔係出在演員，而係出在劇本本身。</p>
+                </div>
+            </article>
         </div>
     </div>
     
     <script>
-        const articles = [
-            {
-                id: 1,
-                title: "《足球女將2》— 續作的尷尬與ViuTV的隱憂",
-                platform: "ViuTV",
-                date: "2026-03-19",
-                preview: "曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。",
-                content: `<p>曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。</p> `
-            },
-            {
-                id: 2,
-                title: "《臥底嬌娃》— 市場定位兩邊唔到岸既典型",
-                platform: "TVB",
-                date: "2026-03-19",
-                preview: "《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。",
-                content: `<p>《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。</p> `
-            },
-            {
-                id: 3,
-                title: "《正義女神》— 佘詩曼都救唔到既節奏問題",
-                platform: "TVB",
-                date: "2026-03-19",
-                preview: "《正義女神》卡士強勁——佘詩曼回歸，陳煒、譚耀文坐鎮，再加上「《新聞女王》班底」呢個賣點，聽落就知係TVB既年度大製作。但睇完成之後，你會發現問題唔係出在演員，而係出在劇本本身。",
-                content: `<p>《正義女神》卡士強勁——佘詩曼回歸，陳煒、譚耀文坐鎮，再加上「《新聞女王》班底」呢個賣點，聽落就知係TVB既年度大製作。但睇完成之後，你會發現問題唔係出在演員，而係出在劇本本身。</p> `
-            }
-        ];
+        const articles = document.querySelectorAll('.article');
         
-        function renderArticles(filteredArticles) {
-            const list = document.getElementById('articleList');
-            
-            if (filteredArticles.length === 0) {
-                list.innerHTML = '<div class="empty-state">暫時未有文章</div>';
-                return;
-            }
-            
-            list.innerHTML = filteredArticles.map(article => `
-                <div class="article-card" onclick="showArticle(${article.id})">
-                    <span class="platform">${article.platform}</span>
-                    <h3>${article.title}</h3>
-                    <div class="meta">📅 ${article.date}</div>
-                    <p class="preview">${article.preview}</p>
-                </div>
-            `).join('');
-        }
-        
-        function filterByPlatform(platform) {
+        function filterBy(platform) {
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.textContent.includes(platform) || (platform === 'all' && btn.textContent === '全部')) {
@@ -381,34 +187,15 @@
                 }
             });
             
-            if (platform === 'all') {
-                renderArticles(articles);
-            } else {
-                renderArticles(articles.filter(a => a.platform === platform));
-            }
+            articles.forEach(article => {
+                const p = article.querySelector('.platform').textContent;
+                if (platform === 'all' || p === platform) {
+                    article.style.display = 'block';
+                } else {
+                    article.style.display = 'none';
+                }
+            });
         }
-        
-        function showArticle(id) {
-            const article = articles.find(a => a.id === id);
-            if (!article) return;
-            
-            document.getElementById('modalTitle').textContent = article.title;
-            document.getElementById('modalMeta').textContent = `${article.platform} | 📅 ${article.date}`;
-            document.getElementById('modalContent').innerHTML = article.content;
-            document.getElementById('articleModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeModal() {
-            document.getElementById('articleModal').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-        
-        document.getElementById('articleModal').addEventListener('click', (e) => {
-            if (e.target.id === 'articleModal') closeModal();
-        });
-        
-        renderArticles(articles);
     </script>
 </body>
 </html>
