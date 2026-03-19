@@ -12,144 +12,91 @@
             --sidebar-bg: #18181B;
             --sidebar-text: #FAFAF8;
             --sidebar-text-muted: #A1A1AA;
-            --main-bg-light: #FAFAF8;
-            --main-text-light: #18181B;
-            --main-text-muted-light: #71717A;
-            --main-bg-dark: #18181B;
-            --main-text-dark: #FAFAF8;
-            --main-text-muted-dark: #A1A1AA;
+            --main-bg: #FAFAF8;
+            --main-text: #18181B;
+            --main-text-muted: #71717A;
             --accent: #DC2626;
-            --accent-hover: #B91C1C;
-            --bg-main: var(--main-bg-light);
-            --text-main: var(--main-text-light);
-            --text-muted: var(--main-text-muted-light);
             --font-heading: 'Noto Serif HK', serif;
             --font-body: 'Noto Sans HK', sans-serif;
-        }
-        
-        [data-theme="dark"] {
-            --bg-main: var(--main-bg-dark);
-            --text-main: var(--main-text-dark);
-            --text-muted: var(--main-text-muted-dark);
+            --sidebar-width: 280px;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: var(--font-body);
-            background: var(--bg-main);
-            color: var(--text-main);
+            background: var(--main-bg);
+            color: var(--main-text);
             min-height: 100vh;
-            display: flex;
-            transition: background 0.3s, color 0.3s;
         }
         
+        /* Mobile First - Hidden sidebar by default */
         .sidebar {
-            width: 280px;
-            background: var(--sidebar-bg);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-        }
-        
-        .sidebar h1 {
-            font-family: var(--font-heading);
-            color: var(--sidebar-text);
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-        
-        .sidebar .subtitle {
-            color: var(--sidebar-text-muted);
-            font-size: 0.875rem;
-            margin-bottom: 32px;
-        }
-        
-        .platform-filter {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }
-        
-        .filter-btn {
-            padding: 8px 16px;
-            border: 1px solid var(--sidebar-text-muted);
-            background: transparent;
-            color: var(--sidebar-text-muted);
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.875rem;
-            transition: all 0.2s;
-        }
-        
-        .filter-btn:hover, .filter-btn.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: white;
-        }
-        
-        .stats {
-            margin-top: auto;
-            padding-top: 24px;
-            border-top: 1px solid #3F3F46;
-        }
-        
-        .stats-item {
-            display: flex;
-            justify-content: space-between;
-            color: var(--sidebar-text-muted);
-            font-size: 0.875rem;
-            margin-bottom: 8px;
+            display: none;
         }
         
         .main {
-            margin-left: 280px;
-            flex: 1;
-            padding: 32px 48px;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
         }
         
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #E4E4E7;
         }
         
-        .header h2 {
+        .header h1 {
             font-family: var(--font-heading);
-            font-size: 1.75rem;
+            font-size: 1.5rem;
         }
         
-        .theme-toggle {
-            background: none;
-            border: none;
+        .header .date {
+            color: var(--main-text-muted);
+            font-size: 0.875rem;
+        }
+        
+        .platform-filter {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--main-text-muted);
+            background: transparent;
+            color: var(--main-text-muted);
+            border-radius: 20px;
             cursor: pointer;
-            font-size: 1.25rem;
-            padding: 8px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
         }
         
         .article-list {
             display: flex;
             flex-direction: column;
-            gap: 24px;
+            gap: 16px;
         }
         
         .article-card {
             background: white;
             border-radius: 12px;
-            padding: 24px;
+            padding: 20px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        [data-theme="dark"] .article-card {
-            background: #27272A;
-            box-shadow: none;
         }
         
         .article-card:hover {
@@ -159,31 +106,32 @@
         
         .platform {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 4px 10px;
             background: var(--accent);
             color: white;
             border-radius: 4px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
         
         .article-card h3 {
             font-family: var(--font-heading);
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             margin-bottom: 8px;
+            line-height: 1.4;
         }
         
         .meta {
-            color: var(--text-muted);
-            font-size: 0.875rem;
-            margin-bottom: 12px;
+            color: var(--main-text-muted);
+            font-size: 0.8rem;
+            margin-bottom: 8px;
         }
         
         .preview {
-            color: var(--text-muted);
+            color: var(--main-text-muted);
             font-size: 0.9rem;
-            line-height: 1.6;
+            line-height: 1.5;
         }
         
         .modal {
@@ -199,40 +147,41 @@
         }
         
         .modal.active {
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            padding: 48px;
+            display: block;
         }
         
         .modal-content {
-            background: var(--bg-main);
-            border-radius: 16px;
-            padding: 32px;
-            max-width: 800px;
-            width: 100%;
-            position: relative;
+            background: white;
+            padding: 24px;
+            max-width: 100%;
+            height: 100%;
+            overflow-y: auto;
         }
         
         .modal-close {
-            position: absolute;
+            position: fixed;
             top: 16px;
             right: 16px;
-            background: none;
+            background: white;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: var(--text-muted);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 1001;
         }
         
         .modal h2 {
             font-family: var(--font-heading);
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             margin-bottom: 8px;
+            padding-right: 40px;
         }
         
         .modal .meta {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
         
         .modal .content {
@@ -242,20 +191,86 @@
         
         .modal .content h3 {
             font-family: var(--font-heading);
-            font-size: 1.25rem;
-            margin: 24px 0 12px;
+            font-size: 1.15rem;
+            margin: 20px 0 10px;
         }
         
         .modal .content h4 {
             font-family: var(--font-heading);
-            font-size: 1.1rem;
-            margin: 20px 0 8px;
+            font-size: 1rem;
+            margin: 16px 0 8px;
         }
         
         .empty-state {
             text-align: center;
-            padding: 48px;
-            color: var(--text-muted);
+            padding: 48px 20px;
+            color: var(--main-text-muted);
+        }
+        
+        /* Desktop */
+        @media (min-width: 768px) {
+            .sidebar {
+                display: flex;
+                flex-direction: column;
+                width: var(--sidebar-width);
+                background: var(--sidebar-bg);
+                padding: 24px;
+                position: fixed;
+                height: 100vh;
+                overflow-y: auto;
+            }
+            
+            .sidebar h1 {
+                font-family: var(--font-heading);
+                color: var(--sidebar-text);
+                font-size: 1.5rem;
+                margin-bottom: 8px;
+            }
+            
+            .sidebar .subtitle {
+                color: var(--sidebar-text-muted);
+                font-size: 0.875rem;
+                margin-bottom: 32px;
+            }
+            
+            .stats {
+                margin-top: auto;
+                padding-top: 24px;
+                border-top: 1px solid #3F3F46;
+            }
+            
+            .stats-item {
+                display: flex;
+                justify-content: space-between;
+                color: var(--sidebar-text-muted);
+                font-size: 0.875rem;
+                margin-bottom: 8px;
+            }
+            
+            .main {
+                margin-left: var(--sidebar-width);
+                padding: 32px 48px;
+                max-width: none;
+            }
+            
+            .header h1 {
+                font-size: 1.75rem;
+            }
+            
+            .modal-content {
+                border-radius: 16px;
+                padding: 32px;
+                max-width: 800px;
+                margin: 48px auto;
+                height: auto;
+                max-height: 90vh;
+            }
+            
+            .modal-close {
+                position: absolute;
+                background: transparent;
+                box-shadow: none;
+            }
         }
     </style>
 </head>
@@ -288,8 +303,16 @@
     
     <main class="main">
         <div class="header">
-            <h2>全部評論</h2>
-            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+            <div>
+                <h1>全部評論</h1>
+                <span class="date">2026-03-19</span>
+            </div>
+        </div>
+        
+        <div class="platform-filter" style="display:none;">
+            <button class="filter-btn active" onclick="filterByPlatform('all')">全部</button>
+            <button class="filter-btn" onclick="filterByPlatform('TVB')">TVB</button>
+            <button class="filter-btn" onclick="filterByPlatform('ViuTV')">ViuTV</button>
         </div>
         
         <div class="article-list" id="articleList"></div>
@@ -305,27 +328,12 @@
     </div>
     
     <script>
-        // Theme toggle
-        function toggleTheme() {
-            const body = document.body;
-            const btn = document.querySelector('.theme-toggle');
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                btn.textContent = '🌙';
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                btn.textContent = '☀️';
-            }
-        }
-        
-        // Articles data
         const articles = [
             {
                 id: 1,
                 title: "足球女將2",
                 platform: "TVB",
                 date: "2026-03-19",
-                focus: "",
                 preview: "曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。",
                 content: `<p>曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。</p> `
             },
@@ -334,7 +342,6 @@
                 title: "臥底嬌娃",
                 platform: "TVB",
                 date: "2026-03-19",
-                focus: "",
                 preview: "《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。班底：有人，但未有足...",
                 content: `<p>《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。</p><p><h4>班底：有人，但未有足夠既說服力</p><p>張曦雯，陳瀅、羅毓儀呢啲新面孔，顏值OK，亦落力。但當一套劇既成敗取決於「臥底」呢個題材既張力既時候，問題就出現——呢班演員，暫時未有足夠既氣場去 carry 咁複雜既角色設定。你會見到佢地好落力，但畀你既感覺就只係「努力但未夠」。呢個唔係演技問題，而係——TVB 既新一批演員，仲未有足夠既代表作去建立觀眾既信任。</p><p>#<h3>市場定位：本地定內地？一个兩邊都唔到岸既選擇</p><p>呢套劇既「輕」，從製作到卡士都feel 到——佢唔係大製作，明顯係針對本地觀眾既輕喜劇。但與此同時，佢既題材（臥底、警匪）又唔係內地觀眾特別buy 既類型。呢種「想做本地，但又眼金金望住內地市場」既心態，正正就係TVB既死症——唔知自己做緊俾邊個睇。</p><p>### 製作野心：有心，但力不足</p><p>要拍臥底題材，需要足夠既情節張力、人物複雜度，同理應既製作資源。但呢套劇畀人既感覺就係「想做但做唔出」——案件設定偏簡單、人物關係冇乜層次、節奏亦欠缺緊張感。呢啲唔係態度問題，而係—— TVB 既製作資源同班底，暫時未能咁樣燒。</p><p>### 總結</p><p>《臥底嬌娃》既問題，唔係「做得差」，而係「力有不逮」。當平台既班底未夠，當市場定位仍然模糊，呢啲所謂既「新嘗試」，最終只會變成「縮水版既失望」。TVB 而家最需要既，唔係再拍幾多套呢啲「輕裝劇」，而係真真正正諗清楚——邊個先係自己既觀眾？</p><p>---</p></h4></h3> `
             },
@@ -343,13 +350,11 @@
                 title: "正義女神",
                 platform: "TVB",
                 date: "2026-03-19",
-                focus: "",
                 preview: "《正義女神》卡士強勁——佘詩曼回歸，陳煒、譚耀文坐鎮，再加上「《新聞女王》班底」呢個賣點，聽落就知係TVB既年度大製作。但睇完成之後，你會發現問題唔係出在演員，而係出在劇本本身。題材定位：想講法律，結果講咗感情套劇打正旗號係「法律劇」，但睇...",
                 content: `<p>《正義女神》卡士強勁——佘詩曼回歸，陳煒、譚耀文坐鎮，再加上「《新聞女王》班底」呢個賣點，聽落就知係TVB既年度大製作。但睇完成之後，你會發現問題唔係出在演員，而係出在劇本本身。</p><p><h4>題材定位：想講法律，結果講咗感情</p><p>套劇打正旗號係「法律劇」，但睇落去，你會發現佢更似一套「情感劇」。案件本身應該有既法律辯論、道德抉擇，全部讓路俾主角既內心掙扎。呢個唔係話情感元素唔可以加，而係當法律橋段變成「推進感情既工具」，套劇既專業性就自然流失。觀眾想睇既係法庭上既攻防，實際睇到既係office入邊既情感糾葛。</p><p>#<h3>節奏：時快時慢，唔係大問題，但反映出結構失衡</p><p>開場兩集的確幾紧凑——案件推進快、人物交代也算清晰。但進入中段後，問題就開始浮現。一來就係大案點題，跟住落去就變成單元形式，每集搞一個細case。呢種處理唔算錯，但細節明顯唔夠——案件来得快，去得更快，觀眾根本冇時間投入。有啲案件處理得太表面，仿佛只係為咗「帶出」主角既情感線咁。</p><p>### 演員：有新鮮感，但角色深度不足</p><p>新面孔既加入絕對係好消息。馬貫東、蔣祖曼呢啲新面孔確實為套劇帶來啲生氣。但問題在於，角色設定本身就缺乏深度——新人既功能往往只係「推動劇情」，而非「成為劇情」。TVB 呢幾年既問題就係咁：唔係冇新人，而係唔知點樣用新人。</p><p>### 網上評價兩極，其實反映緊更大既問題</p><p>網上有人話「有當年追《新聞女王》既感覺」，亦有人話「劇情懸浮、邏輯混亂」。呢種兩極其實唔難理解——TVB 既觀眾本身就好好矛盾：佢地想創新，但又唔想要太過離地既野；佢地想睇新面孔，但又接受唔到舊人消失。</p><p>### 總結</p><p>《正義女神》並非爛劇，佢有亮點——演員表現OK、題材有社會意義。但呢套劇既問題，其實就係 TVB 呢幾年既縮影：想突破，但每一步都走得戰戰競競，最終變成「有啲嘢睇，但唔係好好睇」。如果要再進一步，TVB 需要既唔係再搵多啲「第二個佘詩曼」，而係真真正正去諗：究竟觀眾想睇乜？</p><p>---</p></h4></h3> `
             }
         ];
         
-        // Render articles
         function renderArticles(filteredArticles) {
             const list = document.getElementById('articleList');
             
@@ -368,7 +373,6 @@
             `).join('');
         }
         
-        // Filter by platform
         function filterByPlatform(platform) {
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
@@ -384,7 +388,6 @@
             }
         }
         
-        // Show article modal
         function showArticle(id) {
             const article = articles.find(a => a.id === id);
             if (!article) return;
@@ -393,19 +396,18 @@
             document.getElementById('modalMeta').textContent = `${article.platform} | 📅 ${article.date}`;
             document.getElementById('modalContent').innerHTML = article.content;
             document.getElementById('articleModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
         
-        // Close modal
         function closeModal() {
             document.getElementById('articleModal').classList.remove('active');
+            document.body.style.overflow = '';
         }
         
-        // Close modal on outside click
         document.getElementById('articleModal').addEventListener('click', (e) => {
             if (e.target.id === 'articleModal') closeModal();
         });
         
-        // Initial render
         renderArticles(articles);
     </script>
 </body>
