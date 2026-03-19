@@ -24,40 +24,35 @@ def get_reviews():
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
         
-        # Extract frontmatter
-        title = ""
-        platform = ""
-        
-        # Parse frontmatter
+        # Simple frontmatter extraction - just get title and platform from first few lines
         lines = content.split('\n')
-        in_frontmatter = False
-        frontmatter = {}
-        body_start = 0
+        title = filename.replace('.md', '').replace('2026-03-19-', '')
+        platform = 'TVB'
         
-        for j, line in enumerate(lines):
-            if line.strip() == '---':
-                if not in_frontmatter:
-                    in_frontmatter = True
-                else:
-                    body_start = j + 1
-                continue
-            if in_frontmatter and ':' in line:
-                key, val = line.split(':', 1)
-                frontmatter[key.strip()] = val.strip()
+        for line in lines[:10]:  # Check first 10 lines for frontmatter
+            if line.startswith('title:'):
+                title = line.split('title:')[1].strip()
+            elif line.startswith('platform:'):
+                platform = line.split('platform:')[1].strip()
         
-        title = frontmatter.get('title', filename.replace('.md', ''))
-        platform = frontmatter.get('platform', 'TVB')
+        # Find ## 文章 section - look for it anywhere in file
+        article_match = re.search(r'##\s*文章\s*\n+(.+?)(?=^##\s|\Z)', content, re.MULTILINE | re.DOTALL)
         
-        # Extract article body (after ## 文章 or first heading)
-        body = '\n'.join(lines[body_start:])
-        
-        # Find article section
-        article_match = re.search(r'##\s*文章\s*\n+(.+?)(?=##|\Z)', body, re.DOTALL)
         if article_match:
             article = article_match.group(1).strip()
         else:
-            # If no ## 文章, use whole body minus headers
-            article = re.sub(r'^#.+\n', '', body, flags=re.MULTILINE).strip()
+            # Fallback: skip everything until first H2 or content
+            article = content
+            # Remove frontmatter
+            if article.startswith('---'):
+                parts = article.split('---', 2)
+                if len(parts) >= 3:
+                    article = parts[2]
+            # Remove title
+            article = re.sub(r'^# .+\n', '', article, flags=re.MULTILINE)
+            # Remove all ## headers and their content
+            article = re.sub(r'^## .+\n', '', article, flags=re.MULTILINE)
+            article = article.strip()
         
         # Clean article - convert markdown to HTML-ish
         article = article.replace('\n\n', '</p><p>')
@@ -78,7 +73,7 @@ def get_reviews():
             'title': title,
             'platform': platform,
             'date': date,
-            'focus': frontmatter.get('tags', ''),
+            'focus': '',
             'preview': preview,
             'article': article
         })
@@ -96,7 +91,7 @@ def generate_article_html(review):
                 title: "{escape_js(review['title'])}",
                 platform: "{escape_js(review['platform'])}",
                 date: "{review['date']}",
-                focus: "{escape_js(review['focus'])}",
+                focus: "",
                 preview: "{escape_js(review['preview'])}",
                 content: `{review['article']} `
             }}"""
@@ -497,6 +492,8 @@ def main():
     print("📺 Generating TV Review Dashboard...")
     articles = get_reviews()
     print(f"   Found {len(articles)} reviews")
+    for a in articles:
+        print(f"   - {a['title']}: {len(a['article'])} chars")
     
     html = generate_html(articles)
     
