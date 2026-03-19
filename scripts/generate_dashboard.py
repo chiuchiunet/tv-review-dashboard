@@ -1,4 +1,46 @@
-<!DOCTYPE html>
+#!/usr/bin/env python3
+"""
+TV Review Dashboard Generator
+自動從 database 讀取評論，generate HTML dashboard
+"""
+
+import sqlite3
+import json
+from datetime import datetime
+
+DB_PATH = "/home/ubuntu/.openclaw/workspace-creation/data/creation.db"
+OUTPUT_PATH = "/home/ubuntu/.openclaw/workspace-creation/web/index.html"
+
+def get_reviews():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM tv_reviews ORDER BY id DESC")
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(row) for row in rows]
+
+def generate_article_html(review):
+    """Generate article object for JS"""
+    # Extract preview (first 100 chars from article field or generate)
+    article = review.get('article', '')
+    preview = article[:120] + '...' if len(article) > 120 else article
+    
+    # Convert to JS format
+    return f"""{{
+                id: {review['id']},
+                title: "{review['title']}",
+                platform: "{review['platform']}",
+                date: "{review['date']}",
+                focus: "{review['focus']}",
+                preview: "{preview}",
+                content: `<p>{article}</p>`
+            }}"""
+
+def generate_html(articles):
+    articles_js = ',\n            '.join([generate_article_html(a) for a in articles])
+    
+    html = f'''<!DOCTYPE html>
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +50,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;600;700&family=Noto+Serif+HK:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
+        :root {{
             --sidebar-bg: #18181B;
             --sidebar-text: #FAFAF8;
             --sidebar-text-muted: #A1A1AA;
@@ -25,26 +67,26 @@
             --text-muted: var(--main-text-muted-light);
             --font-heading: 'Noto Serif HK', serif;
             --font-body: 'Noto Sans HK', sans-serif;
-        }
+        }}
         
-        [data-theme="dark"] {
+        [data-theme="dark"] {{
             --bg-main: var(--main-bg-dark);
             --text-main: var(--main-text-dark);
             --text-muted: var(--main-text-muted-dark);
-        }
+        }}
         
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         
-        body {
+        body {{
             font-family: var(--font-body);
             background: var(--bg-main);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
             transition: background 0.3s, color 0.3s;
-        }
+        }}
         
-        .sidebar {
+        .sidebar {{
             width: 280px;
             background: var(--sidebar-bg);
             padding: 24px;
@@ -53,29 +95,29 @@
             position: fixed;
             height: 100vh;
             overflow-y: auto;
-        }
+        }}
         
-        .sidebar h1 {
+        .sidebar h1 {{
             font-family: var(--font-heading);
             color: var(--sidebar-text);
             font-size: 1.5rem;
             margin-bottom: 8px;
-        }
+        }}
         
-        .sidebar .subtitle {
+        .sidebar .subtitle {{
             color: var(--sidebar-text-muted);
             font-size: 0.875rem;
             margin-bottom: 32px;
-        }
+        }}
         
-        .platform-filter {
+        .platform-filter {{
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
             margin-bottom: 24px;
-        }
+        }}
         
-        .filter-btn {
+        .filter-btn {{
             padding: 8px 16px;
             border: 1px solid var(--sidebar-text-muted);
             background: transparent;
@@ -84,80 +126,80 @@
             cursor: pointer;
             font-size: 0.875rem;
             transition: all 0.2s;
-        }
+        }}
         
-        .filter-btn:hover, .filter-btn.active {
+        .filter-btn:hover, .filter-btn.active {{
             background: var(--accent);
             border-color: var(--accent);
             color: white;
-        }
+        }}
         
-        .stats {
+        .stats {{
             margin-top: auto;
             padding-top: 24px;
             border-top: 1px solid #3F3F46;
-        }
+        }}
         
-        .stats-item {
+        .stats-item {{
             display: flex;
             justify-content: space-between;
             color: var(--sidebar-text-muted);
             font-size: 0.875rem;
             margin-bottom: 8px;
-        }
+        }}
         
-        .main {
+        .main {{
             margin-left: 280px;
             flex: 1;
             padding: 32px 48px;
-        }
+        }}
         
-        .header {
+        .header {{
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 32px;
-        }
+        }}
         
-        .header h2 {
+        .header h2 {{
             font-family: var(--font-heading);
             font-size: 1.75rem;
-        }
+        }}
         
-        .theme-toggle {
+        .theme-toggle {{
             background: none;
             border: none;
             cursor: pointer;
             font-size: 1.25rem;
             padding: 8px;
-        }
+        }}
         
-        .article-list {
+        .article-list {{
             display: flex;
             flex-direction: column;
             gap: 24px;
-        }
+        }}
         
-        .article-card {
+        .article-card {{
             background: white;
             border-radius: 12px;
             padding: 24px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
-        }
+        }}
         
-        [data-theme="dark"] .article-card {
+        [data-theme="dark"] .article-card {{
             background: #27272A;
             box-shadow: none;
-        }
+        }}
         
-        .article-card:hover {
+        .article-card:hover {{
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
+        }}
         
-        .platform {
+        .platform {{
             display: inline-block;
             padding: 4px 12px;
             background: var(--accent);
@@ -166,27 +208,27 @@
             font-size: 0.75rem;
             font-weight: 600;
             margin-bottom: 12px;
-        }
+        }}
         
-        .article-card h3 {
+        .article-card h3 {{
             font-family: var(--font-heading);
             font-size: 1.25rem;
             margin-bottom: 8px;
-        }
+        }}
         
-        .meta {
+        .meta {{
             color: var(--text-muted);
             font-size: 0.875rem;
             margin-bottom: 12px;
-        }
+        }}
         
-        .preview {
+        .preview {{
             color: var(--text-muted);
             font-size: 0.9rem;
             line-height: 1.6;
-        }
+        }}
         
-        .modal {
+        .modal {{
             display: none;
             position: fixed;
             top: 0;
@@ -196,25 +238,25 @@
             background: rgba(0,0,0,0.5);
             z-index: 1000;
             overflow-y: auto;
-        }
+        }}
         
-        .modal.active {
+        .modal.active {{
             display: flex;
             align-items: flex-start;
             justify-content: center;
             padding: 48px;
-        }
+        }}
         
-        .modal-content {
+        .modal-content {{
             background: var(--bg-main);
             border-radius: 16px;
             padding: 32px;
             max-width: 800px;
             width: 100%;
             position: relative;
-        }
+        }}
         
-        .modal-close {
+        .modal-close {{
             position: absolute;
             top: 16px;
             right: 16px;
@@ -223,34 +265,34 @@
             font-size: 1.5rem;
             cursor: pointer;
             color: var(--text-muted);
-        }
+        }}
         
-        .modal h2 {
+        .modal h2 {{
             font-family: var(--font-heading);
             font-size: 1.5rem;
             margin-bottom: 8px;
-        }
+        }}
         
-        .modal .meta {
+        .modal .meta {{
             margin-bottom: 24px;
-        }
+        }}
         
-        .modal .content {
+        .modal .content {{
             line-height: 1.8;
             font-size: 1rem;
-        }
+        }}
         
-        .empty-state {
+        .empty-state {{
             text-align: center;
             padding: 48px;
             color: var(--text-muted);
-        }
+        }}
     </style>
 </head>
 <body>
     <aside class="sidebar">
         <h1>📺 TV 評論創作室</h1>
-        <p class="subtitle">電視劇評分析 · 2026-03-19</p>
+        <p class="subtitle">電視劇評分析 · {datetime.now().strftime('%Y-%m-%d')}</p>
         
         <div class="platform-filter">
             <button class="filter-btn active" onclick="filterByPlatform('all')">全部</button>
@@ -261,15 +303,15 @@
         <div class="stats">
             <div class="stats-item">
                 <span>總評論數</span>
-                <span id="totalCount">3</span>
+                <span id="totalCount">{len(articles)}</span>
             </div>
             <div class="stats-item">
                 <span>TVB</span>
-                <span id="tvbCount">2</span>
+                <span id="tvbCount">{len([a for a in articles if a['platform'] == 'TVB'])}</span>
             </div>
             <div class="stats-item">
                 <span>ViuTV</span>
-                <span id="viutvCount">1</span>
+                <span id="viutvCount">{len([a for a in articles if a['platform'] == 'ViuTV'])}</span>
             </div>
         </div>
     </aside>
@@ -294,107 +336,98 @@
     
     <script>
         // Theme toggle
-        function toggleTheme() {
+        function toggleTheme() {{
             const body = document.body;
             const btn = document.querySelector('.theme-toggle');
-            if (body.getAttribute('data-theme') === 'dark') {
+            if (body.getAttribute('data-theme') === 'dark') {{
                 body.setAttribute('data-theme', 'light');
                 btn.textContent = '🌙';
-            } else {
+            }} else {{
                 body.setAttribute('data-theme', 'dark');
                 btn.textContent = '☀️';
-            }
-        }
+            }}
+        }}
         
         // Articles data
         const articles = [
-            {
-                id: 3,
-                title: "足球女將2",
-                platform: "ViuTV",
-                date: "2026-03-19",
-                focus: "續作表現 + 口碑落差 + 題材處理 + ViuTV延續能力",
-                preview: "《足球女將2》並非失敗但稱唔上成功，忘記咗自己既根",
-                content: `<p>《足球女將2》並非失敗但稱唔上成功，忘記咗自己既根</p>`
-            },
-            {
-                id: 2,
-                title: "臥底嬌娃",
-                platform: "TVB",
-                date: "2026-03-19",
-                focus: "班底實力 + 市場定位 + 製作野心",
-                preview: "《臥底嬌娃》— TVB 既「輕」之過？...",
-                content: `<p>《臥底嬌娃》— TVB 既「輕」之過？...</p>`
-            },
-            {
-                id: 1,
-                title: "正义女神",
-                platform: "TVB",
-                date: "2026-03-19",
-                focus: "题材定位 + 剧本深度 + 节奏问题",
-                preview: "《正义女神》— TVB 的「创新」又一次胎死腹中？...",
-                content: `<p>《正义女神》— TVB 的「创新」又一次胎死腹中？...</p>`
-            }
+            {articles_js}
         ];
         
         // Render articles
-        function renderArticles(filteredArticles) {
+        function renderArticles(filteredArticles) {{
             const list = document.getElementById('articleList');
             
-            if (filteredArticles.length === 0) {
+            if (filteredArticles.length === 0) {{
                 list.innerHTML = '<div class="empty-state">暫時未有文章</div>';
                 return;
-            }
+            }}
             
             list.innerHTML = filteredArticles.map(article => `
-                <div class="article-card" onclick="showArticle(${article.id})">
-                    <span class="platform">${article.platform}</span>
-                    <h3>${article.title}</h3>
-                    <div class="meta">📅 ${article.date} | 🔍 ${article.focus}</div>
-                    <p class="preview">${article.preview}</p>
+                <div class="article-card" onclick="showArticle(${{article.id}})">
+                    <span class="platform">${{article.platform}}</span>
+                    <h3>${{article.title}}</h3>
+                    <div class="meta">📅 ${{article.date}} | 🔍 ${{article.focus}}</div>
+                    <p class="preview">${{article.preview}}</p>
                 </div>
             `).join('');
-        }
+        }}
         
         // Filter by platform
-        function filterByPlatform(platform) {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
+        function filterByPlatform(platform) {{
+            document.querySelectorAll('.filter-btn').forEach(btn => {{
                 btn.classList.remove('active');
-                if (btn.textContent.includes(platform) || (platform === 'all' && btn.textContent === '全部')) {
+                if (btn.textContent.includes(platform) || (platform === 'all' && btn.textContent === '全部')) {{
                     btn.classList.add('active');
-                }
-            });
+                }}
+            }});
             
-            if (platform === 'all') {
+            if (platform === 'all') {{
                 renderArticles(articles);
-            } else {
+            }} else {{
                 renderArticles(articles.filter(a => a.platform === platform));
-            }
-        }
+            }}
+        }}
         
         // Show article modal
-        function showArticle(id) {
+        function showArticle(id) {{
             const article = articles.find(a => a.id === id);
             if (!article) return;
             
             document.getElementById('modalTitle').textContent = article.title;
-            document.getElementById('modalMeta').textContent = `${article.platform} | 📅 ${article.date} | 🔍 ${article.focus}`;
+            document.getElementById('modalMeta').textContent = `${{article.platform}} | 📅 ${{article.date}} | 🔍 ${{article.focus}}`;
             document.getElementById('modalContent').innerHTML = article.content;
             document.getElementById('articleModal').classList.add('active');
-        }
+        }}
         
         // Close modal
-        function closeModal() {
+        function closeModal() {{
             document.getElementById('articleModal').classList.remove('active');
-        }
+        }}
         
         // Close modal on outside click
-        document.getElementById('articleModal').addEventListener('click', (e) => {
+        document.getElementById('articleModal').addEventListener('click', (e) => {{
             if (e.target.id === 'articleModal') closeModal();
-        });
+        }});
         
         // Initial render
         renderArticles(articles);
     </script>
 </body>
-</html>
+</html>'''
+    
+    return html
+
+def main():
+    print("📺 Generating TV Review Dashboard...")
+    articles = get_reviews()
+    print(f"   Found {len(articles)} reviews")
+    
+    html = generate_html(articles)
+    
+    with open(OUTPUT_PATH, 'w', encoding='utf-8') as f:
+        f.write(html)
+    
+    print(f"   ✅ Written to {OUTPUT_PATH}")
+
+if __name__ == "__main__":
+    main()
