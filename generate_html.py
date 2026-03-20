@@ -2,9 +2,11 @@
 """Generate HTML page from F1 database"""
 import sys
 import os
+import json
 
 sys.path.insert(0, os.path.dirname(__file__))
 from db import get_conn
+from generate_whatsapp_report import generate_whatsapp_report
 
 def get_all_races():
     """Get all races from database"""
@@ -43,6 +45,15 @@ def get_lap_times(race_id, limit=50):
     laps = cursor.fetchall()
     conn.close()
     return laps
+
+def get_race_info(race_id):
+    """Get race info"""
+    conn = get_conn()
+    cursor = conn.cursor()
+    cursor.execute('SELECT name, date, country, circuit FROM races WHERE id = ?', (race_id,))
+    race = cursor.fetchone()
+    conn.close()
+    return race
 
 def format_lap_time(ms):
     """Format lap time from milliseconds"""
@@ -84,11 +95,20 @@ def generate_html(output_path='index.html'):
         print(f"Created: {output_path}")
         return
     
+    # Get all races info
+    all_races_info = {}
+    for r in races:
+        all_races_info[r[0]] = r
+    
     # Get latest race
     latest_race = races[0]
     race_id = latest_race[0]
     results = get_race_results(race_id)
     fastest_laps = get_lap_times(race_id, 10)
+    race_info = get_race_info(race_id)
+    
+    # Get WhatsApp report for latest race
+    whatsapp_report = generate_whatsapp_report(race_id)
     
     # Build race selector
     race_options = []
@@ -117,6 +137,19 @@ def generate_html(output_path='index.html'):
             <td class="fastest">{format_lap_time(lap[2])}</td>
         </tr>""")
     
+    # Build tabs data for all races
+    tabs_data = []
+    for r in races:
+        rid = r[0]
+        r_info = get_race_info(rid)
+        w_report = generate_whatsapp_report(rid)
+        tabs_data.append({
+            'id': rid,
+            'name': r[1],
+            'country': r[2],
+            'report': w_report
+        })
+    
     html = f"""<!DOCTYPE html>
 <html>
 <head>
@@ -130,11 +163,20 @@ def generate_html(output_path='index.html'):
         h1 {{ color: #e94560; margin-bottom: 10px; }}
         h2 {{ color: #0f3460; border-bottom: 2px solid #e94560; padding-bottom: 10px; }}
         
-        .header {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }}
+        .header {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 10px; }}
         .race-info {{ color: #888; }}
         
         select {{ padding: 10px; font-size: 16px; background: #16213e; color: #eee; 
                  border: 1px solid #0f3460; border-radius: 5px; }}
+        
+        .tabs {{ display: flex; gap: 5px; margin-bottom: 20px; }}
+        .tab {{ padding: 12px 24px; background: #16213e; color: #888; border: none; 
+                border-radius: 8px 8px 0 0; cursor: pointer; font-size: 16px; transition: all 0.3s; }}
+        .tab.active {{ background: #0f3460; color: #fff; }}
+        .tab:hover {{ background: #1f4068; }}
+        
+        .tab-content {{ display: none; }}
+        .tab-content.active {{ display: block; }}
         
         .grid {{ display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }}
         
@@ -150,57 +192,104 @@ def generate_html(output_path='index.html'):
         
         .card {{ background: #16213e; border-radius: 8px; padding: 20px; }}
         
-        @media (max-width: 768px) {{ .grid {{ grid-template-columns: 1fr; }} }}
+        .whatsapp-box {{ background: #25D366; color: #fff; padding: 20px; border-radius: 8px; 
+                        font-family: -apple-system, BlinkMacSystemFont, sans-serif; white-space: pre-wrap; 
+                        line-height: 1.6; }}
+        .whatsapp-box .title {{ font-weight: bold; font-size: 18px; }}
+        .whatsapp-box .section {{ border-bottom: 1px solid rgba(255,255,255,0.3); padding: 10px 0; }}
+        
+        .copy-btn {{ background: #25D366; color: white; border: none; padding: 10px 20px; 
+                    border-radius: 5px; cursor: pointer; font-size: 14px; margin-top: 10px; }}
+        .copy-btn:hover {{ background: #20BD5A; }}
+        
+        @media (max-width: 768px) {{ 
+            .grid {{ grid-template-columns: 1fr; }}
+            .tabs {{ flex-wrap: wrap; }}
+            .tab {{ padding: 10px 16px; font-size: 14px; }}
+        }}
     </style>
 </head>
 <body>
     <div class="header">
         <div>
             <h1>🏎️ F1 Dashboard</h1>
-            <div class="race-info">{latest_race[3]} • {latest_race[4]}</div>
+            <div class="race-info">{race_info[3]} • {race_info[2]}</div>
         </div>
         <select id="raceSelect" onchange="loadRace(this.value)">
             {''.join(race_options)}
         </select>
     </div>
     
-    <div class="grid">
-        <div class="card">
-            <h2>📊 Race Results</h2>
-            <table id="resultsTable">
-                <thead>
-                    <tr>
-                        <th onclick="sortTable(0)">Pos</th>
-                        <th onclick="sortTable(1)">Driver</th>
-                        <th onclick="sortTable(2)">Name</th>
-                        <th onclick="sortTable(3)">Team</th>
-                        <th onclick="sortTable(4)">Gap</th>
-                        <th onclick="sortTable(5)">Pts</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {''.join(results_rows)}
-                </tbody>
-            </table>
+    <div class="tabs">
+        <button class="tab active" onclick="showTab('results')">📊 比賽結果</button>
+        <button class="tab" onclick="showTab('whatsapp')">💬 WhatsApp Report</button>
+    </div>
+    
+    <div id="results" class="tab-content active">
+        <div class="grid">
+            <div class="card">
+                <h2>🏁 Race Results</h2>
+                <table id="resultsTable">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">Pos</th>
+                            <th onclick="sortTable(1)">Driver</th>
+                            <th onclick="sortTable(2)">Name</th>
+                            <th onclick="sortTable(3)">Team</th>
+                            <th onclick="sortTable(4)">Gap</th>
+                            <th onclick="sortTable(5)">Pts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {''.join(results_rows)}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h2>⚡ Fastest Laps</h2>
+                <table>
+                    <thead>
+                        <tr><th>Driver</th><th>Lap</th><th>Time</th></tr>
+                    </thead>
+                    <tbody>
+                        {''.join(lap_rows) if lap_rows else '<tr><td colspan="3">No data</td></tr>'}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        
+    </div>
+    
+    <div id="whatsapp" class="tab-content">
         <div class="card">
-            <h2>⚡ Fastest Laps</h2>
-            <table>
-                <thead>
-                    <tr><th>Driver</th><th>Lap</th><th>Time</th></tr>
-                </thead>
-                <tbody>
-                    {''.join(lap_rows) if lap_rows else '<tr><td colspan="3">No data</td></tr>'}
-                </tbody>
-            </table>
+            <h2>📱 WhatsApp Report</h2>
+            <p style="color: #888; margin-bottom: 15px;">Copy and paste into WhatsApp:</p>
+            <div class="whatsapp-box" id="whatsappReport">{whatsapp_report}</div>
+            <button class="copy-btn" onclick="copyWhatsapp()">📋 Copy to Clipboard</button>
         </div>
     </div>
     
     <script>
+        let raceData = {json.dumps(tabs_data)};
+        
+        function showTab(tabName) {{
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }}
+        
         function loadRace(raceId) {{
-            // In full version, this would fetch data via API
-            alert('Race selection coming soon! Data will reload for race: ' + raceId);
+            raceId = parseInt(raceId);
+            const race = raceData.find(r => r.id === raceId);
+            if (!race) return;
+            
+            // Update WhatsApp report
+            document.getElementById('whatsappReport').textContent = race.report;
+            
+            // Show alert (full data reload would need backend)
+            alert('Report loaded for: ' + race.country + ' ' + race.name);
         }}
         
         function sortTable(n) {{
@@ -238,6 +327,13 @@ def generate_html(output_path='index.html'):
                     }}
                 }}
             }}
+        }}
+        
+        function copyWhatsapp() {{
+            const text = document.getElementById('whatsappReport').textContent;
+            navigator.clipboard.writeText(text).then(() => {{
+                alert('Copied to clipboard!');
+            }});
         }}
     </script>
 </body>

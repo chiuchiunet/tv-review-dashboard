@@ -1,0 +1,31 @@
+🏎️ *中國大獎賽*
+📅 2026-03-15 | 上海國際賽車場
+
+────────────────────
+*🏁 比賽結果*
+────────────────────
+🥇 ANT Kimi Antonelli (Mercedes)
+🥈 RUS George Russell (Mercedes) +5.515s
+🥉 HAM Lewis Hamilton (Ferrari) +25.267s
+4. LEC Charles Leclerc (Ferrari) +28.894s
+5. BEA Oliver Bearman (Haas) +57.268s
+6. GAS Pierre Gasly (Alpine) +59.647s
+7. LAW Liam Lawson (Racing) +80.588s
+8. HAD Isack Hadjar (Red) +87.247s
+9. SAI Carlos Sainz (Williams)
+10. COL Franco Colapinto (Alpine)
+11. HUL Nico Hulkenberg (Audi)
+12. LIN Arvid Lindblad (Racing)
+13. BOT Valtteri Bottas (Cadillac)
+14. OCO Esteban Ocon (Haas)
+15. PER Sergio Perez (Cadillac)
+16. VER Max Verstappen (Red)
+17. ALO Fernando Alonso (Aston)
+18. STR Lance Stroll (Aston) +39.429s
+19. PIA Oscar Piastri (McLaren)
+20. NOR Lando Norris (McLaren)
+21. BOR Gabriel Bortoleto (Audi)
+22. ALB Alexander Albon (Williams)
+
+────────────────────
+📊 Source: OpenF1 API
