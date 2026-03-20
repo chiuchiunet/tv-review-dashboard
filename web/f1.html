@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    🏎️ F1 Race Dashboard 2026</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { 
+            text-align: center; 
+            color: #e94560; 
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(233,69,96,0.5);
+        }
+        .subtitle { text-align: center; color: #888; margin-bottom: 30px; }
+        
+        .race-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .race-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .race-name { font-size: 1.5rem; color: #ffd700; font-weight: bold; }
+        .race-date { color: #888; }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { color: #e94560; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; }
+        td { font-size: 0.95rem; }
+        
+        tr:hover { background: rgba(255,255,255,0.03); }
+        
+        .pos-1 { color: #ffd700; font-weight: bold; }
+        .pos-2 { color: #c0c0c0; font-weight: bold; }
+        .pos-3 { color: #cd7f32; font-weight: bold; }
+        
+        .gap { color: #4ade80; font-family: monospace; }
+        
+        .team-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .footer { text-align: center; color: #555; margin-top: 40px; font-size: 0.85rem; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .race-card { animation: fadeIn 0.5s ease forwards; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏎️ F1 2026</h1>
+        <p class="subtitle">Qualifying Results Dashboard</p>
+        <div id="races"></div>
+        <p class="footer">Data: OpenF1 API | Powered by OpenClaw</p>
+    </div>
+    
+    <script>
+        fetch('https://raw.githubusercontent.com/ccl/creation/refs/heads/main/data/f1_data.json')
+            .then(r => r.json())
+            .then(data => {
+                const container = document.getElementById('races');
+                Object.values(data).forEach((race, i) => {
+                    let html = `
+                    <div class="race-card" style="animation-delay: ${i*0.1}s">
+                        <div class="race-header">
+                            <span class="race-name">${race.race}</span>
+                            <span class="race-date">${race.date}</span>
+                        </div>
+                        <table>
+                            <tr><th>Pos</th><th>車手</th><th>車隊</th><th>時間</th><th>Gap</th></tr>
+                    `;
+                    race.results.forEach(r => {
+                        const posClass = r.position <= 3 ? `pos-${r.position}` : '';
+                        const gapStr = r.position === 1 ? 'POLE' : `+${r.gap.toFixed(3)}s`;
+                        html += `
+                            <tr>
+                                <td class="${posClass}">${r.position}</td>
+                                <td>${r.driver}</td>
+                                <td><span class="team-tag">${r.team}</span></td>
+                                <td>${r.time.toFixed(3)}</td>
+                                <td class="gap">${gapStr}</td>
+                            </tr>
+                        `;
+                    });
+                    html += '</table></div>';
+                    container.innerHTML += html;
+                });
+            });
+    </script>
+</body>
+</html>
