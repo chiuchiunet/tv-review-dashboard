@@ -70,6 +70,20 @@ def fetch_race_results(session_key):
     if not positions:
         return []
     
+    # Get all drivers at once (instead of per driver)
+    all_drivers = fetch_json(f"{API_BASE}/drivers?session_key={session_key}")
+    drivers_dict = {d.get('driver_number'): d for d in (all_drivers or [])}
+    
+    # Get intervals (gap data)
+    intervals = fetch_json(f"{API_BASE}/intervals?session_key={session_key}")
+    intervals_dict = {}
+    if intervals:
+        for i in intervals:
+            driver = i.get('driver_number')
+            if driver not in intervals_dict:
+                intervals_dict[driver] = []
+            intervals_dict[driver].append(i)
+    
     # Group by driver and get final position
     driver_positions = {}
     for p in positions:
@@ -83,18 +97,32 @@ def fetch_race_results(session_key):
         # Get final position (last data point)
         final_pos = pos_data[-1]
         
-        # Get driver info
-        drivers = fetch_json(f"{API_BASE}/drivers?driver_number={driver}&session_key={session_key}")
-        driver_info = drivers[0] if drivers else {}
+        # Get driver info from cached dict
+        driver_info = drivers_dict.get(driver, {})
         
         # Get driver code from mapping or use number
         driver_code = DRIVER_CODES.get(driver, str(driver))
+        
+        # Get gap from intervals
+        gap = ''
+        if driver in intervals_dict:
+            final_interval = intervals_dict[driver][-1]
+            gap_to_leader = final_interval.get('gap_to_leader')
+            interval = final_interval.get('interval')
+            try:
+                if gap_to_leader is not None and float(gap_to_leader) > 0:
+                    gap = f"{float(gap_to_leader):.3f}s"
+                elif interval is not None and float(interval) > 0:
+                    gap = f"+{float(interval):.3f}s"
+            except:
+                pass
         
         results.append({
             'position': final_pos.get('position'),
             'driver_code': driver_code,
             'driver_name': f"{driver_info.get('first_name', '')} {driver_info.get('last_name', '')}".strip(),
             'team': driver_info.get('team_name', 'Unknown'),
+            'time_gap': gap,
         })
     
     # Sort by position
