@@ -1,0 +1,31 @@
+🏎️ *澳洲大獎賽*
+📅 2026-03-08 | 墨爾本阿爾伯特公園
+
+────────────────────
+*🏁 比賽結果*
+────────────────────
+🥇 RUS George Russell (Mercedes)
+🥈 ANT Kimi Antonelli (Mercedes) +2.974s
+🥉 LEC Charles Leclerc (Ferrari) +15.519s
+4. HAM Lewis Hamilton (Ferrari) +16.144s
+5. NOR Lando Norris (McLaren) +51.741s
+6. VER Max Verstappen (Red) +54.617s
+7. BEA Oliver Bearman (Haas)
+8. LIN Arvid Lindblad (Racing)
+9. BOR Gabriel Bortoleto (Audi)
+10. GAS Pierre Gasly (Alpine)
+11. OCO Esteban Ocon (Haas)
+12. ALB Alexander Albon (Williams)
+13. LAW Liam Lawson (Racing)
+14. COL Franco Colapinto (Alpine)
+15. SAI Carlos Sainz (Williams)
+16. PER Sergio Perez (Cadillac)
+17. STR Lance Stroll (Aston)
+18. ALO Fernando Alonso (Aston)
+19. BOT Valtteri Bottas (Cadillac)
+20. HAD Isack Hadjar (Red) +20.590s
+21. PIA Oscar Piastri (McLaren)
+22. HUL Nico Hulkenberg (Audi)
+
+────────────────────
+📊 Source: OpenF1 API
