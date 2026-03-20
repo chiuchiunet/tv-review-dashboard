@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>F1 Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+               max-width: 1000px; margin: 0 auto; padding: 20px; background: #1a1a2e; color: #eee; }
+        h1 { color: #e94560; margin-bottom: 10px; }
+        h2 { color: #0f3460; border-bottom: 2px solid #e94560; padding-bottom: 10px; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .race-info { color: #888; }
+        
+        select { padding: 10px; font-size: 16px; background: #16213e; color: #eee; 
+                 border: 1px solid #0f3460; border-radius: 5px; }
+        
+        .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        
+        table { width: 100%; border-collapse: collapse; background: #16213e; 
+                border-radius: 8px; overflow: hidden; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #0f3460; }
+        th { background: #0f3460; color: #fff; cursor: pointer; }
+        th:hover { background: #e94560; }
+        tr:hover { background: #1f4068; }
+        
+        .driver-code { font-weight: bold; color: #e94560; }
+        .fastest { color: #4ade80; font-weight: bold; }
+        
+        .card { background: #16213e; border-radius: 8px; padding: 20px; }
+        
+        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>🏎️ F1 Dashboard</h1>
+            <div class="race-info">China • Shanghai</div>
+        </div>
+        <select id="raceSelect" onchange="loadRace(this.value)">
+            <option value="1" selected>2026-03-15 - Unknown Race</option>
+        </select>
+    </div>
+    
+    <div class="grid">
+        <div class="card">
+            <h2>📊 Race Results</h2>
+            <table id="resultsTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Pos</th>
+                        <th onclick="sortTable(1)">Driver</th>
+                        <th onclick="sortTable(2)">Name</th>
+                        <th onclick="sortTable(3)">Team</th>
+                        <th onclick="sortTable(4)">Gap</th>
+                        <th onclick="sortTable(5)">Pts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+            <td>1</td>
+            <td><span class="driver-code">BUI</span></td>
+            <td>Kimi Antonelli</td>
+            <td>Mercedes</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>2</td>
+            <td><span class="driver-code">RUSS</span></td>
+            <td>George Russell</td>
+            <td>Mercedes</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>3</td>
+            <td><span class="driver-code">HAM</span></td>
+            <td>Lewis Hamilton</td>
+            <td>Ferrari</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>4</td>
+            <td><span class="driver-code">LEC</span></td>
+            <td>Charles Leclerc</td>
+            <td>Ferrari</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>5</td>
+            <td><span class="driver-code">OCO</span></td>
+            <td>Oliver Bearman</td>
+            <td>Haas F1 Team</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>6</td>
+            <td><span class="driver-code">GAS</span></td>
+            <td>Pierre Gasly</td>
+            <td>Alpine</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>7</td>
+            <td><span class="driver-code">LAW</span></td>
+            <td>Liam Lawson</td>
+            <td>Racing Bulls</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>8</td>
+            <td><span class="driver-code">ALO</span></td>
+            <td>Isack Hadjar</td>
+            <td>Red Bull Racing</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>9</td>
+            <td><span class="driver-code">SAI</span></td>
+            <td>Carlos Sainz</td>
+            <td>Williams</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>10</td>
+            <td><span class="driver-code">DOO</span></td>
+            <td>Franco Colapinto</td>
+            <td>Alpine</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>11</td>
+            <td><span class="driver-code">HUL</span></td>
+            <td>Nico Hulkenberg</td>
+            <td>Audi</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>12</td>
+            <td><span class="driver-code">VEST</span></td>
+            <td>Arvid Lindblad</td>
+            <td>Racing Bulls</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>13</td>
+            <td><span class="driver-code">ANT</span></td>
+            <td>Valtteri Bottas</td>
+            <td>Cadillac</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>14</td>
+            <td><span class="driver-code">OCO</span></td>
+            <td>Esteban Ocon</td>
+            <td>Haas F1 Team</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>15</td>
+            <td><span class="driver-code">MAG</span></td>
+            <td>Sergio Perez</td>
+            <td>Cadillac</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>16</td>
+            <td><span class="driver-code">VER</span></td>
+            <td>Max Verstappen</td>
+            <td>Red Bull Racing</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>17</td>
+            <td><span class="driver-code">ALO</span></td>
+            <td>Fernando Alonso</td>
+            <td>Aston Martin</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>18</td>
+            <td><span class="driver-code">STR</span></td>
+            <td>Lance Stroll</td>
+            <td>Aston Martin</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>19</td>
+            <td><span class="driver-code">PIA</span></td>
+            <td>Oscar Piastri</td>
+            <td>McLaren</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>20</td>
+            <td><span class="driver-code">NOR</span></td>
+            <td>Lando Norris</td>
+            <td>McLaren</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>21</td>
+            <td><span class="driver-code">BOR</span></td>
+            <td>Gabriel Bortoleto</td>
+            <td>Audi</td>
+            <td></td>
+            <td>0</td>
+        </tr><tr>
+            <td>22</td>
+            <td><span class="driver-code">COL</span></td>
+            <td>Alexander Albon</td>
+            <td>Williams</td>
+            <td></td>
+            <td>0</td>
+        </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="card">
+            <h2>⚡ Fastest Laps</h2>
+            <table>
+                <thead>
+                    <tr><th>Driver</th><th>Lap</th><th>Time</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="3">No data</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        function loadRace(raceId) {
+            // In full version, this would fetch data via API
+            alert('Race selection coming soon! Data will reload for race: ' + raceId);
+        }
+        
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("resultsTable");
+            switching = true;
+            dir = "asc";
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("TD")[n];
+                    y = rows[i + 1].getElementsByTagName("TD")[n];
+                    if (dir == "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    } else if (dir == "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    switchcount ++;
+                } else {
+                    if (switchcount == 0 && dir == "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
