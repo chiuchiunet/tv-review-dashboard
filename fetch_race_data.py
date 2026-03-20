@@ -15,18 +15,28 @@ API_BASE = "https://api.openf1.org/v1"
 
 # Driver number to code mapping (2026 grid)
 DRIVER_CODES = {
-    1: "NOR", 3: "VER", 4: "PIA", 5: "BOR", 6: "ALO",
-    10: "GAS", 11: "MAG", 12: "BUI", 14: "ALO", 16: "LEC",
-    18: "STR", 20: "MAG", 21: "DRR", 22: "TSU", 23: "COL",
-    24: "ZHO", 27: "HUL", 30: "LAW", 31: "OCO", 36: "LAW",
-    37: "BEO", 38: "HAD", 39: "NISS", 40: "BEO", 41: "VEST",
-    43: "DOO", 44: "HAM", 45: "BEAR", 46: "OSM", 47: "SCH",
-    50: "AUB", 51: "MA", 52: "BAY", 53: "MANS", 54: "ISA",
-    55: "SAI", 56: "RUS", 57: "RUS", 63: "RUSS", 64: "SIM",
-    70: "MANS", 71: "ISA", 73: "VEST", 74: "PHI", 77: "ANT",
-    78: "GAS", 79: "BER", 81: "PIA", 87: "OCO", 88: "DRR",
-    89: "LAT", 91: "GAS", 92: "SAI", 93: "HAD", 94: "NISS",
-    95: "ZHO", 96: "ZHO", 97: "BORT", 98: "GARC", 99: "FIA"
+    1: "NOR",    # Lando Norris
+    3: "VER",    # Max Verstappen
+    5: "BOR",    # Gabriel Bortoleto
+    6: "HAD",    # Isack Hadjar
+    10: "GAS",   # Pierre Gasly
+    11: "PER",   # Sergio Perez
+    12: "ANT",   # Kimi Antonelli
+    14: "ALO",   # Fernando Alonso
+    16: "LEC",   # Charles Leclerc
+    18: "STR",   # Lance Stroll
+    23: "ALB",   # Alexander Albon
+    27: "HUL",   # Nico Hulkenberg
+    30: "LAW",   # Liam Lawson
+    31: "OCO",   # Esteban Ocon
+    41: "LIN",   # Arvid Lindblad
+    43: "COL",   # Franco Colapinto
+    44: "HAM",   # Lewis Hamilton
+    55: "SAI",   # Carlos Sainz
+    63: "RUS",   # George Russell
+    77: "BOT",   # Valtteri Bottas
+    81: "PIA",   # Oscar Piastri
+    87: "BEA",   # Oliver Bearman
 }
 
 def fetch_json(url):
