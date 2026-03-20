@@ -114,7 +114,9 @@ def generate_html(output_path='index.html'):
     race_options = []
     for r in races:
         selected = 'selected' if r[0] == race_id else ''
-        race_options.append(f'<option value="{r[0]}" {selected}>{r[2]} - {r[1]}</option>')
+        # Use country as name since meeting_name is None
+        race_name = r[2] or r[1]  # country or name
+        race_options.append(f'<option value="{r[0]}" {selected}>{r[2]} - {r[3]}</option>')
     
     # Build results table
     results_rows = []

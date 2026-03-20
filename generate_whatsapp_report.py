@@ -112,14 +112,10 @@ def generate_whatsapp_report(race_id=None):
     
     results = get_race_results(race_id)
     
-    # Build WhatsApp report
+    # Build WhatsApp report (simplified)
     lines = []
-    lines.append(f"🏎️ *{race_name_cn}*")
-    lines.append(f"📅 {race_date} | {circuit_cn}")
+    lines.append(f"🏎️ *{race_name_cn}* | 📅 {race_date}")
     lines.append("")
-    lines.append("─" * 20)
-    lines.append("*🏁 比賽結果*")
-    lines.append("─" * 20)
     
     for r in results:
         pos = r[0]
@@ -147,8 +143,7 @@ def generate_whatsapp_report(race_id=None):
         lines.append(line)
     
     lines.append("")
-    lines.append("─" * 20)
-    lines.append("📊 Source: OpenF1 API")
+    lines.append("📊 #F1")
     
     return "\n".join(lines)
 
