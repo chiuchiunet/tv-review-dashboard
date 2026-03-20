@@ -1,0 +1,79 @@
+{
+  "Australian GP_2026-03-08": {
+    "race": "Australian GP",
+    "circuit": "Melbourne",
+    "date": "2026-03-08",
+    "results": [
+      {
+        "position": 1,
+        "driver": "Max VERSTAPPEN",
+        "team": "Red Bull Racing",
+        "time": 82.091,
+        "gap": 0.0
+      },
+      {
+        "position": 2,
+        "driver": "Lando NORRIS",
+        "team": "McLaren",
+        "time": 82.358,
+        "gap": 0.267
+      },
+      {
+        "position": 3,
+        "driver": "Kimi ANTONELLI",
+        "team": "Mercedes",
+        "time": 82.417,
+        "gap": 0.326
+      },
+      {
+        "position": 4,
+        "driver": "Lewis HAMILTON",
+        "team": "Ferrari",
+        "time": 82.423,
+        "gap": 0.332
+      },
+      {
+        "position": 5,
+        "driver": "Charles LECLERC",
+        "team": "Ferrari",
+        "time": 82.579,
+        "gap": 0.488
+      },
+      {
+        "position": 6,
+        "driver": "George RUSSELL",
+        "team": "Mercedes",
+        "time": 82.67,
+        "gap": 0.579
+      },
+      {
+        "position": 7,
+        "driver": "Franco COLAPINTO",
+        "team": "Alpine",
+        "time": 82.926,
+        "gap": 0.835
+      },
+      {
+        "position": 8,
+        "driver": "Gabriel BORTOLETO",
+        "team": "Audi",
+        "time": 83.257,
+        "gap": 1.166
+      },
+      {
+        "position": 9,
+        "driver": "Carlos SAINZ",
+        "team": "Williams",
+        "time": 83.59,
+        "gap": 1.499
+      },
+      {
+        "position": 10,
+        "driver": "Liam LAWSON",
+        "team": "Racing Bulls",
+        "time": 83.783,
+        "gap": 1.692
+      }
+    ]
+  }
+}
