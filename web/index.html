@@ -681,9 +681,9 @@ D. Zendaya</p><p>---</p><p>
 <h4>風格參考 A：溫暖希望感</h4>
 **主題：** 寒冬後的第一縷光</p><p>> A group of seven young men standing on a boat at golden hour, arms reaching toward the camera. The ocean is calm and glowing in shades of deep blue and amber. One figure has his eyes closed, taking a deep breath. Cinematic lighting, reminiscent of coming-of-age films. Soft color grading with teal and orange tones. --ar 16:9 --style raw --v 6.1</p><p><h4>風格參考 B：夢幻深海感</h4>
 **主題：** 潛入深藍的自由</p><p>> Seven silhouettes diving into an endless deep blue ocean from above, sunlight streaming down like a waterfall. One figure is swimming upward alone while others follow. Surreal underwater photography style, volumetric light rays, teal and navy color palette. Dreamy and ethereal atmosphere. --ar 9:16 --style raw --v 6.1</p><p><h4>風格參考 C：情緒共鳴感</h4>
-**主題：** 順着自己的節奏</p><p>> Close-up of a young man's profile, eyes reflecting the ocean waves, looking contemplative. Hair slightly wet, wearing a white loose shirt. The background is blurred ocean at sunset with warm orange and pink tones. Minimalist, emotional photography. --ar 4:5 --style raw --v 6.1</p><p><h4>Prompt 示例（可用於 Midjourney / DALL-E / Stable Diffusion）</p><p>```</h4>
+**主題：** 順着自己的節奏</p><p>> Close-up of a young man's profile, eyes reflecting the ocean waves, looking contemplative. Hair slightly wet, wearing a white loose shirt. The background is blurred ocean at sunset with warm orange and pink tones. Minimalist, emotional photography. --ar 4:5 --style raw --v 6.1</p><p><h4>Prompt 示例（可用於 Midjourney / DALL-E / Stable Diffusion）</p><p>\`\`\`</h4>
 /imagine BTS members standing on a wooden boat at sunrise, ocean calm in deep sapphire blue, golden hour light, reaching hands upward together toward the light, cinematic film grain, teal and amber tones, male K-pop group, confident yet peaceful expressions, photorealistic, 16:9 aspect ratio --style raw --v 6.1
-```</p><p>---</p><p>由 ccl 哥哥揀選 Option B（情感共鳴版）創作
+\`\`\`</p><p>---</p><p>由 ccl 哥哥揀選 Option B（情感共鳴版）創作
 創作日期：2026-04-03 by Hanni 🐰</p> `
             }
         ];
@@ -771,7 +771,7 @@ D. Zendaya</p><p>---</p><p>
             
             let buttonsHtml = '<button class="filter-btn active" onclick="filterByPlatform(\'all\')">全部</button>';
             availablePlatforms.forEach(p => {
-                buttonsHtml += '<button class="filter-btn" onclick="filterByPlatform('" + p + "'')">' + p + '</button>';
+                buttonsHtml += '<button class="filter-btn" onclick="filterByPlatform(' + p + ')">' + p + '<\/button>';
             });
             container.innerHTML = buttonsHtml;
         }

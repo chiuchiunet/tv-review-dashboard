@@ -106,6 +106,12 @@ def escape_js(text):
         return ""
     return text.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n').replace('\r', '')
 
+def escape_js_template(text):
+    """Escape text for JavaScript template literal"""
+    if not text:
+        return ""
+    return text.replace('\\', '\\\\').replace('`', '\\`').replace('${', '\\${')
+
 def generate_article_js(review, idx, offset):
     """Generate article object for JS"""
     return f"""{{
@@ -116,7 +122,7 @@ def generate_article_js(review, idx, offset):
                 date: "{review['date']}",
                 tags: {review['tags']},
                 preview: "{escape_js(review['preview'])}",
-                content: `{review['article']} `
+                content: `{escape_js_template(review['article'])} `
             }}"""
 
 def generate_html(all_articles):
@@ -639,7 +645,7 @@ def generate_html(all_articles):
             
             let buttonsHtml = '<button class="filter-btn active" onclick="filterByPlatform(\\'all\\')">全部</button>';
             availablePlatforms.forEach(p => {{
-                buttonsHtml += '<button class="filter-btn" onclick="filterByPlatform(\'" + p + "'\')">' + p + '</button>';
+                buttonsHtml += '<button class="filter-btn" onclick="filterByPlatform(\'' + p + '\')">' + p + '<\/button>';
             }});
             container.innerHTML = buttonsHtml;
         }}
