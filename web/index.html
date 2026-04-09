@@ -12,30 +12,22 @@
             --sidebar-bg: #0F0F0F;
             --sidebar-text: #FAFAF8;
             --sidebar-text-muted: #71717A;
-            --sidebar-accent: #3F3F46;
-            
+            --sidebar-accent: #27272A;
             --main-bg: #FAFAF8;
             --main-text: #18181B;
             --main-text-muted: #71717A;
             --main-border: #E5E5E0;
             --card-bg: #FFFFFF;
-            
             --accent-tv: #DC2626;
             --accent-kpop: #8B5CF6;
-            
             --font-heading: 'Noto Serif HK', serif;
             --font-body: 'Noto Sans HK', sans-serif;
-            
             --sidebar-width: 300px;
             --content-max: 1200px;
         }
         
         [data-theme="dark"] {
             --sidebar-bg: #0A0A0A;
-            --sidebar-text: #FAFAF8;
-            --sidebar-text-muted: #71717A;
-            --sidebar-accent: #27272A;
-            
             --main-bg: #18181B;
             --main-text: #FAFAF8;
             --main-text-muted: #A1A1AA;
@@ -44,10 +36,6 @@
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        html {
-            scroll-behavior: smooth;
-        }
         
         body {
             font-family: var(--font-body);
@@ -58,7 +46,8 @@
             transition: background 0.4s ease, color 0.4s ease;
         }
         
-        /* ===== SIDEBAR ===== */
+        html { scroll-behavior: smooth; }
+        
         .sidebar {
             width: var(--sidebar-width);
             background: var(--sidebar-bg);
@@ -73,9 +62,7 @@
             transition: background 0.4s ease;
         }
         
-        .sidebar-brand {
-            margin-bottom: 48px;
-        }
+        .sidebar-brand { margin-bottom: 48px; }
         
         .sidebar-brand h1 {
             font-family: var(--font-heading);
@@ -89,13 +76,11 @@
         .sidebar-brand .date {
             color: var(--sidebar-text-muted);
             font-size: 0.875rem;
-            font-weight: 400;
         }
         
-        /* Content Type Toggle */
         .content-toggle {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             margin-bottom: 32px;
             background: var(--sidebar-accent);
             padding: 6px;
@@ -108,7 +93,7 @@
             border: none;
             background: transparent;
             color: var(--sidebar-text-muted);
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             font-weight: 500;
             border-radius: 8px;
             cursor: pointer;
@@ -116,26 +101,21 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
         }
         
-        .toggle-btn:hover {
-            color: var(--sidebar-text);
-        }
+        .toggle-btn:hover { color: var(--sidebar-text); }
         
         .toggle-btn.active {
             background: var(--card-bg);
             color: var(--main-text);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
         
         .toggle-btn.active.tv { background: var(--accent-tv); color: white; }
         .toggle-btn.active.kpop { background: var(--accent-kpop); color: white; }
         
-        /* Platform Filters */
-        .filter-section {
-            margin-bottom: 32px;
-        }
+        .filter-section { margin-bottom: 32px; }
         
         .filter-label {
             color: var(--sidebar-text-muted);
@@ -146,11 +126,7 @@
             margin-bottom: 12px;
         }
         
-        .platform-filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
+        .platform-filters { display: flex; flex-wrap: wrap; gap: 8px; }
         
         .platform-btn {
             padding: 8px 14px;
@@ -163,67 +139,30 @@
             transition: all 0.25s ease;
         }
         
-        .platform-btn:hover {
-            border-color: var(--sidebar-text-muted);
-            color: var(--sidebar-text);
-        }
+        .platform-btn:hover { border-color: var(--sidebar-text-muted); color: var(--sidebar-text); }
+        .platform-btn.active { background: var(--sidebar-text); border-color: var(--sidebar-text); color: var(--sidebar-bg); }
         
-        .platform-btn.active {
-            background: var(--sidebar-text);
-            border-color: var(--sidebar-text);
-            color: var(--sidebar-bg);
-        }
-        
-        /* Stats */
         .sidebar-stats {
             margin-top: auto;
             padding-top: 32px;
             border-top: 1px solid var(--sidebar-accent);
         }
         
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         
-        .stat-item {
-            padding: 16px;
-            background: var(--sidebar-accent);
-            border-radius: 10px;
-        }
+        .stat-item { padding: 14px; background: var(--sidebar-accent); border-radius: 10px; }
         
         .stat-value {
             font-family: var(--font-heading);
-            font-size: 1.75rem;
+            font-size: 1.5rem;
             font-weight: 600;
             color: var(--sidebar-text);
             line-height: 1;
             margin-bottom: 4px;
         }
         
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--sidebar-text-muted);
-        }
+        .stat-label { font-size: 0.7rem; color: var(--sidebar-text-muted); }
         
-        /* Theme Toggle */
-        .theme-btn {
-            position: absolute;
-            top: 40px;
-            right: 32px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.25rem;
-            padding: 8px;
-            opacity: 0.7;
-            transition: opacity 0.2s;
-        }
-        
-        .theme-btn:hover { opacity: 1; }
-        
-        /* ===== MAIN CONTENT ===== */
         .main {
             margin-left: var(--sidebar-width);
             min-height: 100vh;
@@ -250,17 +189,10 @@
             font-size: 1rem;
         }
         
-        /* Article Grid */
-        .articles-container {
-            max-width: var(--content-max);
-        }
+        .articles-container { max-width: var(--content-max); }
         
-        .article-grid {
-            display: grid;
-            gap: 32px;
-        }
+        .article-grid { display: grid; gap: 28px; }
         
-        /* Article Card */
         .article-card {
             background: var(--card-bg);
             border-radius: 16px;
@@ -283,9 +215,7 @@
             transition: width 0.35s ease;
         }
         
-        .article-card.kpop::before {
-            background: var(--accent-kpop);
-        }
+        .article-card.kpop::before { background: var(--accent-kpop); }
         
         .article-card:hover {
             transform: translateY(-4px);
@@ -293,22 +223,15 @@
             border-color: var(--main-border);
         }
         
-        .article-card:hover::before {
-            width: 6px;
-        }
+        .article-card:hover::before { width: 6px; }
         
-        .card-meta {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
+        .card-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
         
         .type-tag {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
+            gap: 5px;
+            padding: 5px 12px;
             font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
@@ -318,30 +241,13 @@
             color: white;
         }
         
-        .type-tag.kpop {
-            background: var(--accent-kpop);
-        }
+        .type-tag.kpop { background: var(--accent-kpop); }
         
-        .platform-tag {
-            font-size: 0.8rem;
-            color: var(--main-text-muted);
-            font-weight: 500;
-        }
+        .platform-tag { font-size: 0.8rem; color: var(--main-text-muted); font-weight: 500; }
         
-        .article-card h3 {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            font-weight: 600;
-            line-height: 1.4;
-            margin-bottom: 12px;
-            color: var(--main-text);
-        }
+        .article-card h3 { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 600; line-height: 1.4; margin-bottom: 10px; }
         
-        .article-card .date {
-            font-size: 0.85rem;
-            color: var(--main-text-muted);
-            margin-bottom: 16px;
-        }
+        .article-card .date { font-size: 0.85rem; color: var(--main-text-muted); margin-bottom: 14px; }
         
         .article-card .preview {
             font-size: 0.95rem;
@@ -357,7 +263,7 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            margin-top: 16px;
+            margin-top: 14px;
             font-size: 0.85rem;
             font-weight: 500;
             color: var(--accent-tv);
@@ -367,32 +273,8 @@
         }
         
         .article-card.kpop .read-more { color: var(--accent-kpop); }
+        .article-card:hover .read-more { opacity: 1; transform: translateX(0); }
         
-        .article-card:hover .read-more {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 80px 40px;
-            color: var(--main-text-muted);
-        }
-        
-        .empty-state .icon {
-            font-size: 3rem;
-            margin-bottom: 16px;
-        }
-        
-        .empty-state h3 {
-            font-family: var(--font-heading);
-            font-size: 1.25rem;
-            margin-bottom: 8px;
-            color: var(--main-text);
-        }
-        
-        /* ===== MODAL ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -404,14 +286,7 @@
             transition: opacity 0.3s ease;
         }
         
-        .modal-overlay.active {
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            opacity: 1;
-            overflow-y: auto;
-            padding: 48px;
-        }
+        .modal-overlay.active { display: flex; align-items: flex-start; justify-content: center; opacity: 1; overflow-y: auto; padding: 48px; }
         
         .modal-content {
             background: var(--main-bg);
@@ -425,15 +300,9 @@
             overflow: hidden;
         }
         
-        .modal-overlay.active .modal-content {
-            transform: translateY(0);
-            opacity: 1;
-        }
+        .modal-overlay.active .modal-content { transform: translateY(0); opacity: 1; }
         
-        .modal-header {
-            padding: 48px 48px 32px;
-            border-bottom: 1px solid var(--main-border);
-        }
+        .modal-header { padding: 48px 48px 32px; border-bottom: 1px solid var(--main-border); }
         
         .modal-close {
             position: absolute;
@@ -453,136 +322,37 @@
             color: var(--main-text);
         }
         
-        .modal-close:hover {
-            background: var(--main-text);
-            color: var(--main-bg);
-        }
+        .modal-close:hover { background: var(--main-text); color: var(--main-bg); }
         
-        .modal-meta {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
+        .modal-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
         
-        .modal-platform {
-            display: inline-block;
-            padding: 6px 14px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            border-radius: 6px;
-            background: var(--accent-tv);
-            color: white;
-        }
+        .modal-platform { display: inline-block; padding: 6px 14px; font-size: 0.8rem; font-weight: 600; border-radius: 6px; background: var(--accent-tv); color: white; }
+        .modal-platform.kpop { background: var(--accent-kpop); }
         
-        .modal-platform.kpop {
-            background: var(--accent-kpop);
-        }
+        .modal-date { color: var(--main-text-muted); font-size: 0.9rem; }
         
-        .modal-date {
-            color: var(--main-text-muted);
-            font-size: 0.9rem;
-        }
+        .modal-title { font-family: var(--font-heading); font-size: 2rem; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
         
-        .modal-title {
-            font-family: var(--font-heading);
-            font-size: 2rem;
-            font-weight: 600;
-            line-height: 1.3;
-            letter-spacing: -0.01em;
-        }
+        .modal-body { padding: 40px 48px 48px; }
         
-        .modal-body {
-            padding: 40px 48px 48px;
-        }
+        .modal-body .content { font-size: 1.05rem; line-height: 1.85; color: var(--main-text); }
         
-        .modal-body .content {
-            font-size: 1.05rem;
-            line-height: 1.85;
-            color: var(--main-text);
-        }
+        .modal-body .content h3 { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 600; margin: 36px 0 16px; }
+        .modal-body .content h4 { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 600; margin: 28px 0 12px; }
+        .modal-body .content p { margin-bottom: 20px; }
         
-        .modal-body .content h3 {
-            font-family: var(--font-heading);
-            font-size: 1.35rem;
-            font-weight: 600;
-            margin: 36px 0 16px;
-        }
+        .modal-body .content table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 0.9rem; }
+        .modal-body .content table th, .modal-body .content table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--main-border); }
+        .modal-body .content table th { font-weight: 600; background: var(--card-bg); }
         
-        .modal-body .content h4 {
-            font-family: var(--font-heading);
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 28px 0 12px;
-        }
+        .modal-body .content ul, .modal-body .content ol { margin: 16px 0; padding-left: 24px; }
+        .modal-body .content li { margin-bottom: 8px; }
+        .modal-body .content hr { border: none; border-top: 1px solid var(--main-border); margin: 32px 0; }
+        .modal-body .content blockquote { border-left: 4px solid var(--accent-tv); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--main-text-muted); }
+        .modal-body .content strong { font-weight: 600; }
         
-        .modal-body .content p {
-            margin-bottom: 20px;
-        }
-        
-        .modal-body .content table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 24px 0;
-            font-size: 0.9rem;
-        }
-        
-        .modal-body .content table th,
-        .modal-body .content table td {
-            padding: 12px 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--main-border);
-        }
-        
-        .modal-body .content table th {
-            font-weight: 600;
-            background: var(--card-bg);
-        }
-        
-        .modal-body .content ul, 
-        .modal-body .content ol {
-            margin: 16px 0;
-            padding-left: 24px;
-        }
-        
-        .modal-body .content li {
-            margin-bottom: 8px;
-        }
-        
-        .modal-body .content hr {
-            border: none;
-            border-top: 1px solid var(--main-border);
-            margin: 32px 0;
-        }
-        
-        .modal-body .content blockquote {
-            border-left: 4px solid var(--accent-tv);
-            padding-left: 20px;
-            margin: 24px 0;
-            font-style: italic;
-            color: var(--main-text-muted);
-        }
-        
-        .modal-body .content strong {
-            font-weight: 600;
-        }
-        
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .article-card {
-            animation: fadeInUp 0.5s ease forwards;
-        }
-        
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .article-card { animation: fadeInUp 0.5s ease forwards; opacity: 0; }
         .article-card:nth-child(1) { animation-delay: 0.05s; }
         .article-card:nth-child(2) { animation-delay: 0.1s; }
         .article-card:nth-child(3) { animation-delay: 0.15s; }
@@ -590,31 +360,13 @@
         .article-card:nth-child(5) { animation-delay: 0.25s; }
         .article-card:nth-child(6) { animation-delay: 0.3s; }
         
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .sidebar {
-                width: 260px;
-            }
-            .main {
-                margin-left: 260px;
-                padding: 32px 40px;
-            }
-        }
+        @media (max-width: 1024px) { .sidebar { width: 260px; } .main { margin-left: 260px; padding: 32px 40px; } }
+        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; padding: 24px; } .main { margin-left: 0; padding: 24px; } .sidebar-stats { display: none; } }
         
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                padding: 24px;
-            }
-            .main {
-                margin-left: 0;
-                padding: 24px;
-            }
-            .sidebar-stats {
-                display: none;
-            }
+        .empty-state {
+            text-align: center;
+            padding: 48px;
+            color: var(--text-muted);
         }
     </style>
 </head>
@@ -642,22 +394,10 @@
         
         <div class="sidebar-stats">
             <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-value" id="totalCount">13</div>
-                    <div class="stat-label">總內容</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">11</div>
-                    <div class="stat-label">TV 評論</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">2</div>
-                    <div class="stat-label">K-Pop</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value">8</div>
-                    <div class="stat-label">平台</div>
-                </div>
+                <div class="stat-item"><div class="stat-value" id="totalCount">13</div><div class="stat-label">總內容</div></div>
+                <div class="stat-item"><div class="stat-value">11</div><div class="stat-label">TV 評論</div></div>
+                <div class="stat-item"><div class="stat-value">2</div><div class="stat-label">K-Pop</div></div>
+                <div class="stat-item"><div class="stat-value">8</div><div class="stat-label">平台</div></div>
             </div>
         </div>
     </aside>
@@ -757,4 +497,526 @@
                 date: "2026-04-08",
                 tags: ['TVB, 外購劇, 古裝, 懸疑, forensic, 機智女法醫2, 御賜小仵作2'],
                 preview: "《御賜小仵作2》大家都知，內地騰訊播嘅時候熱度2.1萬、播放量1.18億。TVB 3月5日拎咗上翡翠台配音做晚晚9:30外購劇，仲要有**冠名贊助**。TVB 黃金檔冠名有門檻，唔係有錢就上到，係要節目有一定質素先會有廣告商願意用自己品牌命...",
-                content: `<p>《御賜小仵作2》大家都知，內地騰訊播嘅時候熱度2.1萬、播放量1.18億。TVB 3月5日拎咗上翡翠台配音做晚晚9:30外購劇，仲要有**冠名贊助**。</p><p>TVB 黃金檔冠名有門檻，唔係有錢就上到，係要節目有一定質素先會有廣告商願意用自己品牌命名呢個時段。呢個門檻唔會減價sell，變相係幫呢套劇嘅**內地口碑已驗證**——有基本收視保
+                content: `<p>《御賜小仵作2》大家都知，內地騰訊播嘅時候熱度2.1萬、播放量1.18億。TVB 3月5日拎咗上翡翠台配音做晚晚9:30外購劇，仲要有**冠名贊助**。</p><p>TVB 黃金檔冠名有門檻，唔係有錢就上到，係要節目有一定質素先會有廣告商願意用自己品牌命名呢個時段。呢個門檻唔會減價sell，變相係幫呢套劇嘅**內地口碑已驗證**——有基本收視保證，贊助商先肯入紙。</p><p>---</p><p>
+《機智女法醫2》改編自小說《名捕夫人》，背景唐中晚期，延續上一季設定——楚楚已係御賜仵作，嫁咗郡王蕭瑾瑜，婚後育有一仔。今季主線「血色玉韘案」——由一具佩戴血色玉韘嘅屍體開始，逐步揭發南趙意圖入侵大唐嘅陰謀，層層加碼到18年前先帝暴斃舊案。</p><p>**重點係：全部破解起點，都係楚楚驗到嘅一具屍。**</p><p>最新第15集大反轉——楚楚發現宮中聲稱死亡嘅南趙二王子祐辰安，「遺體」上舊傷特徵與真人唔符，**確定：那具屍體根本唔係佢**。南趙王派佢出使，不過一早當佢係棋子。 forensic 角度嘅妙處就喺呢度——用驗屍破解外交陰謀，呢個就係TVB自己拍唔出嘅格局。</p><p>---</p><p>
+以前外購古裝成日被彈「配音怪」——演員嘴型對唔上、配樂突兀、節奏慢咗幾拍。《機智女法醫2》今次**TVB配音**大致過關，演員語氣冇甩beat，至少聽落唔會令人想轉台。對唔鍾意配音、慣咗睇字幕嘅後生仔係加分位。</p><p>---</p><p>
+蕭瑾瑜染上疳霉瘡但繼續瞞病情救老婆，典型霸總今次有眼濕位。景翊 × 冷月由歡喜冤家升到相依相守，感情線自然唔催淚——唔會為咗催谷收視硬加一段三角戀。南趙二王子祐辰安以為係普通使者，原來另有目的，劇情走向取決於佢係友係敵。</p><p>---</p><p>
+過去TVB外購古裝多數水土不服，但今次有內地口碑打底、題材夠獨特（香港少見 forensic）、配音過關、節奏唔拖，每集有爆點唔會為咗拖集數加無謂感情線。**88萬觀眾捧場**，師奶界應該幾收貨。</p><p>**forensic 加外交陰謀，楚楚驗嘅唔止係屍，係成個朝代嘅真相。**</p><p>---</p><p>*📺 TVB翡翠台外購 / 原版：《御賜小仵作2》/ 👤 王子奇、蘇曉彤、楊廷東、趙堯珂 / 🎤 TVB粵語配音 / 💰 冠名贊助（黃金檔門檻）/ 📅 播出中，大結局4月3日*</p> `
+            },
+            {
+                id: 3,
+                title: "《正義女神》— 從法袍到法袍，佘詩曼這次不放過任何一個「壞孩子」",
+                platform: "TVB",
+                content_type: "tv",
+                date: "2026-04-08",
+                tags: ['TVB, 佘詩曼, 法律, 少年法庭, 劇評'],
+                preview: "《正義女神》（Themis）2026年3月16日率先登陸優酷，3月30日翡翠台接力播出。最大賣點當然係**佘詩曼**——視后闊別TVB一段時間後強勢回歸，而且**首次披上法官袍**，飾演高等法院法官言惠知。一開場，佘詩曼已經唔同晒。不是「M...",
+                content: `<p>《正義女神》（Themis）2026年3月16日率先登陸優酷，3月30日翡翠台接力播出。最大賣點當然係**佘詩曼**——視后闊別TVB一段時間後強勢回歸，而且**首次披上法官袍**，飾演高等法院法官言惠知。</p><p>一開場，佘詩曼已經唔同晒。不是「Man姐」的霸氣，是另一種——**柔肩擔道義，法庭上殺人不見血**。一個案件，足以令她放棄高等法院的大好前途，主動申請降職去少年法庭。呢個決定，本身就已經係一種宣言。</p><p>---</p><p>
+**1. 視后再次封帝討論**</p><p>「佘詩曼演活咗個角色，好希望《正義女神》熱度爆出來」、「感覺後面繼續下去如果劇情和角色更好，大機會再拿5封」——大陸網民對佘詩曼嘅演技幾乎零負評，認為她把「果断、正義、強硬、溫柔又善良」四種特質融為一體。</p><p>**2. 「少年法庭」設定夠新鮮**</p><p>呢個係香港電視劇**少見的法官視角**。過去TVB的律政劇多數係律師視角（《踩過界》《怒火街頭》），今次直接切入法官群體，仲要係少年法庭——專審13至18歲被告。呢個切入點，被認為係「有勇氣」的選擇。</p><p>**3. 抄考《少年法庭》？同題材不同方向**</p><p>Netflix韓劇《少年法庭》（2022年）當年爆紅，以**極度冷峻、批判體制**嘅風格震撼觀眾。香港版某程度上有着相同的命題：**青少年犯罪，社會應該點處理？**</p><p>但風格截然不同：</p><p>| 比較 | 《少年法庭》（韓） | 《正義女神》（港） |
+|------|------------------|------------------|
+| 風格 | 冷峻、灰暗、批判體制 | 情感豐富、注重個體抉擇 |
+| 法官形象 | 厭惡少年犯、親自調查 | 理想主義、願意犧牲前途 |
+| 結局取向 | 系統無力感重 | 偏向「影響改變」的可能性 |</p><p>香港版多了份**溫情**——即使面對「惡魔少年」，言惠知選擇的係「從源頭拯救」而非單純懲罰。但呢個取向，亦係部分大陸網友批評的地方：**「太理想化」、「現實邊會咁童話」**。</p><p>---</p><p>
+值得一提的是**文頌嫻**的演出。相隔19年重返TVB，一出场儿子就死了——呢個角色極度悲劇，需要素顏上陣、刻意弄得憔悴。導演透露，十場戲有九場都係喊戲。呢個係觀眾另一個討論焦點：「文頌嫻真係好慘，但係佢嘅悲劇唔會令人覺得厭」。</p><p>---</p><p>
+此劇是許紹雄的**熒幕遺作**。佢飾演洪法官——即將退休、看似吊兒郎當但其實經驗老到的主任裁判官。呢個角色某程度上代表住上一代法官的價值觀，與言惠知的理想主義形成對照。有網民話：「感覺佢彷彿從未離開」。</p><p>---</p><p>
+《正義女神》稱唔稱得上神劇？現在定論太早。但佢做到咗一件事：**令香港觀眾願意認真思考「少年犯」呢個議題**。</p><p>比起《少年法庭》那種令人窒息的無力感，《正義女神》選擇了更困難的路——**相信改變仍然可能**。即使天真，呢個信念本身已經係一種聲音。</p><p>**一句到尾：視后狀態依然，題材有勇有謀，但香港版本地化係咪成功，仍待觀眾驗證。**</p><p>---</p><p>*平台：TVB（優酷先行）/ 演員：佘詩曼、譚耀文、陳煒、周嘉洛、許紹雄、文頌嫻 / 風格：法律+成長+社會反思*</p> `
+            },
+            {
+                id: 4,
+                title: "《愛情怎麼翻譯？》— 語言天才與國際巨星，愛能跨越幾多語言？",
+                platform: "Netflix",
+                content_type: "tv",
+                date: "2026-04-08",
+                tags: ['Netflix, 韓劇, 愛情, 金宣虎, 高允貞, 洪氏姊妹'],
+                preview: "語言，是橋樑還是牆？Netflix 新劇《愛情怎麼翻譯？》（Can This Love Be Translated？）由《德魯納酒店》《還魂》的洪氏姊妹編劇，《契約友情》《紅丹心》的柳英恩導演，2026年1月16日全球首播。演員陣容包括金宣...",
+                content: `<p>語言，是橋樑還是牆？</p><p>Netflix 新劇《愛情怎麼翻譯？》（Can This Love Be Translated？）由《德魯納酒店》《還魂》的洪氏姊妹編劇，《契約友情》《紅丹心》的柳英恩導演，2026年1月16日全球首播。演員陣容包括金宣虎、高允貞、福士蒼汰，遠赴日本、加拿大、意大利取景。</p><p>故事講述天才口譯員周浩鎮（金宣虎 飾），精通六種語言，綽號「Papago」，卻是愛情白癡。國際巨星車茂熙（高允貞 飾）因喪屍電影一炮而紅，卻在走紅後陷入公眾人物的孤獨。兩人因為一檔真人秀《浪漫之旅》重新相遇——茂熙與日本演員黑澤博（福士蒼汰 飾）出演戀愛節目，浩鎮受聘擔任翻譯。</p><p>問題來了：當翻譯軟件能即時轉換語言，點解兩個人仍然無法理解彼此？</p><p>
+《愛情怎麼翻譯？》唔係典型甜寵劇。洪氏姊妹這次沒有寫童話，而是寫了一個關於「無法表達」的故事。</p><p>浩鎮的问题是：他懂得所有語言，卻不懂得怎麼說「我愛你」。茂熙的問題是：她是公眾人物，早已習慣戴上口罩說話。兩人之間隔着的，不只是六種語言，還有創傷、逃避、與自我保護。</p><p>劇評普遍認為，這部劇觸及了「創傷」「語言隔閡」「公眾人物的異化」以及「迴避型依附」等心理層面。有評價指它「最甜也最寂寞」，甜戲不多，但每一場對話都有重量。</p><p>
+金宣虎與高允貞的螢幕化學反應獲得一致讚賞，被形容為「神顏CP」。劇組遠赴鎌倉、意大利等風景優美的地方拍攝，每一幀都可以截圖做wallpaper。但風景再美，都唔夠兩個人的眼神交戲好看。</p><p>值得一讚的是福士蒼汰扮演的日本演員黑澤博——呢個角色並非簡單的情敵，而係映照出兩位主角內心的一面鏡子。</p><p>
+如果要用一句話總結《愛情怎麼翻譯？》，我會話：**「語言係工具，愛係選擇。」**</p><p>劇中有一句台詞大概係咁講的：「即使我地語言相通，我地仍然可能係陌生人。」呢個先係最殘忍又最真實嘅地方。</p><p>推介俾：喜歡深度愛情劇、對心理描寫有興趣、願意思考「溝通」真正意思嘅觀眾。</p><p>---
+*資料來源：維基百科、Elle、Vocus、Beauty321、Yahoo新聞（2026年3月）*</p> `
+            },
+            {
+                id: 5,
+                title: "《小城大事》— 趙麗穎×黃曉明演活基層奇蹟",
+                platform: "WeTV",
+                content_type: "tv",
+                date: "2026-04-08",
+                tags: ['陸劇, 年代劇, 改革開放, 趙麗穎, 黃曉明, 評測'],
+                preview: "如果話2026年1月有邊套陸劇係唔可以錯過，《小城大事》一定係其中之一。趙麗穎同黃曉明呢對「強強聯手」嘅組合，一文一武、一個留法歸來、一個扎根泥土，喺資源匱乏、沒有國家撥款嘅艱困條件下，帶住小鎮基層幹部同鎮民，「集資合夥」一步步起出一座現代...",
+                content: `<p>如果話2026年1月有邊套陸劇係唔可以錯過，《小城大事》一定係其中之一。</p><p>趙麗穎同黃曉明呢對「強強聯手」嘅組合，一文一武、一個留法歸來、一個扎根泥土，喺資源匱乏、沒有國家撥款嘅艱困條件下，帶住小鎮基層幹部同鎮民，「集資合夥」一步步起出一座現代城市。</p><p>---</p><p>
+呢套劇最打動我嘅地方，係角色塑造。</p><p>**趙麗穎** 飾演嘅李秋萍唔係典型大女主，唔係完美人設，而係一個會害怕、會猶豫、會犯錯嘅普通人。全素顏、方言原聲演出，為戲增重8公斤，展現基層女幹 部嘅敬業同硬骨頭精神。</p><p>**黃曉明** 為咗角色狠甩15公斤，褪晒「霸總」外殼，以一身土氣但扎實嘅草根氣質回歸。佢飾演嘅鄭德誠唔係正派亦唔係反派，而係一個喺現實中左右為難嘅中年人——呢種灰色地帶先至係我哋身邊真實存在嘅人。</p><p>---</p><p>
+兩位演員都交出咗「毀容式」演出：</p><p>- 趙麗穎全素顏喺暴雨中搶險，無台詞眼神戲成為加分關鍵
+- 黃曉明「吃紙耍賴」嘅即興表演，展現前所未見嘅演技層次
+- 趙麗穎喺訪問入面笑住話黃曉明「這是毛病吧？」，延續《中餐廳》嘅歡喜冤家化學反應</p><p>---</p><p>
+呢套劇用輕喜劇形式包裝改革開放呢個厚重主題，係創作者嘅自覺追求——</p><p>> 以「小城」嘅微觀視角承載「大事」嘅時代分量，為主旋律題材煥發出新嘅思想活力同情感溫度。</p><p>跳 出歌頌成就嘅單一框架，係近年陸劇少見嘅膽試。唔洗捱苦情催淚，但睇完會真心覺得：改革開放呢個世代，的確有一班人用血肉之軀創造奇蹟。</p><p>---</p><p>
+隨著口碑發酵，《小城大事》打趴同檔宋威龍主演嘅《驕陽似我》收視奪冠，絕對係實力證明。</p><p>---</p><p>
+✅ 你喜歡《風吹半夏》《幸福到萬家呢類寫實風格
+✅ 你想了解改革開放歷史但又怕悶
+✅ 你想睇演員「毀容式」嘅敬業演出
+✅ 你中意有血肉嘅角色塑造</p><p>❌ 如果你想要愛情線好重嘅偶像劇，就skip呢套</p><p>---</p><p>**總結**：⭐⭐⭐⭐⭐（5/5）</p><p>《小城大事》唔係嗰種你要「追」嘅爆款，而係一套值得靜下心嚟睇、慢慢感受嘅作品。趙麗穎同黃曉明嘅化學反應係驚喜，輕喜劇嘅包裝方式令沉重歷史變得易入口——2026年目前最推薦嘅陸劇，絕對係呢套。</p> `
+            },
+            {
+                id: 6,
+                title: "《訂閱男友》— Jisoo 挑戰虛擬戀愛，係創新定係呃Like？",
+                platform: "Netflix",
+                content_type: "tv",
+                date: "2026-04-08",
+                tags: ['Netflix, 韓劇, Jisoo, K-Pop, 虛擬戀愛, AI'],
+                preview: "由 BLACKPINK Jisoo 主演既《訂閱男友》（Boyfriend on Demand）3月6日正式登陸 Netflix。故事講述女主角「徐未來」透過一個「虛擬戀愛訂閱」服務，一次過解鎖八種理想型——霸總、白馬王子、校園初戀，乜類型...",
+                content: `<p>由 BLACKPINK Jisoo 主演既《訂閱男友》（Boyfriend on Demand）3月6日正式登陸 Netflix。故事講述女主角「徐未來」透過一個「虛擬戀愛訂閱」服務，一次過解鎖八種理想型——霸總、白馬王子、校園初戀，乜類型都有。</p><p>呢個設定直頭係為咗我哋呢啲「岩岩失戀」或者「對現實戀愛乸聲」既都市人度身訂造：唔洗付出真心，又可以享受到戀愛既甜——呢個世界到底係進步定係悲哀？</p><p>
+老實講，Jisoo 既演技之前大家都會質疑——畢竟「人間 DIOR」做歌手就得，做戲就得唔得？</p><p>今次佢既要應付「一次過約會 9 個男人」既場面，又要展現對「虛擬」同「真實」既掙扎。我覺得佢既進步係明顯既——起碼做唔到死板的「女神」表情，會有啲小女生既扭擰同心事。</p><p>同徐仁國既 Kiss 場戲就最多人討論，網上瘋傳既片段都幾🔥。</p><p>
+呢套劇既核心，其實係探討一個好時代既問題：**「如果愛情可以零風險，你仲使唔使去愛？」**</p><p>編劇最後既選擇幾有意思——Jisoo 唔係揀任何一個「訂閱男友」，而係揀咗現實中既朴慶南。呢個係咪即係話「冇痛既戀愛唔係真正既戀愛」？定係ampion「虛擬野終歸都係假」？</p><p>
+我個人覺得呢套劇「創意有餘，深入不足」。佢提出咗好好既問題（AI 戀愛、虛擬情感），但係用「下飯劇」「輕鬆高甜」既包裝，反而冇咁多位去探討呢啲咁deep既議題。</p><p>如果你鍾意睇靚人靚景、輕鬆呃時間，呢套 OK。但如果你期待好似《黑暗榮耀》咁有深度既 Jisoo，可能要等多幾套。</p><p>**Score: 6.5/10** — 有驚喜，但未夠震撼。</p><p>---</p><p>*有興趣可以留意：Jisoo 現實中既身價已經飆升 HK$9.2億，呢套劇會唔會令佢既演員路更順？*</p> `
+            },
+            {
+                id: 7,
+                title: "《足球女將2》— 續作的尷尬與ViuTV的隱憂",
+                platform: "ViuTV",
+                content_type: "tv",
+                date: "2026-04-08",
+                tags: ['ViuTV, 足球劇, 劇評'],
+                preview: "曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。",
+                content: `<p>曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。</p> `
+            },
+            {
+                id: 8,
+                title: "《臥底嬌娃》— 市場定位兩邊唔到岸既典型",
+                platform: "TVB",
+                content_type: "tv",
+                date: "2026-04-08",
+                tags: ['TVB, 警匪劇, 劇評'],
+                preview: "《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。",
+                content: `<p>《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。</p> `
+            },
+            {
+                id: 9,
+                title: "《歲月如歌》— 零討論度背後的系統問題",
+                platform: "HOY TV",
+                content_type: "tv",
+                date: "2026-04-08",
+                tags: ['HOY TV, 歌唱節目, 綜藝, 劇評'],
+                preview: "《歲月如歌》——HOY TV年度大型跨平台、跨地區歌唱節目，喺香港著名地標戲曲中心拍攝，仲要拎埋政府「創意智優計劃」主要資助。聽落好似好巴閉？但如果你上網搜尋呢個節目，你會發現——基本上冇人討論。呢個現象唔係單純「節目唔好睇」咁簡單，而係反...",
+                content: `<p>《歲月如歌》——HOY TV年度大型跨平台、跨地區歌唱節目，喺香港著名地標戲曲中心拍攝，仲要拎埋政府「創意智優計劃」主要資助。聽落好似好巴閉？但如果你上網搜尋呢個節目，你會發現——基本上冇人討論。</p><p>呢個現象唔係單純「節目唔好睇」咁簡單，而係反映緊一連串既結構性問題。</p><p>一個節目冇人討論，通常有幾個原因：內容唔夠吸引、宣傳做得差、平台本身冇流量。但《歲月如歌》既問題，似乎特別複雜——佢有政府資助、有戲曲中心呢類靚場地、有歌唱嘉賓既表面架勢，但就偏偏乜都冇。</p><p>《歲月如歌》作為一個歌唱節目，本身就要面對一個激烈既競爭市場。本地歌唱節目唔算多，但要突圍並唔容易——你要同過往既經典歌唱節目比較，要同歌手本身既粉絲基礎掛鈎，仲要同節目本身既製作質素掛鈎。</p><p>如果節目只係「請啲歌手嚟唱幾首歌」，咁就太過單一。觀眾而家想要既，唔係淨係「聽歌」，而係「睇故事」——歌手既背景、選曲既原因、比賽既張力。但從目前既討論度嚟睇，《歲月如歌》似乎冇做到呢啲。</p><p>節目屬於HOY TV高層變動之後推出，呢個時間點好敏感——新管理層上台，通常會有新既策略方向、新既節目理念。但如果節目係「前朝規劃／前團隊製作」，咁就會出現一個尷尬既情況：節目做完之後，新管理層唔會花太多資源去推廣，結果就變成「做完算数」。</p><p>電視台高層變動，對節目既影響可以好大。主要唔係節目本身既質素，而係資源分配、宣傳策略、同定位調整。《歲月如歌》有冇受到呢啲因素影響？我唔知具体內部情況，但從「零討論度」呢個結果反推，呢啲因素「某程度上」應該存在。</p><p>點解「政府資助」既節目，往往反而冇市場關注？原因可能係創作自由度受限、KPI壓力只關注完成項目而非收視、平台配套不足。公帑同市場，佢地既邏輯本身就唔同。用公帑既節目，往往注重「文化價值」多於「商業價值」。但咁樣既結果，就可能係——節目「有心做」，但「冇人睇」。</p><p>《歲月如歌》既問題，唔係「做得差」，而係——佢生唔逢時。一個有政府資助、有戲曲中心靚場地、有歌唱嘉賓既節目，最後變成「冇人討論」，呢個本身就已經說明咗好多嘢。</p><p>如果HOY TV想建立存在感，佢地需要既唔係再做多幾個《歲月如歌》，而係諗清楚——點樣先可以引起觀眾既注意？呢個先係佢地既真正挑戰。</p> `
+            },
+            {
+                id: 10,
+                title: "《戀愛等高線》— 小品綜藝的尷尬與ViuTV的隱憂",
+                platform: "ViuTV",
+                content_type: "tv",
+                date: "2026-04-08",
+                tags: ['ViuTV, 綜藝, 戀愛真人騷, 劇評'],
+                preview: "近年戀愛真人騷氾濫，觀眾既口味越來越刁鑽——《戀愛等高線》就正正撞正咗呢個市場變化。作為小品式戀愛綜藝，佢既定位注定咗佢唔會有太大既火花，但問題係——連小品應有既「輕鬆有趣」都唔夠。小品綜藝既生存之道，係「易入口」——唔洗花太多心力，唔洗追...",
+                content: `<p>近年戀愛真人騷氾濫，觀眾既口味越來越刁鑽——《戀愛等高線》就正正撞正咗呢個市場變化。作為小品式戀愛綜藝，佢既定位注定咗佢唔會有太大既火花，但問題係——連小品應有既「輕鬆有趣」都唔夠。</p><p>小品綜藝既生存之道，係「易入口」——唔洗花太多心力，唔洗追得好辛苦，但偏偏，《戀愛等高線》就係輸咗喺呢度。佢太過「安全」——每個环节都照住傳統戀愛真人騷既公式，冇驚喜，冇突破。有觀眾話：「睇完一集都唔知想表達咩。」呢句說話雖然有啲夸张，但係的确講中咗呢個節目既問題——佢乜都想講，但乜都講唔深。</p><p>小品既價值唔係「冇內容」，而係「精而簡」。你可以用15分鐘講一個完整既情感故事，但《戀愛等高線》似乎唔係咁諗——佢想乜都啱啱好，結果乜都唔够。</p><p>呢幾年，ViuTV既綜藝比上不足、比下有餘。早期既成功靠既係——真實感同話題性。啲節目敢於觸及社會議題，敢於表現真人既一面。但近排既綜藝，似乎越來越「離地」——《戥愛等高線》就係其中一個例子。</p><p>有觀眾指出：「ViuTV既綜藝越來越似TVB。」呢句說話雖然刻薄，但係反映緊一個事實——ViuTV曾經既「另類」同「創新」，似乎慢慢流失。佢地唔係唔可以做戀愛綜藝，而係要做「有ViuTV特色」既戀愛綜藝。</p><p>從《戀愛等高線》既表現，我哋可以睇到ViuTV既一個趨勢——佢地開始做多啲「安全」既內容。呢個決定唔難理解：本地市場細，做大製作既風險高，做小品起碼唔會大敗。但長遠而言，如果唔再敢於創新，ViuTV既品牌形象就會慢慢模糊。</p><p>《戀愛等高線》並非爛節目，但佢絕對稱唔上「好」。小品綜藝既失敗，通常唔係因為做得差，而係因為——乜都唔够。如果ViuTV想重拾昔日綜藝既光輝，佢地需要既唔係再複製下一個《戀愛等高線》，而係記得——點解當初觀眾會留意ViuTV？</p> `
+            },
+            {
+                id: 11,
+                title: "【FLOWERING】— 七年沉澱，終於為自己而開",
+                platform: "Spotify|Apple Music|YouTube|ALL",
+                content_type: "kpop",
+                date: "2026-04-08",
+                tags: ['AKMU, FLOWERING, 개화, Akdong Musician, Lee Chanhyuk, Lee Suhyun, 七年, 韓樂, Kpop, 獨立音樂, 成長, 情感'],
+                preview: "**Option：七年成長版**\nAKMU 離開 YG Entertainment 後首張作品，七年時間沉澱，終於以自己節奏綻放。唔再係被包裝嘅K-pop偶像，係真正嘅音樂人宣言。---\n中文版本（粵/國）##粵語版\n🌸 AKMU 歸來，但...",
+                content: `<p>**Option：七年成長版**
+AKMU 離開 YG Entertainment 後首張作品，七年時間沉澱，終於以自己節奏綻放。唔再係被包裝嘅K-pop偶像，係真正嘅音樂人宣言。</p><p>---</p><p>
+<h4>中文版本（粵/國）</p><p>##<h3>粵語版</h4></h3>
+🌸 AKMU 歸來，但今次唔一樣。</p><p>《FLOWERING》係七年後首張完整專輯。
+唔催迫，唔比較，只係等待合適嘅時機為自己綻放。</p><p>「成長唔係變老，係學識接受自己所有嘅情緒——
+開心、悲傷、孤獨、期待，全部都係你身邊最重要嘅碎片。」</p><p>七年，AKMU 終於游到自己嘅節奏。</p><p>#AKMU #FLOWERING #個화 #AkdongMusician #七年 #為自己而開</p><p>#<h4>國語版</h4>
+🌸 AKMU 回來了，但這次不一樣。</p><p>《FLOWERING》是七年後首張完整專輯。
+不催迫，不比較，只是一直等待合適的時機為自己綻放。</p><p>「成長不是變老，是學會接受自己所有的情緒——
+開心悲傷、孤獨期待，全部都是你身邊最重要的碎片。」</p><p>七年，AKMU 終於游到自己嘅節奏。</p><p>#AKMU #FLOWERING #개화 #AkdongMusician #七年 #為自己而開</p><p>---</p><p><h4>韓語版本</h4>
+🌸 AKMU가 돌아왔지만, 이번엔 다르다.</p><p>《개화(FLOWERING)》는 7년 만의 정규앨범이다.
+재촉하지 않고, 비교하지 않고, 그저 자신의时机에 맞춰 피었다.</p><p>「성장은 늙는 게 아니야.
+모든 감정을 받아들이는 법을 배우는 거야.
+기쁨도, 슬픔도, 외로움도, 기대도 — 전부 다 네게 필요한 조각이야.」</p><p>7년, AKMU는 마침내 자신만의 속도로 피었다.</p><p>#AKMU #개화 #FLOWERING #이찬혁 #이수현 #악동뮤지션 #7년만의정규앨범</p><p>---</p><p><h4>英文版本</h4>
+🌸 AKMU is back — but this time, it's different.</p><p>FLOWERING is their first full album in seven years.
+No rush. No comparisons. Just waiting for the right moment to bloom on their own terms.</p><p>"Growth isn't about getting older.
+It's about learning to embrace every emotion —
+joy, sorrow, loneliness, anticipation.
+All of them are the pieces that make you whole."</p><p>Seven years later, AKMU finally bloomed at their own pace.</p><p>#AKMU #FLOWERING #AkdongMusician #LeeChanhyuk #LeeSuhyun #SevenYears #Kpop #IndieMusic #Bloom</p><p>---</p><p><h4>Hashtags</h4>
+#AKMU #FLOWERING #개화 #악동뮤지션 #이찬혁 #이수현 #李燦赫 #李秀賢 #Kpop #IndiePop #Acoustic #七年 #獨立音樂 #成長 #情感 #為自己而開 #Bloom #Mood</p><p>---</p><p><h4>平台適用建議</h4>
+- **Instagram：** 完整版（粵/國雙語 Carousel），配春天花開色調
+- **Twitter/X：** 國語版為主，140字內，加 2-3 個 Hashtags
+- **Threads：** 粵語版主打，生活化語氣，配 Album Cover 靚圖
+- **TikTok：** 英文版最啱，配 Album Trailer 片段 + 粉絲 reaction clips
+- **YouTube Community：** 韓語版，等粉絲可以了解背後意義</p><p>---</p><p>
+<h4>🎤 專輯預告版腳本</h4>
+**長度：** 45-60 秒
+**目的：** 展示七年沉澱嘅意義，等粉絲明白呢張專輯嘅重量</p><p>**Scene 1 (0-10s) — 時鐘倒帶**
+- 画面：時鐘倒帶，由 2026 → 2019
+- 旁白：「2019年，AKMU 最後一張正規專輯」
+- 画面：舊MV片段剪輯（黑白處理）
+- 🎵 配樂：純鋼琴，節奏緩慢</p><p>**Scene 2 (10-25s) — 七年沉澱**
+- 旁白：「七年，佢哋經歷咗乜？」
+- 画面：
+  - Lee Chanhyuk 嘅創作片段（Studio alone）
+  - Lee Suhyun 嘅個人發展片段
+  - YG 離開新聞截圖
+- 🎵 配樂：節奏微微上揚</p><p>**Scene 3 (25-45s) — FLOWERING 誕生**
+- 旁白：「2026年4月7日，七年後——」
+- 画面：花瓣慢慢展開，Flower blooming 延時片段
+- Album Cover 慢慢浮現
+- 🎵 配樂：《Joy, Sorrow, Beautiful Heart》副歌片段
+- 最後字幕：「七年，終於為自己而開 #AKMU #FLOWERING」</p><p>---</p><p><h4>🎬  Album Visualizer 解説版腳本</h4>
+**長度：** 90-120 秒
+**目的：** 引導粉絲欣賞 Album Visualizer，了解每首歌嘅情緒</p><p>**Introduction (0-15s)**
+- 旁白：「七年後，AKMU 帶住《FLOWERING》歸來」
+- 画面：Album Art 慢慢放大
+- 說明：「11首歌曲，11個成長嘅碎片」</p><p>**Track-by-Track Guide (每首 8-10秒):**</p><p>**1. 소문의 낙원 (Paradise of Rumors)**
+- 旁白：「起點——傳聞中嘅天堂，係真係假？」
+- 画面：迷雾中行走的剪影
+- 🎵 「소문의 낙원~」</p><p>**2. 봄 색깔 (Spring Colors)**
+- 旁白：「春天顏色——萬物復甦嘅顏色」
+- 画面：花瓣飄落，綠芽生長
+- 🎵 輕快嘅木結他</p><p>**3. 벌레를 내고 (??? - 捉蟲)**
+- 旁白：「清理內心——將唔再適合你嘅野剔除」
+- 画面：手拆除舊牆紙嘅畫面
+- 🎵 節奏突然停頓</p><p>**4. 기쁨, 슬픔, 아름다운 마음 (Joy, Sorrow, Beautiful Heart)**
+- 旁白：「主打——接受所有情緒，因為全部都係你」
+- 画面：花瓣與雨滴同時落下，太陽與雲共存
+- 🎵 副歌：「기쁨, 슬픔, 아름다운 마음~」
+- 最後字幕：「#情緒自由」</p><p>**5. 햇빛 bless you (陽光祝福你)**
+- 旁白：「陽光——有時就係一句說話就可以改變一日」
+- 画面：陽光穿透窗戶，灰暗房間突然明亮
+- 🎵 温暖嘅人手結他</p><p>**6. Tent (帳篷)**
+- 旁白：「帳篷——保护罩，屬於自己嘅小空間」
+- 画面：一個人喺帳篷內，安靜坐着
+- 🎵 簡約鋼琴</p><p>**7. 어린 부부 (Young Couple)**
+- 旁白：「年輕夫妻——愛情的純真形態」
+- 画面：兩個小孩手拖手背影
+- 🎵 清純木結他</p><p>**8. 옳은 사람 (Right Person)**
+- 旁白：「對的人——等嘅過程中，唔好失去自己」
+- 画面：分開行走的兩個人，但望向同一方向
+- 🎵 中速節奏，略帶憂鬱</p><p>**9. 우아한 아침 식사 (優雅早餐)**
+- 旁白：「優雅早餐——日常都可以好有儀式感」
+- 画面：慢動作倒咖啡，切水果
+- 🎵 輕鬆愉快節奏</p><p>**10. 난민들의 축제 (難民的節日)**
+- 旁白：「難民的節日——邊緣人嘅慶典，唔完美但真實」
+- 画面：多元文化人羣廣場慶典
+- 🎵 節奏最強嘅一曲</p><p>**11. (Final Track)**
+- 旁白：「最後——所有碎片合埋一齊」
+- 画面：全部顏色混合成白光
+- 🎵 和煦收尾</p><p>**Ending (最後10秒)**
+- 旁白：「七年，終於——」
+- Album Cover 完全呈現
+- 字幕：「#AKMU #FLOWERING」</p><p>---</p><p><h4>🎬 粉丝 reaction 模板腳本</h4>
+**長度：** 15-30 秒
+**目的：** 鼓勵粉絲拍 reaction，等佢哋分享自己嘅七年</p><p>**Template Script:**
+1. 開頭：「聽完 AKMU《FLOWERING》之後...」
+2. 展示 Album Cover（3秒）
+3. 講一句感受：「最打動我嘅係...」（5-10秒）
+4. Tag 錨點：「@AKMU @악동뮤지션 #AKMU #FLOWERING」（2秒）
+5. End screen：「七年，邊個陪你走過？」</p><p>**Tag Challenge:**
+#AKMU #FLOWERING #My7YearsChallenge
+解釋：分享過去七年陪你走過嘅一首歌或者一個人</p><p>---</p><p>
+<h4>討論話題</h4>
+**Q1：** 你第一次聽 AKMU 係幾時？咩歌？</p><p>**Q2：** 七年係好長嘅時間，你呢七年入面有咩改變？</p><p>**Q3：** 「Joy, Sorrow, Beautiful Heart」——你最近一次接受自己悲傷係幾時？</p><p>**Q4：** AKMU 離開 YG 之後，你認為佢哋嘅音樂會有乜嘢改變？</p><p>---</p><p><h4>投票調查</h4>
+❓ **《FLOWERING》最吸引你嘅元素係？**</p><p>- 🌸 七年沉澱嘅意義
+- 🎵 Indie Pop / Acoustic 風格
+- 💔 「Joy, Sorrow, Beautiful Heart」嘅情感深度
+- 👥 AKMU 離開 YG 後嘅獨立姿態
+- 🌍 十一首歌嘅完整敘事</p><p>---</p><p><h4>冷知識 Quiz</p><p>**❓ Q1：** AKMU 上一次出正規專輯係幾時？</h4>
+A. 2017年
+B. 2018年
+C. 2019年 ✅（正確答案）
+D. 2020年</p><p>**❓ Q2：** 《FLOWERING》係 AKMU 第幾張正規專輯？
+A. 第二張
+B. 第三張
+C. 第四張 ✅（正確答案）
+D. 第五張</p><p>**❓ Q3：** AKMU 係由邊個公司成立？
+A. JYP Entertainment
+B. SM Entertainment
+C. YG Entertainment ✅（正確答案，但2026年已離開）
+D. HYBE</p><p>**❓ Q4：** AKMU 嘅成員名係？
+A. Lee Chanhyuk & Lee Suhyun（李燦赫 & 李秀賢）✅
+B. Park Jin-young & IU
+C. Kim Hyun-joong & Lee Seung-gi
+D. Bang Si-hyuk & G-Dragon</p><p>---</p><p>
+<h4>風格參考 A：七年綻放感</h4>
+**主題：** 花朵在七年的等待後終於綻放</p><p>> A single flower blooming in an abandoned room over seven years, petals slowly unfurling through cracked concrete. Timelapse photography style, warm golden hour light streaming through broken windows. The flower is pink and delicate, contrasting with the rough gray walls. Cinematic, emotional, slightly melancholic but ultimately hopeful. Soft color grading with warm amber and soft pink tones. --ar 16:9 --style raw --v 6.1</p><p><h4>風格參考 B：情緒花園感</h4>
+**主題：** Joy, Sorrow, Beautiful Heart——所有情緒如花園中同時存在</p><p>> A surreal garden where flowers and rain coexist — petals falling while raindrops glisten in sunlight. One path leads through the garden with both sunny and stormy sections merged. A young woman walking alone, unafraid of the mixed weather. Dreamy, ethereal, emotionally resonant photography. Soft focus, teal and gold tones, slightly melancholic atmosphere. --ar 9:16 --style raw --v 6.1</p><p><h4>風格參考 C：七年時鐘感</h4>
+**主題：** 時間的重量</p><p>> A giant clock made of dried flowers, hands frozen at 7:00, vines slowly consuming the numbers. An open book lies beneath the clock, pages blank. Conceptual photography, muted earth tones with touches of pink flower petals. Moody, reflective, intellectual atmosphere. --ar 4:5 --style raw --v 6.1</p><p><h4>Prompt 示例（可用於 Midjourney / DALL-E / Stable Diffusion）</p><p>\`\`\`</h4>
+/imagine AKMU album cover concept: a person's hands holding a tiny blooming flower in a dark palm, seven years of dried petals scattered around, golden light from above, intimate close-up shot, soft cinematic lighting, pastel pink and warm amber tones, emotional and delicate atmosphere, album cover photography style --ar 1:1 --style raw --v 6.1
+\`\`\`</p><p>---</p><p>
+<h4>為乜七年係咁重要？</p><p>AKMU 2014年出道，當時 Chanhyuk 同 Suhyun 係「兄妹組合」闖入 K-pop 世界。佢哋嘅音樂風格從來都唔係典型 K-pop——木結他、Acoustic Folk、 Indie Pop，喺 YG 体系入面係另類存在。</p><p>2019年《Sailing》之後，AKMU 幾乎消失在公眾視線。 Chanhyuk 專注創作，Suhyun 發展個人風格。七年，剛好係一個人從青春期走入成年早期嘅全部時間。</p><p>#<h3>離開 YG 係乜嘢意思？</p><p>YG Entertainment 係韓國三大經紀公司之一。離開意味住：</h4></h3>
+- 唔再有大公司嘅資源同曝光
+- 但同時唔再需要配合商業化要求
+- 可以完全掌控自己嘅音樂方向</p><p>《FLOWERING》係一張「為自己而整」嘅專輯，唔係為市場、唔係為排行榜。</p><p><h4>「Joy, Sorrow, Beautiful Heart」嘅情感深度</p><p>主打歌嘅核心係：**接受所有情緒，因為佢哋構成完整嘅你。**</p><p>> 「與其把悲傷推开，不如把它抱紧，因为它会变成最珍贵的东西。」</p><p>呢種情感表達喺 K-pop 界好少見——唔係selling happiness，唔係假装坚强，係真實嘅情感接納。</p><p>#<h3>十一首歌嘅敘事結構</p><p>如果將十一首歌當成一條成長嘅path：</h4></h3>
+1. **入場**——我哋從傳聞中嘅 Paradise 出發
+2. **復甦**——感受春天嘅顏色
+3. **清理**——剔除唔再屬於自己嘅嘢
+4. **核心**——接受曉同悲傷，先係完整嘅心
+5. **温暖**——陽光祝福你
+6. **保護**——屬於自己嘅帳篷空間
+7. **純真**——young couple 嘅愛
+8. **等待**——尋找啱嘅人
+9. **日常**——優雅嘅早餐，儀式感
+10. **邊緣**——難民的節日，唔完美但真實
+11. **整合**——所有碎片合埋一齊</p><p>---</p><p>由 ccl 哥哥揀選完整版創作
+創作日期：2026-04-08 by Hanni 🐰</p> `
+            },
+            {
+                id: 12,
+                title: "【SWIM】— 順着自己的節奏，游最適合的速度就夠",
+                platform: "IG|Twitter|Threads|TikTok|ALL",
+                content_type: "kpop",
+                date: "2026-04-08",
+                tags: ['BTS, SWIM, ARIRANG, 防彈少年團, 韓樂, Kpop, 勵志, 自我成長'],
+                preview: "**Option B：情感共鳴版**\n主打 Jimin 所說「反映 BTS 當下狀態」——經歷漫長寒冬後，選擇順着自己的節奏向前游。唔催迫自己，唔比較步伐，只係相信自己嘅速度。---\n中文版本（粵/國）##粵語版\n🌊 BTS 歸來，但今次唔...",
+                content: `<p>**Option B：情感共鳴版**
+主打 Jimin 所說「反映 BTS 當下狀態」——經歷漫長寒冬後，選擇順着自己的節奏向前游。唔催迫自己，唔比較步伐，只係相信自己嘅速度。</p><p>---</p><p>
+<h4>中文版本（粵/國）</p><p>##<h3>粵語版</h4></h3>
+🌊 BTS 歸來，但今次唔催迫你。</p><p>《SWIM》唔係叫你跑，叫你游。
+潛入深海，唔使迫自己快，唔使理其他人嘅節奏。
+最緊要係——你仲喺度，仲願意繼續游。</p><p>「After the long winter, we finally dive into the deep blue together.」
+寒冬過後，終於可以一齊潛入深藍。
+今次唔比較，一起就得。</p><p>#BTS #SWIM #ARIRANG #防彈少年團 #順着自己的節奏</p><p>#<h4>國語版</h4>
+🌊 BTS 回來了，但這次不催迫你。</p><p>《SWIM》不是叫你跑，是叫你游。
+潛入深海，不用逼自己快，不用理其他人的節奏。
+最重要的是——你還在，還願意繼續游。</p><p>「After the long winter, we finally dive into the deep blue together.」
+寒冬過後，終於可以一起潛入深藍。
+這次不比較，一起就夠。</p><p>#BTS #SWIM #ARIRANG #防彈少年團 #順著自己的節奏</p><p>---</p><p><h4>韓語版本</h4>
+🌊 BTS가 돌아왔지만, 이번엔 널 재촉하지 않아.</p><p>《SWIM》은 뛰라고 하는 게 아니야. 헤엄치라고.
+깊은 바다로 diving, 빠르게 가라고 하지 않아.
+남들과 속도를 비교하지 않아도 돼.</p><p>가장 중요한 건 — 넌 아직 여기, 여전히 앞으로 가고 싶다는 것.</p><p>「After the long winter, we finally dive into the deep blue together.」
+긴 겨울이 지나, 마침내 함께 deep blue로 다이빙.
+이번엔 비교하지 않아. 함께라면 충분해.</p><p>#BTS #SWIM #ARIRANG #방탄소년단 #나만의속도</p><p>---</p><p><h4>英文版本</h4>
+🌊 BTS is back — but this time, we're not rushing you.</p><p>SWIM isn't about running. It's about diving.
+Into the deep blue. At your own pace. No comparisons.</p><p>What matters most? You're still here. Still willing to keep going.</p><p>「After the long winter, we finally dive into the deep blue together.」
+After the longest winter, we finally dove into the deep blue as one.
+No race. Just us, moving forward together.</p><p>#BTS #SWIM #ARIRANG #BTSARMY #AtYourOwnPace #KeepSwimming</p><p>---</p><p><h4>Hashtags</h4>
+#BTS #SWIM #ARIRANG #방탄소년단 #防彈少年團 #BTSARMY #Kpop #NewMusic #Comeback #AlternativeRandB #DreamPop #深海 #順著自己的節奏 #AtYourOwnPace #KeepSwimming # Jimin #Rm #JungKook #Pdogg</p><p>---</p><p><h4>平台適用建議</h4>
+- **Instagram：** 完整版（粵/國雙語 Carousel），配海藍色調 filter
+- **Twitter/X：** 國語版為主，140字內，加 2-3 個 Hashtags
+- **Threads：** 粵語版主打，生活化語氣，配 MV 金句 screenshot
+- **TikTok：** 英文版最啱，配 MV 片段 + 粉絲 reaction clips</p><p>---</p><p>
+<h4>🎤 舞蹈版腳本</h4>
+**長度：** 30-45 秒
+**目的：** 展示編舞亮點，等粉絲可以跟住跳</p><p>**Scene 1 (0-10s) — Opening Shot**
+- 画面：成員一字排開面向鏡頭，海浪背景
+- 編舞重點：**雙手由下向上拉開**，如同拉開水面
+- 表情：冷静但有決心
+- 🎵 配樂：前奏鋼琴漸強</p><p>**Scene 2 (10-25s) — Chorus Dance**
+- 画面：成員分散，每人有獨立 shot
+- 編舞重點：
+  - **手臂划水動作**（呼應 SWIM 主題）
+  - **定點爆發** moment：雙手向外展 + 抬頭
+  - 整齊但有個性嘅 group dance
+- 🎵 配樂：「dive into the deep blue...」</p><p>**Scene 3 (25-40s) — Ending**
+- 画面：全部人聚攏，形成圓形
+- 編舞重點：**集體向水面伸出手**（象徵一起浮出水面）
+- 表情：温暖、释然
+- 🎵 配樂：的最後一句「...together」</p><p>**拍攝建議：**
+- 室外水池拍攝，陽光折射效果
+- 慢動作回放配合最後導語</p><p>---</p><p><h4>🎬 幕後版腳本</h4>
+**長度：** 60-90 秒
+**目的：** 挖掘專輯故事，增加情感深度</p><p>**Scene 1 (0-15s) — 專輯背景**
+- 旁白：「ARIRANG，呢個名取自一首130年歷史嘅韓國民歌」
+- 画面：黑白歷史片段 + 現代 BTS 排練畫面交替
+- 🎵 配樂：ARIRANG 旋律片段（純音樂）</p><p>**Scene 2 (15-35s) — SWIM 創作故事**
+- 訪問片段：Jimin 說「SWIM 反映我哋而家嘅狀態」
+- RM、Jung Kook、Pdogg 嘅創作訪問片段
+- 画面：studio 創作過程，BTS 成員表情認真但輕鬆
+- 🎵 配樂：SWIM Instrumental</p><p>**Scene 3 (35-60s) — MV拍攝亮點**
+- Lili Reinhart cameo 片段（預告風格）
+- 海上拍攝幕後：導演解說設定
+- 成員喺船上拍攝，頭髮被風吹起嘅自然 moments
+- 🎵 配樂：SWIM 副歌</p><p>**Scene 4 (60-90s) — 結語**
+- 全部成員面对镜头講一句鼓励说话
+- RM: 「唔使迫自己」
+- J-Hope: 「游你嘅速度」
+-  Jimin: 「我哋一齊」
+- 🎵 配樂：漸弱至純鋼琴</p><p>---</p><p><h4>🎮 挑戰版腳本 — Fan Challenge：「#SWIMChallenge」</h4>
+**長度：** 15-20 秒
+**目的：** 簡單易學，等粉絲可以廣泛參與</p><p>**規則說明（文字疊加）：**
+1. 任何地方都可以開始（泳池/浴缸/甚至想像中）
+2. 播放 SWIM 副歌
+3. 做出「划水動作」（雙手由前向後划）
+4. 然後向上伸出手（象徵浮出水面）
+5. 微笑面向鏡頭</p><p>**拍攝模板：**
+- Countdown 3-2-1 開始
+- 前半：你自己做動作
+- 後半：加入文字「@你認識嘅人一齊 SWIM」</p><p>**Tag 鼓勵：**
+- #SWIMChallenge
+- #BTSARMY
+- #SWIMxBTS</p><p>---</p><p>
+<h4>討論話題</h4>
+**Q1：** 你最近一次「覺得游唔動」係幾時？你係點樣比自己繼續游落去？</p><p>**Q2：** BTS 七年依然喺度，呢件事對你有咩意義？</p><p>**Q3：** 如果你可以帶一首歌去任何地方，你會帶《SWIM》嗎？為什麼？</p><p>---</p><p><h4>投票調查</h4>
+❓ **《SWIM》最打動你嘅元素係？**</p><p>- 🌊 歌曲主題（順着自己的節奏）
+- 🎵 Alternative R&B 風格
+- 💃 編舞設計
+- 🎬 MV（Lili Reinhart cameo + 海上場景）
+- 👥 BTS 七年情嘅感動</p><p>---</p><p><h4>冷知識 Quiz</p><p>**❓ Q1：** ARIRANG 呢張專輯名稱取自一首韓國傳統民歌，呢首歌大約有幾多年歷史？</h4>
+A. 50 年
+B. 100 年
+C. 130 年 ✅（正確答案）
+D. 200 年</p><p>**❓ Q2：** SWIM 係 ARIRANG 專輯嘅第幾 track？
+A. 第 1 track
+B. 第 3 track
+C. 第 5 track
+D. 第 7 track ✅（正確答案）</p><p>**❓ Q3：** SWIM MV 入面有邊位 Hollywood 演員 cameo？
+A. Lily Collins
+B. Lili Reinhart ✅（正確答案）
+C. Emma Watson
+D. Zendaya</p><p>---</p><p>
+<h4>風格參考 A：溫暖希望感</h4>
+**主題：** 寒冬後的第一縷光</p><p>> A group of seven young men standing on a boat at golden hour, arms reaching toward the camera. The ocean is calm and glowing in shades of deep blue and amber. One figure has his eyes closed, taking a deep breath. Cinematic lighting, reminiscent of coming-of-age films. Soft color grading with teal and orange tones. --ar 16:9 --style raw --v 6.1</p><p><h4>風格參考 B：夢幻深海感</h4>
+**主題：** 潛入深藍的自由</p><p>> Seven silhouettes diving into an endless deep blue ocean from above, sunlight streaming down like a waterfall. One figure is swimming upward alone while others follow. Surreal underwater photography style, volumetric light rays, teal and navy color palette. Dreamy and ethereal atmosphere. --ar 9:16 --style raw --v 6.1</p><p><h4>風格參考 C：情緒共鳴感</h4>
+**主題：** 順着自己的節奏</p><p>> Close-up of a young man's profile, eyes reflecting the ocean waves, looking contemplative. Hair slightly wet, wearing a white loose shirt. The background is blurred ocean at sunset with warm orange and pink tones. Minimalist, emotional photography. --ar 4:5 --style raw --v 6.1</p><p><h4>Prompt 示例（可用於 Midjourney / DALL-E / Stable Diffusion）</p><p>\`\`\`</h4>
+/imagine BTS members standing on a wooden boat at sunrise, ocean calm in deep sapphire blue, golden hour light, reaching hands upward together toward the light, cinematic film grain, teal and amber tones, male K-pop group, confident yet peaceful expressions, photorealistic, 16:9 aspect ratio --style raw --v 6.1
+\`\`\`</p><p>---</p><p>由 ccl 哥哥揀選 Option B（情感共鳴版）創作
+創作日期：2026-04-03 by Hanni 🐰</p> `
+            }
+        ];
+        
+        let currentType = 'all';
+        let currentPlatform = 'all';
+        
+        // Get platform text for display
+        function getPlatformLabel(type, platform) {
+            if (platform === 'all') return type === 'all' ? '全部內容' : (type === 'tv' ? 'TV 評論' : 'K-Pop 內容');
+            return platform;
+        }
+        
+        // Render articles
+        function renderArticles(filteredArticles) {
+            const list = document.getElementById('articleList');
+            const main = document.getElementById('mainContent');
+            
+            // Update body attribute for styling
+            main.setAttribute('data-type', currentType === 'all' ? 'mixed' : currentType);
+            
+            if (filteredArticles.length === 0) {
+                list.innerHTML = '<div class="empty-state">暫時未有文章</div>';
+                return;
+            }
+            
+            list.innerHTML = filteredArticles.map(article => {
+                const isKpop = article.content_type === 'kpop';
+                const typeLabel = isKpop ? '🎤 K-Pop' : '📺 TV';
+                return `
+                <div class="article-card ${isKpop ? 'kpop' : ''}" onclick="showArticle(${article.id})">
+                    <div class="card-meta">
+                        <span class="type-tag ${isKpop ? 'kpop' : ''}">${typeLabel}</span>
+                        <span class="platform-tag">${article.platform}</span>
+                    </div>
+                    <h3>${article.title}</h3>
+                    <div class="date">📅 ${article.date}</div>
+                    <p class="preview">${article.preview}</p>
+                    <span class="read-more">閱讀全文 →</span>
+                </div>
+            `}).join('');
+        }
+        
+        // Filter by content type
+        function filterByType(type) {
+            currentType = type;
+            currentPlatform = 'all';
+            
+            // Update type buttons
+            document.querySelectorAll('.type-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if ((type === 'all' && btn.textContent.includes('全部')) ||
+                    (type === 'tv' && btn.textContent.includes('TV')) ||
+                    (type === 'kpop' && btn.textContent.includes('K-Pop'))) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Update platform buttons
+            updatePlatformFilters();
+            
+            // Apply filter
+            applyFilter();
+        }
+        
+        // Filter by platform
+        function filterByPlatform(platform) {
+            currentPlatform = platform;
+            
+            // Update platform buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if ((platform === 'all' && btn.textContent === '全部') ||
+                    btn.textContent === platform) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            applyFilter();
+        }
+        
+        // Update platform filter buttons based on current type
+        function updatePlatformFilters() {
+            const container = document.getElementById('platformFilter');
+            const availablePlatforms = [...new Set(articles
+                .filter(a => currentType === 'all' || a.content_type === currentType)
+                .map(a => a.platform))];
+            
+            let buttonsHtml = '<button class="filter-btn active" onclick="filterByPlatform(\'all\')">全部</button>';
+            availablePlatforms.forEach(p => {
+                buttonsHtml += '<button class="filter-btn" onclick="filterByPlatform(\'' + p + '\')">' + p + '<\/button>';
+            });
+            container.innerHTML = buttonsHtml;
+        }
+        
+        // Apply current filters
+        function applyFilter() {
+            let filtered = articles;
+            
+            // Filter by type
+            if (currentType !== 'all') {
+                filtered = filtered.filter(a => a.content_type === currentType);
+            }
+            
+            // Filter by platform
+            if (currentPlatform !== 'all') {
+                filtered = filtered.filter(a => a.platform === currentPlatform);
+            }
+            
+            // Update title
+            const title = getPlatformLabel(currentType, currentPlatform);
+            document.getElementById('pageTitle').textContent = title;
+            
+            renderArticles(filtered);
+        }
+        
+        // Show article modal
+        function showArticle(id) {
+            const article = articles.find(a => a.id === id);
+            if (!article) return;
+            
+            const platformEl = document.getElementById('modalPlatform');
+            platformEl.textContent = article.platform;
+            platformEl.className = 'platform' + (article.content_type === 'kpop' ? ' kpop' : '');
+            
+            const platformEl = document.getElementById('modalPlatform');
+            platformEl.textContent = article.platform;
+            platformEl.className = 'modal-platform' + (article.content_type === 'kpop' ? ' kpop' : '');
+            
+            document.getElementById('modalDate').textContent = '📅 ' + article.date;
+            document.getElementById('modalTitle').textContent = article.title;
+            document.getElementById('modalContent').innerHTML = article.content;
+            document.getElementById('articleModal').classList.add('active');
+        }
+        
+        // Close modal
+        function closeModal(event) {
+            if (event && event.target.id !== 'articleModal') return;
+            document.getElementById('articleModal').classList.remove('active');
+        }
+        
+        function closeModalDirect() {
+            document.getElementById('articleModal').classList.remove('active');
+        }
+        
+        // Close modal on outside click
+        document.getElementById('articleModal').addEventListener('click', (e) => {
+            if (e.target.id === 'articleModal') closeModal();
+        });
+        
+        // Initial render
+        applyFilter();
+    </script>
+</body>
+</html>
