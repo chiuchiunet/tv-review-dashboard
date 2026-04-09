@@ -356,8 +356,6 @@
         
         <div class="platform-filter" id="platformFilter">
             <button class="filter-btn active" onclick="filterByPlatform('all')">全部</button>
-            <button class="filter-btn" onclick="filterByPlatform('tv', 'HOY TV')">HOY TV</button><button class="filter-btn" onclick="filterByPlatform('tv', 'Netflix')">Netflix</button><button class="filter-btn" onclick="filterByPlatform('tv', 'TVB')">TVB</button><button class="filter-btn" onclick="filterByPlatform('tv', 'TVB/ViuTV')">TVB/ViuTV</button><button class="filter-btn" onclick="filterByPlatform('tv', 'ViuTV')">ViuTV</button><button class="filter-btn" onclick="filterByPlatform('tv', 'WeTV')">WeTV</button>
-            <button class="filter-btn" onclick="filterByPlatform('kpop', 'IG|Twitter|Threads|TikTok|ALL')">IG|Twitter|Threads|TikTok|ALL</button><button class="filter-btn" onclick="filterByPlatform('kpop', 'Spotify|Apple Music|YouTube|ALL')">Spotify|Apple Music|YouTube|ALL</button>
         </div>
         
         <div class="stats">
@@ -918,7 +916,7 @@ D. Zendaya</p><p>---</p><p>
             
             let buttonsHtml = '<button class="filter-btn active" onclick="filterByPlatform(\'all\')">全部</button>';
             availablePlatforms.forEach(p => {
-                buttonsHtml += '<button class="filter-btn" onclick="filterByPlatform('' + p + '')">' + p + '<\/button>';
+                buttonsHtml += '<button class="filter-btn" onclick="filterByPlatform(\'' + p + '\')">' + p + '<\/button>';
             });
             container.innerHTML = buttonsHtml;
         }
