@@ -3,203 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎬 創作室 Dashboard</title>
+    <title>TV 評論創作室</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;600;700&family=Noto+Serif+HK:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --sidebar-bg: #0F0F0F;
-            --sidebar-text: #FAFAF8;
-            --sidebar-text-muted: #71717A;
-            --sidebar-accent: #27272A;
-            --main-bg: #FAFAF8;
-            --main-text: #18181B;
-            --main-text-muted: #71717A;
-            --main-border: #E5E5E0;
+            --bg: #FAFAFA;
             --card-bg: #FFFFFF;
-            --accent-tv: #DC2626;
-            --accent-kpop: #8B5CF6;
+            --text: #1A1A1A;
+            --text-muted: #6B7280;
+            --accent: #E63946;
+            --accent-light: #FFF0F0;
+            --border: #E5E5E5;
+            --shadow: rgba(0,0,0,0.06);
             --font-heading: 'Noto Serif HK', serif;
             --font-body: 'Noto Sans HK', sans-serif;
-            --sidebar-width: 300px;
-            --content-max: 1200px;
-        }
-        
-        [data-theme="dark"] {
-            --sidebar-bg: #0A0A0A;
-            --main-bg: #18181B;
-            --main-text: #FAFAF8;
-            --main-text-muted: #A1A1AA;
-            --main-border: #3F3F46;
-            --card-bg: #1F1F23;
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: var(--font-body);
-            background: var(--main-bg);
-            color: var(--main-text);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
             min-height: 100vh;
-            line-height: 1.6;
-            transition: background 0.4s ease, color 0.4s ease;
         }
         
-        html { scroll-behavior: smooth; }
-        
-        .sidebar {
-            width: var(--sidebar-width);
-            background: var(--sidebar-bg);
-            height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            padding: 40px 32px;
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
-            transition: background 0.4s ease;
+        .hero {
+            background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
+            color: white;
+            padding: 48px 24px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
         
-        .sidebar-brand { margin-bottom: 48px; }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(230,57,70,0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
         
-        .sidebar-brand h1 {
+        .hero h1 {
             font-family: var(--font-heading);
-            font-size: 1.75rem;
-            font-weight: 600;
-            color: var(--sidebar-text);
-            letter-spacing: -0.02em;
+            font-size: 2.2rem;
+            font-weight: 700;
             margin-bottom: 8px;
+            letter-spacing: 3px;
+            position: relative;
         }
         
-        .sidebar-brand .date {
-            color: var(--sidebar-text-muted);
-            font-size: 0.875rem;
+        .hero .subtitle {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            position: relative;
         }
         
-        .content-toggle {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 32px;
-            background: var(--sidebar-accent);
-            padding: 6px;
-            border-radius: 12px;
+        .container {
+            max-width: 720px;
+            margin: -30px auto 0;
+            padding: 0 20px 60px;
+            position: relative;
+            z-index: 1;
         }
         
-        .toggle-btn {
-            flex: 1;
-            padding: 12px 16px;
-            border: none;
-            background: transparent;
-            color: var(--sidebar-text-muted);
-            font-size: 0.875rem;
-            font-weight: 500;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+        .search-box {
+            margin-bottom: 20px;
         }
         
-        .toggle-btn:hover { color: var(--sidebar-text); }
-        
-        .toggle-btn.active {
-            background: var(--card-bg);
-            color: var(--main-text);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        
-        .toggle-btn.active.tv { background: var(--accent-tv); color: white; }
-        .toggle-btn.active.kpop { background: var(--accent-kpop); color: white; }
-        
-        .filter-section { margin-bottom: 32px; }
-        
-        .filter-label {
-            color: var(--sidebar-text-muted);
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 12px;
-        }
-        
-        .platform-filters { display: flex; flex-wrap: wrap; gap: 8px; }
-        
-        .platform-btn {
-            padding: 8px 14px;
-            border: 1px solid var(--sidebar-accent);
-            background: transparent;
-            color: var(--sidebar-text-muted);
-            font-size: 0.8rem;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-        }
-        
-        .platform-btn:hover { border-color: var(--sidebar-text-muted); color: var(--sidebar-text); }
-        .platform-btn.active { background: var(--sidebar-text); border-color: var(--sidebar-text); color: var(--sidebar-bg); }
-        
-        .sidebar-stats {
-            margin-top: auto;
-            padding-top: 32px;
-            border-top: 1px solid var(--sidebar-accent);
-        }
-        
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        
-        .stat-item { padding: 14px; background: var(--sidebar-accent); border-radius: 10px; }
-        
-        .stat-value {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--sidebar-text);
-            line-height: 1;
-            margin-bottom: 4px;
-        }
-        
-        .stat-label { font-size: 0.7rem; color: var(--sidebar-text-muted); }
-        
-        .main {
-            margin-left: var(--sidebar-width);
-            min-height: 100vh;
-            padding: 48px 64px;
-        }
-        
-        .content-header {
-            max-width: var(--content-max);
-            margin-bottom: 48px;
-            padding-bottom: 32px;
-            border-bottom: 1px solid var(--main-border);
-        }
-        
-        .content-header h2 {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            margin-bottom: 8px;
-        }
-        
-        .content-header .subtitle {
-            color: var(--main-text-muted);
+        .search-box input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--border);
+            border-radius: 16px;
             font-size: 1rem;
+            font-family: var(--font-body);
+            background: var(--card-bg);
+            transition: all 0.2s;
+            box-shadow: 0 2px 12px var(--shadow);
         }
         
-        .articles-container { max-width: var(--content-max); }
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 4px 20px rgba(230,57,70,0.1);
+        }
         
-        .article-grid { display: grid; gap: 28px; }
+        .platform-filter {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            padding: 8px 18px;
+            border: 2px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-muted);
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            font-family: var(--font-body);
+            transition: all 0.2s;
+        }
+        
+        .filter-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            box-shadow: 0 4px 12px rgba(230,57,70,0.3);
+        }
         
         .article-card {
             background: var(--card-bg);
-            border-radius: 16px;
-            padding: 32px;
+            border-radius: 20px;
+            padding: 24px 28px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 24px var(--shadow);
             cursor: pointer;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid transparent;
+            transition: all 0.25s ease;
+            border: 1px solid var(--border);
             position: relative;
             overflow: hidden;
         }
@@ -209,571 +147,625 @@
             position: absolute;
             left: 0;
             top: 0;
+            bottom: 0;
             width: 4px;
-            height: 100%;
-            background: var(--accent-tv);
-            transition: width 0.35s ease;
+            background: var(--accent);
+            opacity: 0;
+            transition: opacity 0.2s;
         }
-        
-        .article-card.kpop::before { background: var(--accent-kpop); }
         
         .article-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            border-color: var(--main-border);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
         }
         
-        .article-card:hover::before { width: 6px; }
+        .article-card:hover::before {
+            opacity: 1;
+        }
         
-        .card-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-        
-        .type-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 12px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .platform-tag {
+            display: inline-block;
+            padding: 4px 12px;
             border-radius: 6px;
-            background: var(--accent-tv);
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .article-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            line-height: 1.45;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        
+        .article-card .meta {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            margin-bottom: 10px;
+        }
+        
+        .article-card .preview {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.65;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            overflow-y: auto;
+            backdrop-filter: blur(6px);
+        }
+        
+        .modal.active {
+            display: block;
+        }
+        
+        .modal-content {
+            background: var(--card-bg);
+            max-width: 700px;
+            margin: 40px auto;
+            border-radius: 24px;
+            padding: 0;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #1A1A1A, #2D2D2D);
+            color: white;
+            padding: 32px 36px 28px;
+        }
+        
+        .modal-header .platform-tag {
+            margin-bottom: 16px;
+        }
+        
+        .modal-header h2 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        
+        .modal-header .meta {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
+        }
+        
+        .modal-body {
+            padding: 32px 36px;
+        }
+        
+        .modal-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            font-size: 1.5rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            color: var(--text);
+            transition: all 0.2s;
+            z-index: 1001;
+        }
+        
+        .modal-close:hover {
+            background: var(--accent);
             color: white;
         }
         
-        .type-tag.kpop { background: var(--accent-kpop); }
-        
-        .platform-tag { font-size: 0.8rem; color: var(--main-text-muted); font-weight: 500; }
-        
-        .article-card h3 { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 600; line-height: 1.4; margin-bottom: 10px; }
-        
-        .article-card .date { font-size: 0.85rem; color: var(--main-text-muted); margin-bottom: 14px; }
-        
-        .article-card .preview {
-            font-size: 0.95rem;
-            line-height: 1.7;
-            color: var(--main-text-muted);
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+        .article-content {
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: var(--text);
         }
         
-        .read-more {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 14px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--accent-tv);
-            opacity: 0;
-            transform: translateX(-8px);
-            transition: all 0.3s ease;
+        .article-content h3 {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            margin: 28px 0 14px;
+            color: var(--accent);
         }
         
-        .article-card.kpop .read-more { color: var(--accent-kpop); }
-        .article-card:hover .read-more { opacity: 1; transform: translateX(0); }
-        
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        .article-content h4 {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            margin: 22px 0 10px;
         }
         
-        .modal-overlay.active { display: flex; align-items: flex-start; justify-content: center; opacity: 1; overflow-y: auto; padding: 48px; }
-        
-        .modal-content {
-            background: var(--main-bg);
-            border-radius: 20px;
-            max-width: 760px;
-            width: 100%;
-            position: relative;
-            transform: translateY(20px);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
+        .article-content p {
+            margin-bottom: 16px;
         }
         
-        .modal-overlay.active .modal-content { transform: translateY(0); opacity: 1; }
-        
-        .modal-header { padding: 48px 48px 32px; border-bottom: 1px solid var(--main-border); }
-        
-        .modal-close {
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: var(--main-border);
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            color: var(--main-text);
+        .article-content p:last-child {
+            margin-bottom: 0;
         }
-        
-        .modal-close:hover { background: var(--main-text); color: var(--main-bg); }
-        
-        .modal-meta { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
-        
-        .modal-platform { display: inline-block; padding: 6px 14px; font-size: 0.8rem; font-weight: 600; border-radius: 6px; background: var(--accent-tv); color: white; }
-        .modal-platform.kpop { background: var(--accent-kpop); }
-        
-        .modal-date { color: var(--main-text-muted); font-size: 0.9rem; }
-        
-        .modal-title { font-family: var(--font-heading); font-size: 2rem; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
-        
-        .modal-body { padding: 40px 48px 48px; }
-        
-        .modal-body .content { font-size: 1.05rem; line-height: 1.85; color: var(--main-text); }
-        
-        .modal-body .content h3 { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 600; margin: 36px 0 16px; }
-        .modal-body .content h4 { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 600; margin: 28px 0 12px; }
-        .modal-body .content p { margin-bottom: 20px; }
-        
-        .modal-body .content table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 0.9rem; }
-        .modal-body .content table th, .modal-body .content table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--main-border); }
-        .modal-body .content table th { font-weight: 600; background: var(--card-bg); }
-        
-        .modal-body .content ul, .modal-body .content ol { margin: 16px 0; padding-left: 24px; }
-        .modal-body .content li { margin-bottom: 8px; }
-        .modal-body .content hr { border: none; border-top: 1px solid var(--main-border); margin: 32px 0; }
-        .modal-body .content blockquote { border-left: 4px solid var(--accent-tv); padding-left: 20px; margin: 24px 0; font-style: italic; color: var(--main-text-muted); }
-        .modal-body .content strong { font-weight: 600; }
-        
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .article-card { animation: fadeInUp 0.5s ease forwards; opacity: 0; }
-        .article-card:nth-child(1) { animation-delay: 0.05s; }
-        .article-card:nth-child(2) { animation-delay: 0.1s; }
-        .article-card:nth-child(3) { animation-delay: 0.15s; }
-        .article-card:nth-child(4) { animation-delay: 0.2s; }
-        .article-card:nth-child(5) { animation-delay: 0.25s; }
-        .article-card:nth-child(6) { animation-delay: 0.3s; }
-        
-        @media (max-width: 1024px) { .sidebar { width: 260px; } .main { margin-left: 260px; padding: 32px 40px; } }
-        @media (max-width: 768px) { .sidebar { width: 100%; height: auto; position: relative; padding: 24px; } .main { margin-left: 0; padding: 24px; } .sidebar-stats { display: none; } }
         
         .empty-state {
             text-align: center;
-            padding: 48px;
+            padding: 80px 20px;
             color: var(--text-muted);
+        }
+        
+        .empty-state .emoji {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat .num {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .stat .label {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+        }
+        
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.6rem; }
+            .container { padding: 0 16px 40px; }
+            .modal-content { margin: 20px 16px; }
+            .modal-header { padding: 24px 24px 20px; }
+            .modal-body { padding: 24px; }
         }
     </style>
 </head>
 <body>
-    <aside class="sidebar">
-        <button class="theme-btn" onclick="toggleTheme()">🌙</button>
-        
-        <div class="sidebar-brand">
-            <h1>🎬 創作室</h1>
-            <p class="date">電視評論 · K-Pop · 2026-04-08</p>
-        </div>
-        
-        <div class="content-toggle">
-            <button class="toggle-btn tv active" onclick="filterByType('all')">全部</button>
-            <button class="toggle-btn tv" onclick="filterByType('tv')">📺 TV</button>
-            <button class="toggle-btn kpop" onclick="filterByType('kpop')">🎤 K-Pop</button>
-        </div>
-        
-        <div class="filter-section">
-            <p class="filter-label">平台</p>
-            <div class="platform-filters" id="platformFilter">
-                <button class="platform-btn active" onclick="filterByPlatform('all')">全部</button>
+    <div class="hero">
+        <h1>📺 TV 評論創作室</h1>
+        <div class="subtitle">ccl 哥哥的電視評論收藏</div>
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="num" id="totalCount">12</div>
+                <div class="label">篇文章</div>
+            </div>
+            <div class="stat">
+                <div class="num">7</div>
+                <div class="label">個平台</div>
             </div>
         </div>
-        
-        <div class="sidebar-stats">
-            <div class="stats-grid">
-                <div class="stat-item"><div class="stat-value" id="totalCount">13</div><div class="stat-label">總內容</div></div>
-                <div class="stat-item"><div class="stat-value">11</div><div class="stat-label">TV 評論</div></div>
-                <div class="stat-item"><div class="stat-value">2</div><div class="stat-label">K-Pop</div></div>
-                <div class="stat-item"><div class="stat-value">8</div><div class="stat-label">平台</div></div>
-            </div>
-        </div>
-    </aside>
+    </div>
     
-    <main class="main">
-        <div class="content-header">
-            <h2 id="pageTitle">全部內容</h2>
-            <p class="subtitle" id="pageSubtitle">13 篇精選文章</p>
+    <div class="container">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 搜尋劇名…" oninput="renderArticles()">
         </div>
         
-        <div class="articles-container">
-            <div class="article-grid" id="articleList"></div>
+        <div class="platform-filter">
+            <button class="filter-btn active" onclick="filterBy('all')">全部</button>
+            <button class="filter-btn" data-platform="HOY TV" onclick="filterBy('HOY TV')">HOY TV</button><button class="filter-btn" data-platform="Netflix" onclick="filterBy('Netflix')">Netflix</button><button class="filter-btn" data-platform="TVB" onclick="filterBy('TVB')">TVB</button><button class="filter-btn" data-platform="TVB/ViuTV" onclick="filterBy('TVB/ViuTV')">TVB/ViuTV</button><button class="filter-btn" data-platform="ViuTV" onclick="filterBy('ViuTV')">ViuTV</button><button class="filter-btn" data-platform="WeTV" onclick="filterBy('WeTV')">WeTV</button><button class="filter-btn" data-platform="優酷" onclick="filterBy('優酷')">優酷</button>
         </div>
-    </main>
+        
+        <div id="articleList"></div>
+    </div>
     
-    <div class="modal-overlay" id="articleModal" onclick="closeModal(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closeModalDirect()">×</button>
+    <div class="modal" id="articleModal" onclick="if(event.target === this) closeModal()">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-meta">
-                    <span class="modal-platform" id="modalPlatform"></span>
-                    <span class="modal-date" id="modalDate"></span>
-                </div>
-                <h2 class="modal-title" id="modalTitle"></h2>
+                <span class="platform-tag" id="modalPlatform" style="color:white;border:1px solid rgba(255,255,255,0.3)"></span>
+                <h2 id="modalTitle"></h2>
+                <div class="meta" id="modalMeta"></div>
             </div>
             <div class="modal-body">
-                <div class="content" id="modalContent"></div>
+                <div class="article-content" id="modalContent"></div>
             </div>
         </div>
     </div>
     
     <script>
-        // Theme toggle
-        function toggleTheme() {
-            const body = document.body;
-            const btn = document.querySelector('.theme-btn');
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                btn.textContent = '🌙';
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                btn.textContent = '☀️';
-            }
-        }
-        
-        // Articles data
         const articles = [
-            {
-                id: 0,
+                        {
+                id: 1,
                 title: "《唱錢》與香港音樂節目的十字路口",
                 platform: "TVB/ViuTV",
-                content_type: "tv",
                 date: "2026-03-28",
-                tags: ['香港電視, 音樂節目, TVB, ViuTV, 粵語流行曲, 行業分析'],
-                preview: "上週 TVB 推出新節目《唱錢》，形式係音樂闖關遊戲——素人唱歌俾 AI 評分系統挑戰，難度分 Monster 級，獎金最高十萬。主持係森美、Eric Kwok、李茵彤。嘉賓有側田呢種出道多年嘅歌手，佢自己都話：「唱歌從此變得有對錯。」呢個...",
-                content: `<p>上週 TVB 推出新節目《唱錢》，形式係音樂闖關遊戲——素人唱歌俾 AI 評分系統挑戰，難度分 Monster 級，獎金最高十萬。主持係森美、Eric Kwok、李茵彤。嘉賓有側田呢種出道多年嘅歌手，佢自己都話：「唱歌從此變得有對錯。」</p><p>呢個節目嘅出現，其實係香港音樂節目多年收縮之後，少有嘅「原創音樂遊戲節目」。</p><p>
-香港音樂節目嘅輝煌，係跟隨粵語流行曲黃金期而生。七、八十年代，無綫電視（TVB）幾乎壟斷晒所有音樂宣傳渠道。歌手出新歌，必需上 TVB 节目《勁歌金曲》做宣傳，否則就冇曝光。**TVB 係唯一嘅遊戲規則制定者。**</p><p>當年《勁歌金曲》唔單止係音樂節目，係整個香港流行文化工業鏈嘅核心。歌手走紅次序、頒獎禮結局，某程度上都係喺呢個生態內決定。</p><p>
-2011 年至 2014 年間，爆發 **HKRIA 版權風波**（Hong Kong Record Industry Association）。三大國際唱片公司（Sony、EMI、Universal）因為版權費問題，同 TVB 鬧翻，集體抽起旗下歌手喺 TVB 嘅節目亮相。</p><p>呢個係一個分水嶺——**歌手唔再需要被迫靠 TVB 宣傳**，TVB 對樂壇嘅控制力開始瓦解。版權風波最終以曾志偉 2021 年回歸 TVB 重新破冰告終，但流失嘅時間同生態已經補唔番。</p><p>
-2019 年，ViuTV 推出《Chill Club》，形勢逆轉。</p><p>《Chill Club》同 TVB 傳統音樂節目嘅最大分別：</p><p>| | TVB 主流做法 | ViuTV《Chill Club》 |
+                preview: "背景：一個遊戲節目揭示的行業曙光 上週 TVB 推出新節目《唱錢》，形式係音樂闖關遊戲——素人唱歌俾 AI 評分系統挑戰，難度分 Monster 級，獎金最高十萬。主持係森美、Eric Kwok、李茵彤。嘉賓有側田呢種出道多年嘅歌手，佢自己…",
+                article: `<h3>背景：一個遊戲節目揭示的行業曙光</h3>
+<p>上週 TVB 推出新節目《唱錢》，形式係音樂闖關遊戲——素人唱歌俾 AI 評分系統挑戰，難度分 Monster 級，獎金最高十萬。主持係森美、Eric Kwok、李茵彤。嘉賓有側田呢種出道多年嘅歌手，佢自己都話：「唱歌從此變得有對錯。」</p>
+<p>呢個節目嘅出現，其實係香港音樂節目多年收縮之後，少有嘅「原創音樂遊戲節目」。</p>
+<h3>香港音樂節目的黃金年代</h3>
+<p>香港音樂節目嘅輝煌，係跟隨粵語流行曲黃金期而生。七、八十年代，無綫電視（TVB）幾乎壟斷晒所有音樂宣傳渠道。歌手出新歌，必需上 TVB 节目《勁歌金曲》做宣傳，否則就冇曝光。**TVB 係唯一嘅遊戲規則制定者。**</p>
+<p>當年《勁歌金曲》唔單止係音樂節目，係整個香港流行文化工業鏈嘅核心。歌手走紅次序、頒獎禮結局，某程度上都係喺呢個生態內決定。</p>
+<h3>衰落嘅遠因：版權風波與制度崩解</h3>
+<p>2011 年至 2014 年間，爆發 **HKRIA 版權風波**（Hong Kong Record Industry Association）。三大國際唱片公司（Sony、EMI、Universal）因為版權費問題，同 TVB 鬧翻，集體抽起旗下歌手喺 TVB 嘅節目亮相。</p>
+<p>呢個係一個分水嶺——**歌手唔再需要被迫靠 TVB 宣傳**，TVB 對樂壇嘅控制力開始瓦解。版權風波最終以曾志偉 2021 年回歸 TVB 重新破冰告終，但流失嘅時間同生態已經補唔番。</p>
+<h3>衰落嘅近因：ViuTV 崛起與節目策略分歧</h3>
+<p>2019 年，ViuTV 推出《Chill Club》，形勢逆轉。</p>
+<p>《Chill Club》同 TVB 傳統音樂節目嘅最大分別：</p>
+<p>| | TVB 主流做法 | ViuTV《Chill Club》 |
 |---|---|---|
 | **歌曲選擇** | 懷舊為主（《流行經典50年》） | 新歌優先 |
 | **歌手風格** | 熟面孔、穩定派 | 年輕歌手、 indie 風格 |
 | **節目生態** | 依附唱片公司制度 | 自建排行榜「Chill Club 推介榜」 |
-| **意識形態** | 保守，唔敢踩線 | 2019 年後容許藝人表達政治立場 |</p><p>林一峰曾經同一晚同時亮相 TVB《流行經典50年》（唱 90 年代舊歌）同 ViuTV《Chill Club》（唱新歌同自己作品），年輕觀眾嘅反應清晰不過——**大家想聽新嘢，唔係回帶**。</p><p>2020 年，香港正式踏入 **「五台時代」**——TVB、ViuTV、商台、港台、家卡通，五個渠道各有各做，TVB 不再係唯一。ViuTV 更有專屬排行榜，等於另起爐灶。</p><p>
-面對競爭，TVB 嘅策略係不斷裁撤同整合：</p><p>- **《勁歌金曲》停播**（2021 年左右），後分拆為《勁歌金榜》環節
+| **意識形態** | 保守，唔敢踩線 | 2019 年後容許藝人表達政治立場 |</p>
+<p>林一峰曾經同一晚同時亮相 TVB《流行經典50年》（唱 90 年代舊歌）同 ViuTV《Chill Club》（唱新歌同自己作品），年輕觀眾嘅反應清晰不過——**大家想聽新嘢，唔係回帶**。</p>
+<p>2020 年，香港正式踏入 **「五台時代」**——TVB、ViuTV、商台、港台、家卡通，五個渠道各有各做，TVB 不再係唯一。ViuTV 更有專屬排行榜，等於另起爐灶。</p>
+<h3>TVB 近年嘅應對：收縮同整合</h3>
+<p>面對競爭，TVB 嘅策略係不斷裁撤同整合：</p>
+<p>- **《勁歌金曲》停播**（2021 年左右），後分拆為《勁歌金榜》環節
 - **《勁歌金榜》再整合**，2026 年 1 月起正式成為《J Music》一部分
-- 獨立嘅原創音樂節目數量大幅減少，取而代之係「資訊+綜藝」混合型節目</p><p>余詠珊時期（2017-2021）主政無綫電視娛樂音樂業務，被批評者指呢段時間 TVB 音樂節目形象最為低落——**唔係冇做，係做嘅方向錯咗**：大量翻兜舊歌，同時代脫節。</p><p>
-《唱錢》係 TVB 少有嘅**原創音樂遊戲節目**，概念係結合唱歌能力測試同獎金刺激嘅互動形式。呢個唔係傳統意義上嘅「音樂节目」，但佢成功做到：</p><p>1. **娛樂性**：遊戲元素令觀眾有參與感
+- 獨立嘅原創音樂節目數量大幅減少，取而代之係「資訊+綜藝」混合型節目</p>
+<p>余詠珊時期（2017-2021）主政無綫電視娛樂音樂業務，被批評者指呢段時間 TVB 音樂節目形象最為低落——**唔係冇做，係做嘅方向錯咗**：大量翻兜舊歌，同時代脫節。</p>
+<h3>《唱錢》嘅出現意味著咩？</h3>
+<p>《唱錢》係 TVB 少有嘅**原創音樂遊戲節目**，概念係結合唱歌能力測試同獎金刺激嘅互動形式。呢個唔係傳統意義上嘅「音樂节目」，但佢成功做到：</p>
+<p>1. **娛樂性**：遊戲元素令觀眾有參與感
 2. **音樂性**：唔係齋靠顏值，要有真功夫先過到關
-3. **話題性**：十萬獎金得主、側田被考起，已成熱話</p><p>但我哋亦要問：**呢個係咪代表 TVB 喺音樂節目上嘅真正轉向？** 定還只係一次性嘅創意實驗？</p><p>
-香港音樂節目面對嘅困境，唔單止係電視台之間嘅競爭，係成個流行工業嘅結構性問題：</p><p>- **歌手出道渠道單一**：以往靠 TVB，忽然變成靠 MIRROR 效应同 social media
+3. **話題性**：十萬獎金得主、側田被考起，已成熱話</p>
+<p>但我哋亦要問：**呢個係咪代表 TVB 喺音樂節目上嘅真正轉向？** 定還只係一次性嘅創意實驗？</p>
+<h3>行業嘅根本問題</h3>
+<p>香港音樂節目面對嘅困境，唔單止係電視台之間嘅競爭，係成個流行工業嘅結構性問題：</p>
+<p>- **歌手出道渠道單一**：以往靠 TVB，忽然變成靠 MIRROR 效应同 social media
 - **粵語流行曲市場萎縮**：大灣區政策機遇同時間，本地創作者數量未能補足
 - **音樂工業收入模式改變**：streaming 平台崛起，但香港未建立完善嘅本土音樂生態
-- **政治環境影響**：意識形態限制令創作者有所顧忌</p><p>
-香港音樂節目現時處於一個微妙位置：**唔再係昔日嘅單一霸權，但亦未搵到新嘅可持續模式**。</p><p>ViuTV 靠 MIRROR 效應同《Chill Club》建立咗自己嘅音樂地盤，但 2025-2026 年廣告收益倒退，反映單靠偶像經濟唔係長遠之计。TVB 靠《新聞女王 2》止血轉賺，但音樂節目依然係弱勢。</p><p>《唱錢》嘅出現，證明 **觀眾對有質素嘅原創音樂節目依然有需求**——關鍵係 TVB 願唔願意持續投資，仲係只係當佢係一次性嘅收視實驗？</p><p>香港樂壇要真正復甦，需要嘅唔止係一個《唱錢》，係成個工業鏈——從培訓、製作、宣傳到變現——都需要重新梳理。而電視節目，只係呢個生態入面其中一個環節。</p><p>---</p><p>*延伸話題：MIRROR 效應到底帶動咗幾多本地音樂工業投資？ViuTV 2026 年嘅「團體演唱會」規劃係咪能夠逆轉？香港樂壇係咪需要一個新嘅「電視黃金時代」定係壓根兒就唔再需要電視？呢啲問題，值得繼續觀察。*</p> `
-            },
-            {
-                id: 1,
-                title: "《逐玉》— 古裝陸劇如何打破韓流壟斷 Netflix？",
-                platform: "Netflix",
-                content_type: "tv",
-                date: "2026-03-29",
-                tags: ['古裝, 陸劇, Netflix, 先婚後愛, 張凌赫, 田曦薇'],
-                preview: "過去幾年，Netflix 和 Disney+ 的亞洲內容版圖幾乎由韓劇主導。從早年的驚悚題材到近期的浪漫喜劇，平台演算法總是偏愛韓國製作。然而，2026 年三月上線的古裝陸劇《逐玉》，卻帶來了一場結結實實的突圍戰。根據官方最新公布的數據，這...",
-                content: `<p>過去幾年，Netflix 和 Disney+ 的亞洲內容版圖幾乎由韓劇主導。從早年的驚悚題材到近期的浪漫喜劇，平台演算法總是偏愛韓國製作。然而，2026 年三月上線的古裝陸劇《逐玉》，卻帶來了一場結結實實的突圍戰。</p><p>根據官方最新公布的數據，這部劇集單週觀看次數高達 **190 萬**，一口氣打進 **9 個國家和地區的熱門前十名**，成為史上首部登上 Netflix 全球非英語週榜的陸劇。能在以歐美及韓流為主的串流戰場中殺出一條血路，這份成績單對華語影視圈而言，絕對是一個重要里程碑。</p><p>---</p><p>
-《逐玉》的視覺美學獲得極高讚譽，導演精準捕捉張凌赫那種「清冷與破碎感交織」的美。觀眾評價道：「每一幀畫面都像是寫給張凌赫的一封情書」，並讚嘆導演透過女主角的視角帶領觀眾沉溺於這份美貌衝擊。</p><p>男神張凌赫在劇中飾演落難侯爺謝征，角色設定層次豐富——從隱忍低調到狠戾反擊，雙面性格精準拿捏，演技備受肯定。</p><p>---</p><p>
-田曦薇飾演的屠戶女樊長玉，一改觀眾對她「甜妹」的既定印象，武力值爆燈之餘，更在社交平台引爆熱議——她輕鬆背起 190cm 高的張凌赫，有趣場面讓網友大呼「最强反差 CP」。</p><p>兩人「假婚真爱」的設定，由最初的互相利用，到後來真心交付，甜虐節奏掌握得恰到好處，觀眾黏著度極高。</p><p>---</p><p>
-《逐玉》另一成功關鍵，在於「極致雕花」般的精緻服化道。從演員妝容到場景陳設，每個細節都一絲不苟，成功營造出亂世古裝的史詩感。配合「先婚後愛」的清晰框架，觀眾能快速投入劇情，獲得源源不絕的「爽感」。</p><p>---</p><p>
-<h4>結局洩露風波</p><p>《逐玉》尚未播畢，結局高清片源已在網上瘋傳。劇組及三大串流平台（騰訊視頻、愛奇藝、優酷）聯合發表聲明，強調將追查洩露源頭，依法追究法律責任。</p><p>#<h3>劇情節奏爭議</p><p>部分觀眾指出劇情推進稍慢，權謀線交代稍嫌混亂；另有觀眾吐槽「冬天拿着扇子」等邏輯漏洞。先甜後虐的轉折，亦有觀眾認為來得過於突然，情緒準備不足。</p><p>---</p><p></h4></h3>
-《逐玉》的成功，證明瞭優質製作與精準市場定位，足以打破語言與文化壁壘。張凌赫與田曦薇這對「最强反差 CP」，以顔值與化學反應成功攻陷海外觀眾，為陸劇出海寫下重要一章。儘管爭議難免，但作為現象級作品，《逐玉》足以在 2026 年的華語劇集中佔據一席之地。</p><p>**必看指數：⭐⭐⭐⭐⭐（5/5）**</p> `
+- **政治環境影響**：意識形態限制令創作者有所顧忌</p>
+<h3>結論：機遇與焦慮並存</h3>
+<p>香港音樂節目現時處於一個微妙位置：**唔再係昔日嘅單一霸權，但亦未搵到新嘅可持續模式**。</p>
+<p>ViuTV 靠 MIRROR 效應同《Chill Club》建立咗自己嘅音樂地盤，但 2025-2026 年廣告收益倒退，反映單靠偶像經濟唔係長遠之计。TVB 靠《新聞女王 2》止血轉賺，但音樂節目依然係弱勢。</p>
+<p>《唱錢》嘅出現，證明 **觀眾對有質素嘅原創音樂節目依然有需求**——關鍵係 TVB 願唔願意持續投資，仲係只係當佢係一次性嘅收視實驗？</p>
+<p>香港樂壇要真正復甦，需要嘅唔止係一個《唱錢》，係成個工業鏈——從培訓、製作、宣傳到變現——都需要重新梳理。而電視節目，只係呢個生態入面其中一個環節。</p>
+<p>---</p>
+<p>*延伸話題：MIRROR 效應到底帶動咗幾多本地音樂工業投資？ViuTV 2026 年嘅「團體演唱會」規劃係咪能夠逆轉？香港樂壇係咪需要一個新嘅「電視黃金時代」定係壓根兒就唔再需要電視？呢啲問題，值得繼續觀察。*</p>`
             },
             {
                 id: 2,
-                title: "《機智女法醫2》— 古裝 forensic 加外交陰謀，TVB外購難得冇仆街",
-                platform: "TVB",
-                content_type: "tv",
-                date: "2026-03-25",
-                tags: ['TVB, 外購劇, 古裝, 懸疑, forensic, 機智女法醫2, 御賜小仵作2'],
-                preview: "《御賜小仵作2》大家都知，內地騰訊播嘅時候熱度2.1萬、播放量1.18億。TVB 3月5日拎咗上翡翠台配音做晚晚9:30外購劇，仲要有**冠名贊助**。TVB 黃金檔冠名有門檻，唔係有錢就上到，係要節目有一定質素先會有廣告商願意用自己品牌命...",
-                content: `<p>《御賜小仵作2》大家都知，內地騰訊播嘅時候熱度2.1萬、播放量1.18億。TVB 3月5日拎咗上翡翠台配音做晚晚9:30外購劇，仲要有**冠名贊助**。</p><p>TVB 黃金檔冠名有門檻，唔係有錢就上到，係要節目有一定質素先會有廣告商願意用自己品牌命名呢個時段。呢個門檻唔會減價sell，變相係幫呢套劇嘅**內地口碑已驗證**——有基本收視保證，贊助商先肯入紙。</p><p>---</p><p>
-《機智女法醫2》改編自小說《名捕夫人》，背景唐中晚期，延續上一季設定——楚楚已係御賜仵作，嫁咗郡王蕭瑾瑜，婚後育有一仔。今季主線「血色玉韘案」——由一具佩戴血色玉韘嘅屍體開始，逐步揭發南趙意圖入侵大唐嘅陰謀，層層加碼到18年前先帝暴斃舊案。</p><p>**重點係：全部破解起點，都係楚楚驗到嘅一具屍。**</p><p>最新第15集大反轉——楚楚發現宮中聲稱死亡嘅南趙二王子祐辰安，「遺體」上舊傷特徵與真人唔符，**確定：那具屍體根本唔係佢**。南趙王派佢出使，不過一早當佢係棋子。 forensic 角度嘅妙處就喺呢度——用驗屍破解外交陰謀，呢個就係TVB自己拍唔出嘅格局。</p><p>---</p><p>
-以前外購古裝成日被彈「配音怪」——演員嘴型對唔上、配樂突兀、節奏慢咗幾拍。《機智女法醫2》今次**TVB配音**大致過關，演員語氣冇甩beat，至少聽落唔會令人想轉台。對唔鍾意配音、慣咗睇字幕嘅後生仔係加分位。</p><p>---</p><p>
-蕭瑾瑜染上疳霉瘡但繼續瞞病情救老婆，典型霸總今次有眼濕位。景翊 × 冷月由歡喜冤家升到相依相守，感情線自然唔催淚——唔會為咗催谷收視硬加一段三角戀。南趙二王子祐辰安以為係普通使者，原來另有目的，劇情走向取決於佢係友係敵。</p><p>---</p><p>
-過去TVB外購古裝多數水土不服，但今次有內地口碑打底、題材夠獨特（香港少見 forensic）、配音過關、節奏唔拖，每集有爆點唔會為咗拖集數加無謂感情線。**88萬觀眾捧場**，師奶界應該幾收貨。</p><p>**forensic 加外交陰謀，楚楚驗嘅唔止係屍，係成個朝代嘅真相。**</p><p>---</p><p>*📺 TVB翡翠台外購 / 原版：《御賜小仵作2》/ 👤 王子奇、蘇曉彤、楊廷東、趙堯珂 / 🎤 TVB粵語配音 / 💰 冠名贊助（黃金檔門檻）/ 📅 播出中，大結局4月3日*</p> `
+                title: "《重案解密》— 老土，但老土得未夠狠",
+                platform: "優酷",
+                date: "2026-04-18",
+                preview: "一套劇最大問題不是題材，而是定位。 《重案解密》打着「改編自香港真實奇案」的旗號，第一集交出的牌是：舊情、誤會、陳年懸案——經典到不能再經典的三寶。警長與女警因舊案反目，再被迫攜手辦案，呢個設定，我阿媽細個都睇過起碼三套。 問題不在演員，而…",
+                article: `<p>一套劇最大問題不是題材，而是定位。</p>
+<p>《重案解密》打着「改編自香港真實奇案」的旗號，第一集交出的牌是：舊情、誤會、陳年懸案——經典到不能再經典的三寶。警長與女警因舊案反目，再被迫攜手辦案，呢個設定，我阿媽細個都睇過起碼三套。</p>
+<p>問題不在演員，而在角色。</p>
+<p>苗僑偉是正氣老手，岑麗香係新生代警花，兩個加埋本該係穩陣配置。但第一集呈現的化學反應，勉強叫做「各玩各的」——你見到演員做緊嘢，但見唔到角色嘅靈魂。洪永城同周家怡相對比較穩，但戲份所限，搶唔到幾多分鐘。</p>
+<p>老土唔係罪，但老土得太平庸就係問題。</p>
+<p>第一集喺處理「重啟懸案」呢個契機時，節奏偏向安全，冇話故意慢，但亦都冇令人想追睇第二集嘅鈎。你以為會有一個超級反轉、結局揭示——結果收收埋埋，留到最後先話你知有伏筆，但個伏筆又未夠吸引。</p>
+<p>最後可以拉去講平台方向。</p>
+<p>優酷港劇場最近密密試緊呢種「中港合拍」犯罪懸疑配方，《重案解密》同《正義女神》路線相似，但後者有佘詩曼林峯呢張皇牌，前者只能靠「真實個案」呢個標籤硬食。12集嘅篇幅，唔算長，但如果頭幾集建立唔到追看動力的話，後半段就好難谷上嚟。</p>
+<p>結論：你當然可以繼續追——但期望值建議放喺「及格」水平，唔好諗住一嚟就係《踩過界》或《EU超時任務嗰種格局。</p>`
             },
             {
                 id: 3,
-                title: "《正義女神》— 從法袍到法袍，佘詩曼這次不放過任何一個「壞孩子」",
-                platform: "TVB",
-                content_type: "tv",
-                date: "2026-03-24",
-                tags: ['TVB, 佘詩曼, 法律, 少年法庭, 劇評'],
-                preview: "《正義女神》（Themis）2026年3月16日率先登陸優酷，3月30日翡翠台接力播出。最大賣點當然係**佘詩曼**——視后闊別TVB一段時間後強勢回歸，而且**首次披上法官袍**，飾演高等法院法官言惠知。一開場，佘詩曼已經唔同晒。不是「M...",
-                content: `<p>《正義女神》（Themis）2026年3月16日率先登陸優酷，3月30日翡翠台接力播出。最大賣點當然係**佘詩曼**——視后闊別TVB一段時間後強勢回歸，而且**首次披上法官袍**，飾演高等法院法官言惠知。</p><p>一開場，佘詩曼已經唔同晒。不是「Man姐」的霸氣，是另一種——**柔肩擔道義，法庭上殺人不見血**。一個案件，足以令她放棄高等法院的大好前途，主動申請降職去少年法庭。呢個決定，本身就已經係一種宣言。</p><p>---</p><p>
-**1. 視后再次封帝討論**</p><p>「佘詩曼演活咗個角色，好希望《正義女神》熱度爆出來」、「感覺後面繼續下去如果劇情和角色更好，大機會再拿5封」——大陸網民對佘詩曼嘅演技幾乎零負評，認為她把「果断、正義、強硬、溫柔又善良」四種特質融為一體。</p><p>**2. 「少年法庭」設定夠新鮮**</p><p>呢個係香港電視劇**少見的法官視角**。過去TVB的律政劇多數係律師視角（《踩過界》《怒火街頭》），今次直接切入法官群體，仲要係少年法庭——專審13至18歲被告。呢個切入點，被認為係「有勇氣」的選擇。</p><p>**3. 抄考《少年法庭》？同題材不同方向**</p><p>Netflix韓劇《少年法庭》（2022年）當年爆紅，以**極度冷峻、批判體制**嘅風格震撼觀眾。香港版某程度上有着相同的命題：**青少年犯罪，社會應該點處理？**</p><p>但風格截然不同：</p><p>| 比較 | 《少年法庭》（韓） | 《正義女神》（港） |
-|------|------------------|------------------|
-| 風格 | 冷峻、灰暗、批判體制 | 情感豐富、注重個體抉擇 |
-| 法官形象 | 厭惡少年犯、親自調查 | 理想主義、願意犧牲前途 |
-| 結局取向 | 系統無力感重 | 偏向「影響改變」的可能性 |</p><p>香港版多了份**溫情**——即使面對「惡魔少年」，言惠知選擇的係「從源頭拯救」而非單純懲罰。但呢個取向，亦係部分大陸網友批評的地方：**「太理想化」、「現實邊會咁童話」**。</p><p>---</p><p>
-值得一提的是**文頌嫻**的演出。相隔19年重返TVB，一出场儿子就死了——呢個角色極度悲劇，需要素顏上陣、刻意弄得憔悴。導演透露，十場戲有九場都係喊戲。呢個係觀眾另一個討論焦點：「文頌嫻真係好慘，但係佢嘅悲劇唔會令人覺得厭」。</p><p>---</p><p>
-此劇是許紹雄的**熒幕遺作**。佢飾演洪法官——即將退休、看似吊兒郎當但其實經驗老到的主任裁判官。呢個角色某程度上代表住上一代法官的價值觀，與言惠知的理想主義形成對照。有網民話：「感覺佢彷彿從未離開」。</p><p>---</p><p>
-《正義女神》稱唔稱得上神劇？現在定論太早。但佢做到咗一件事：**令香港觀眾願意認真思考「少年犯」呢個議題**。</p><p>比起《少年法庭》那種令人窒息的無力感，《正義女神》選擇了更困難的路——**相信改變仍然可能**。即使天真，呢個信念本身已經係一種聲音。</p><p>**一句到尾：視后狀態依然，題材有勇有謀，但香港版本地化係咪成功，仍待觀眾驗證。**</p><p>---</p><p>*平台：TVB（優酷先行）/ 演員：佘詩曼、譚耀文、陳煒、周嘉洛、許紹雄、文頌嫻 / 風格：法律+成長+社會反思*</p> `
+                title: "《逐玉》— 古裝陸劇如何打破韓流壟斷 Netflix？",
+                platform: "Netflix",
+                date: "2026-03-29",
+                preview: "過去幾年，Netflix 和 Disney+ 的亞洲內容版圖幾乎由韓劇主導。從早年的驚悚題材到近期的浪漫喜劇，平台演算法總是偏愛韓國製作。然而，2026 年三月上線的古裝陸劇《逐玉》，卻帶來了一場結結實實的突圍戰。 根據官方最新公布的數據，…",
+                article: `<p>過去幾年，Netflix 和 Disney+ 的亞洲內容版圖幾乎由韓劇主導。從早年的驚悚題材到近期的浪漫喜劇，平台演算法總是偏愛韓國製作。然而，2026 年三月上線的古裝陸劇《逐玉》，卻帶來了一場結結實實的突圍戰。</p>
+<p>根據官方最新公布的數據，這部劇集單週觀看次數高達 **190 萬**，一口氣打進 **9 個國家和地區的熱門前十名**，成為史上首部登上 Netflix 全球非英語週榜的陸劇。能在以歐美及韓流為主的串流戰場中殺出一條血路，這份成績單對華語影視圈而言，絕對是一個重要里程碑。</p>
+<p>---</p>
+<h3>大熱原因一：顔值即正義</h3>
+<p>《逐玉》的視覺美學獲得極高讚譽，導演精準捕捉張凌赫那種「清冷與破碎感交織」的美。觀眾評價道：「每一幀畫面都像是寫給張凌赫的一封情書」，並讚嘆導演透過女主角的視角帶領觀眾沉溺於這份美貌衝擊。</p>
+<p>男神張凌赫在劇中飾演落難侯爺謝征，角色設定層次豐富——從隱忍低調到狠戾反擊，雙面性格精準拿捏，演技備受肯定。</p>
+<p>---</p>
+<h3>大熱原因二：最强反差 CP</h3>
+<p>田曦薇飾演的屠戶女樊長玉，一改觀眾對她「甜妹」的既定印象，武力值爆燈之餘，更在社交平台引爆熱議——她輕鬆背起 190cm 高的張凌赫，有趣場面讓網友大呼「最强反差 CP」。</p>
+<p>兩人「假婚真爱」的設定，由最初的互相利用，到後來真心交付，甜虐節奏掌握得恰到好處，觀眾黏著度極高。</p>
+<p>---</p>
+<h3>大熱原因三：製作精良・爽感充足</h3>
+<p>《逐玉》另一成功關鍵，在於「極致雕花」般的精緻服化道。從演員妝容到場景陳設，每個細節都一絲不苟，成功營造出亂世古裝的史詩感。配合「先婚後愛」的清晰框架，觀眾能快速投入劇情，獲得源源不絕的「爽感」。</p>
+<p>---</p>
+<h3>爭議與批評：完美並不存在</h3>
+<h4>結局洩露風波</h4>
+<p>《逐玉》尚未播畢，結局高清片源已在網上瘋傳。劇組及三大串流平台（騰訊視頻、愛奇藝、優酷）聯合發表聲明，強調將追查洩露源頭，依法追究法律責任。</p>
+<h4>劇情節奏爭議</h4>
+<p>部分觀眾指出劇情推進稍慢，權謀線交代稍嫌混亂；另有觀眾吐槽「冬天拿着扇子」等邏輯漏洞。先甜後虐的轉折，亦有觀眾認為來得過於突然，情緒準備不足。</p>
+<p>---</p>
+<h3>總結：陸劇出海的代表作</h3>
+<p>《逐玉》的成功，證明瞭優質製作與精準市場定位，足以打破語言與文化壁壘。張凌赫與田曦薇這對「最强反差 CP」，以顔值與化學反應成功攻陷海外觀眾，為陸劇出海寫下重要一章。儘管爭議難免，但作為現象級作品，《逐玉》足以在 2026 年的華語劇集中佔據一席之地。</p>
+<p>**必看指數：⭐⭐⭐⭐⭐（5/5）**</p>`
             },
             {
                 id: 4,
-                title: "《愛情怎麼翻譯？》— 語言天才與國際巨星，愛能跨越幾多語言？",
-                platform: "Netflix",
-                content_type: "tv",
-                date: "2026-03-22",
-                tags: ['Netflix, 韓劇, 愛情, 金宣虎, 高允貞, 洪氏姊妹'],
-                preview: "語言，是橋樑還是牆？Netflix 新劇《愛情怎麼翻譯？》（Can This Love Be Translated？）由《德魯納酒店》《還魂》的洪氏姊妹編劇，《契約友情》《紅丹心》的柳英恩導演，2026年1月16日全球首播。演員陣容包括金宣...",
-                content: `<p>語言，是橋樑還是牆？</p><p>Netflix 新劇《愛情怎麼翻譯？》（Can This Love Be Translated？）由《德魯納酒店》《還魂》的洪氏姊妹編劇，《契約友情》《紅丹心》的柳英恩導演，2026年1月16日全球首播。演員陣容包括金宣虎、高允貞、福士蒼汰，遠赴日本、加拿大、意大利取景。</p><p>故事講述天才口譯員周浩鎮（金宣虎 飾），精通六種語言，綽號「Papago」，卻是愛情白癡。國際巨星車茂熙（高允貞 飾）因喪屍電影一炮而紅，卻在走紅後陷入公眾人物的孤獨。兩人因為一檔真人秀《浪漫之旅》重新相遇——茂熙與日本演員黑澤博（福士蒼汰 飾）出演戀愛節目，浩鎮受聘擔任翻譯。</p><p>問題來了：當翻譯軟件能即時轉換語言，點解兩個人仍然無法理解彼此？</p><p>
-《愛情怎麼翻譯？》唔係典型甜寵劇。洪氏姊妹這次沒有寫童話，而是寫了一個關於「無法表達」的故事。</p><p>浩鎮的问题是：他懂得所有語言，卻不懂得怎麼說「我愛你」。茂熙的問題是：她是公眾人物，早已習慣戴上口罩說話。兩人之間隔着的，不只是六種語言，還有創傷、逃避、與自我保護。</p><p>劇評普遍認為，這部劇觸及了「創傷」「語言隔閡」「公眾人物的異化」以及「迴避型依附」等心理層面。有評價指它「最甜也最寂寞」，甜戲不多，但每一場對話都有重量。</p><p>
-金宣虎與高允貞的螢幕化學反應獲得一致讚賞，被形容為「神顏CP」。劇組遠赴鎌倉、意大利等風景優美的地方拍攝，每一幀都可以截圖做wallpaper。但風景再美，都唔夠兩個人的眼神交戲好看。</p><p>值得一讚的是福士蒼汰扮演的日本演員黑澤博——呢個角色並非簡單的情敵，而係映照出兩位主角內心的一面鏡子。</p><p>
-如果要用一句話總結《愛情怎麼翻譯？》，我會話：**「語言係工具，愛係選擇。」**</p><p>劇中有一句台詞大概係咁講的：「即使我地語言相通，我地仍然可能係陌生人。」呢個先係最殘忍又最真實嘅地方。</p><p>推介俾：喜歡深度愛情劇、對心理描寫有興趣、願意思考「溝通」真正意思嘅觀眾。</p><p>---
-*資料來源：維基百科、Elle、Vocus、Beauty321、Yahoo新聞（2026年3月）*</p> `
+                title: "《機智女法醫2》— 古裝 forensic 加外交陰謀，TVB外購難得冇仆街",
+                platform: "TVB",
+                date: "2026-03-25",
+                preview: "黃金檔有門檻　冠名唔減價 《御賜小仵作2》大家都知，內地騰訊播嘅時候熱度2.1萬、播放量1.18億。TVB 3月5日拎咗上翡翠台配音做晚晚9:30外購劇，仲要有**冠名贊助**。 TVB 黃金檔冠名有門檻，唔係有錢就上到，係要節目有一定質素…",
+                article: `<h3>黃金檔有門檻　冠名唔減價</h3>
+<p>《御賜小仵作2》大家都知，內地騰訊播嘅時候熱度2.1萬、播放量1.18億。TVB 3月5日拎咗上翡翠台配音做晚晚9:30外購劇，仲要有**冠名贊助**。</p>
+<p>TVB 黃金檔冠名有門檻，唔係有錢就上到，係要節目有一定質素先會有廣告商願意用自己品牌命名呢個時段。呢個門檻唔會減價sell，變相係幫呢套劇嘅**內地口碑已驗證**——有基本收視保證，贊助商先肯入紙。</p>
+<p>---</p>
+<h3>全部起點　都係楚楚驗到嘅一具屍</h3>
+<p>《機智女法醫2》改編自小說《名捕夫人》，背景唐中晚期，延續上一季設定——楚楚已係御賜仵作，嫁咗郡王蕭瑾瑜，婚後育有一仔。今季主線「血色玉韘案」——由一具佩戴血色玉韘嘅屍體開始，逐步揭發南趙意圖入侵大唐嘅陰謀，層層加碼到18年前先帝暴斃舊案。</p>
+<p>**重點係：全部破解起點，都係楚楚驗到嘅一具屍。**</p>
+<p>最新第15集大反轉——楚楚發現宮中聲稱死亡嘅南趙二王子祐辰安，「遺體」上舊傷特徵與真人唔符，**確定：那具屍體根本唔係佢**。南趙王派佢出使，不過一早當佢係棋子。 forensic 角度嘅妙處就喺呢度——用驗屍破解外交陰謀，呢個就係TVB自己拍唔出嘅格局。</p>
+<p>---</p>
+<h3>TVB配音今次冇仆街</h3>
+<p>以前外購古裝成日被彈「配音怪」——演員嘴型對唔上、配樂突兀、節奏慢咗幾拍。《機智女法醫2》今次**TVB配音**大致過關，演員語氣冇甩beat，至少聽落唔會令人想轉台。對唔鍾意配音、慣咗睇字幕嘅後生仔係加分位。</p>
+<p>---</p>
+<h3>人物有嘢做</h3>
+<p>蕭瑾瑜染上疳霉瘡但繼續瞞病情救老婆，典型霸總今次有眼濕位。景翊 × 冷月由歡喜冤家升到相依相守，感情線自然唔催淚——唔會為咗催谷收視硬加一段三角戀。南趙二王子祐辰安以為係普通使者，原來另有目的，劇情走向取決於佢係友係敵。</p>
+<p>---</p>
+<h3>一句到尾</h3>
+<p>過去TVB外購古裝多數水土不服，但今次有內地口碑打底、題材夠獨特（香港少見 forensic）、配音過關、節奏唔拖，每集有爆點唔會為咗拖集數加無謂感情線。**88萬觀眾捧場**，師奶界應該幾收貨。</p>
+<p>**forensic 加外交陰謀，楚楚驗嘅唔止係屍，係成個朝代嘅真相。**</p>
+<p>---</p>
+<p>*📺 TVB翡翠台外購 / 原版：《御賜小仵作2》/ 👤 王子奇、蘇曉彤、楊廷東、趙堯珂 / 🎤 TVB粵語配音 / 💰 冠名贊助（黃金檔門檻）/ 📅 播出中，大結局4月3日*</p>`
             },
             {
                 id: 5,
-                title: "《小城大事》— 趙麗穎×黃曉明演活基層奇蹟",
-                platform: "WeTV",
-                content_type: "tv",
-                date: "2026-03-21",
-                tags: ['陸劇, 年代劇, 改革開放, 趙麗穎, 黃曉明, 評測'],
-                preview: "如果話2026年1月有邊套陸劇係唔可以錯過，《小城大事》一定係其中之一。趙麗穎同黃曉明呢對「強強聯手」嘅組合，一文一武、一個留法歸來、一個扎根泥土，喺資源匱乏、沒有國家撥款嘅艱困條件下，帶住小鎮基層幹部同鎮民，「集資合夥」一步步起出一座現代...",
-                content: `<p>如果話2026年1月有邊套陸劇係唔可以錯過，《小城大事》一定係其中之一。</p><p>趙麗穎同黃曉明呢對「強強聯手」嘅組合，一文一武、一個留法歸來、一個扎根泥土，喺資源匱乏、沒有國家撥款嘅艱困條件下，帶住小鎮基層幹部同鎮民，「集資合夥」一步步起出一座現代城市。</p><p>---</p><p>
-呢套劇最打動我嘅地方，係角色塑造。</p><p>**趙麗穎** 飾演嘅李秋萍唔係典型大女主，唔係完美人設，而係一個會害怕、會猶豫、會犯錯嘅普通人。全素顏、方言原聲演出，為戲增重8公斤，展現基層女幹 部嘅敬業同硬骨頭精神。</p><p>**黃曉明** 為咗角色狠甩15公斤，褪晒「霸總」外殼，以一身土氣但扎實嘅草根氣質回歸。佢飾演嘅鄭德誠唔係正派亦唔係反派，而係一個喺現實中左右為難嘅中年人——呢種灰色地帶先至係我哋身邊真實存在嘅人。</p><p>---</p><p>
-兩位演員都交出咗「毀容式」演出：</p><p>- 趙麗穎全素顏喺暴雨中搶險，無台詞眼神戲成為加分關鍵
-- 黃曉明「吃紙耍賴」嘅即興表演，展現前所未見嘅演技層次
-- 趙麗穎喺訪問入面笑住話黃曉明「這是毛病吧？」，延續《中餐廳》嘅歡喜冤家化學反應</p><p>---</p><p>
-呢套劇用輕喜劇形式包裝改革開放呢個厚重主題，係創作者嘅自覺追求——</p><p>> 以「小城」嘅微觀視角承載「大事」嘅時代分量，為主旋律題材煥發出新嘅思想活力同情感溫度。</p><p>跳 出歌頌成就嘅單一框架，係近年陸劇少見嘅膽試。唔洗捱苦情催淚，但睇完會真心覺得：改革開放呢個世代，的確有一班人用血肉之軀創造奇蹟。</p><p>---</p><p>
-隨著口碑發酵，《小城大事》打趴同檔宋威龍主演嘅《驕陽似我》收視奪冠，絕對係實力證明。</p><p>---</p><p>
-✅ 你喜歡《風吹半夏》《幸福到萬家呢類寫實風格
-✅ 你想了解改革開放歷史但又怕悶
-✅ 你想睇演員「毀容式」嘅敬業演出
-✅ 你中意有血肉嘅角色塑造</p><p>❌ 如果你想要愛情線好重嘅偶像劇，就skip呢套</p><p>---</p><p>**總結**：⭐⭐⭐⭐⭐（5/5）</p><p>《小城大事》唔係嗰種你要「追」嘅爆款，而係一套值得靜下心嚟睇、慢慢感受嘅作品。趙麗穎同黃曉明嘅化學反應係驚喜，輕喜劇嘅包裝方式令沉重歷史變得易入口——2026年目前最推薦嘅陸劇，絕對係呢套。</p> `
+                title: "《正義女神》— 從法袍到法袍，佘詩曼這次不放過任何一個「壞孩子」",
+                platform: "TVB",
+                date: "2026-03-24",
+                preview: "不是《新聞女王》2.0，是TVB少見的「法官視角」 《正義女神》（Themis）2026年3月16日率先登陸優酷，3月30日翡翠台接力播出。最大賣點當然係**佘詩曼**——視后闊別TVB一段時間後強勢回歸，而且**首次披上法官袍**，飾演高…",
+                article: `<h3>不是《新聞女王》2.0，是TVB少見的「法官視角」</h3>
+<p>《正義女神》（Themis）2026年3月16日率先登陸優酷，3月30日翡翠台接力播出。最大賣點當然係**佘詩曼**——視后闊別TVB一段時間後強勢回歸，而且**首次披上法官袍**，飾演高等法院法官言惠知。</p>
+<p>一開場，佘詩曼已經唔同晒。不是「Man姐」的霸氣，是另一種——**柔肩擔道義，法庭上殺人不見血**。一個案件，足以令她放棄高等法院的大好前途，主動申請降職去少年法庭。呢個決定，本身就已經係一種宣言。</p>
+<p>---</p>
+<h3>大陸網友點睇？微博熱議三大方向</h3>
+<p>**1. 視后再次封帝討論**</p>
+<p>「佘詩曼演活咗個角色，好希望《正義女神》熱度爆出來」、「感覺後面繼續下去如果劇情和角色更好，大機會再拿5封」——大陸網民對佘詩曼嘅演技幾乎零負評，認為她把「果断、正義、強硬、溫柔又善良」四種特質融為一體。</p>
+<p>**2. 「少年法庭」設定夠新鮮**</p>
+<p>呢個係香港電視劇**少見的法官視角**。過去TVB的律政劇多數係律師視角（《踩過界》《怒火街頭》），今次直接切入法官群體，仲要係少年法庭——專審13至18歲被告。呢個切入點，被認為係「有勇氣」的選擇。</p>
+<p>**3. 抄考《少年法庭》？同題材不同方向**</p>
+<p>Netflix韓劇《少年法庭》（2022年）當年爆紅，以**極度冷峻、批判體制**嘅風格震撼觀眾。香港版某程度上有着相同的命題：**青少年犯罪，社會應該點處理？**</p>
+<p>但風格截然不同：</p>
+<p>| 比較 | 《少年法庭》（韓） | 《正義女神》（港） |
+|------|------------------|------------------|
+| 風格 | 冷峻、灰暗、批判體制 | 情感豐富、注重個體抉擇 |
+| 法官形象 | 厭惡少年犯、親自調查 | 理想主義、願意犧牲前途 |
+| 結局取向 | 系統無力感重 | 偏向「影響改變」的可能性 |</p>
+<p>香港版多了份**溫情**——即使面對「惡魔少年」，言惠知選擇的係「從源頭拯救」而非單純懲罰。但呢個取向，亦係部分大陸網友批評的地方：**「太理想化」、「現實邊會咁童話」**。</p>
+<p>---</p>
+<h3>文頌嫻隔19年回歸：十場有九場喊</h3>
+<p>值得一提的是**文頌嫻**的演出。相隔19年重返TVB，一出场儿子就死了——呢個角色極度悲劇，需要素顏上陣、刻意弄得憔悴。導演透露，十場戲有九場都係喊戲。呢個係觀眾另一個討論焦點：「文頌嫻真係好慘，但係佢嘅悲劇唔會令人覺得厭」。</p>
+<p>---</p>
+<h3>許紹雄的告别作</h3>
+<p>此劇是許紹雄的**熒幕遺作**。佢飾演洪法官——即將退休、看似吊兒郎當但其實經驗老到的主任裁判官。呢個角色某程度上代表住上一代法官的價值觀，與言惠知的理想主義形成對照。有網民話：「感覺佢彷彿從未離開」。</p>
+<p>---</p>
+<h3>總結：TVB少有的「有溫度的法律劇」</h3>
+<p>《正義女神》稱唔稱得上神劇？現在定論太早。但佢做到咗一件事：**令香港觀眾願意認真思考「少年犯」呢個議題**。</p>
+<p>比起《少年法庭》那種令人窒息的無力感，《正義女神》選擇了更困難的路——**相信改變仍然可能**。即使天真，呢個信念本身已經係一種聲音。</p>
+<p>**一句到尾：視后狀態依然，題材有勇有謀，但香港版本地化係咪成功，仍待觀眾驗證。**</p>
+<p>---</p>
+<p>*平台：TVB（優酷先行）/ 演員：佘詩曼、譚耀文、陳煒、周嘉洛、許紹雄、文頌嫻 / 風格：法律+成長+社會反思*</p>`
             },
             {
                 id: 6,
-                title: "《訂閱男友》— Jisoo 挑戰虛擬戀愛，係創新定係呃Like？",
+                title: "《愛情怎麼翻譯？》— 語言天才與國際巨星，愛能跨越幾多語言？",
                 platform: "Netflix",
-                content_type: "tv",
-                date: "2026-03-20",
-                tags: ['Netflix, 韓劇, Jisoo, K-Pop, 虛擬戀愛, AI'],
-                preview: "由 BLACKPINK Jisoo 主演既《訂閱男友》（Boyfriend on Demand）3月6日正式登陸 Netflix。故事講述女主角「徐未來」透過一個「虛擬戀愛訂閱」服務，一次過解鎖八種理想型——霸總、白馬王子、校園初戀，乜類型...",
-                content: `<p>由 BLACKPINK Jisoo 主演既《訂閱男友》（Boyfriend on Demand）3月6日正式登陸 Netflix。故事講述女主角「徐未來」透過一個「虛擬戀愛訂閱」服務，一次過解鎖八種理想型——霸總、白馬王子、校園初戀，乜類型都有。</p><p>呢個設定直頭係為咗我哋呢啲「岩岩失戀」或者「對現實戀愛乸聲」既都市人度身訂造：唔洗付出真心，又可以享受到戀愛既甜——呢個世界到底係進步定係悲哀？</p><p>
-老實講，Jisoo 既演技之前大家都會質疑——畢竟「人間 DIOR」做歌手就得，做戲就得唔得？</p><p>今次佢既要應付「一次過約會 9 個男人」既場面，又要展現對「虛擬」同「真實」既掙扎。我覺得佢既進步係明顯既——起碼做唔到死板的「女神」表情，會有啲小女生既扭擰同心事。</p><p>同徐仁國既 Kiss 場戲就最多人討論，網上瘋傳既片段都幾🔥。</p><p>
-呢套劇既核心，其實係探討一個好時代既問題：**「如果愛情可以零風險，你仲使唔使去愛？」**</p><p>編劇最後既選擇幾有意思——Jisoo 唔係揀任何一個「訂閱男友」，而係揀咗現實中既朴慶南。呢個係咪即係話「冇痛既戀愛唔係真正既戀愛」？定係ampion「虛擬野終歸都係假」？</p><p>
-我個人覺得呢套劇「創意有餘，深入不足」。佢提出咗好好既問題（AI 戀愛、虛擬情感），但係用「下飯劇」「輕鬆高甜」既包裝，反而冇咁多位去探討呢啲咁deep既議題。</p><p>如果你鍾意睇靚人靚景、輕鬆呃時間，呢套 OK。但如果你期待好似《黑暗榮耀》咁有深度既 Jisoo，可能要等多幾套。</p><p>**Score: 6.5/10** — 有驚喜，但未夠震撼。</p><p>---</p><p>*有興趣可以留意：Jisoo 現實中既身價已經飆升 HK$9.2億，呢套劇會唔會令佢既演員路更順？*</p> `
+                date: "2026-03-22",
+                preview: "當語言天才遇上國際巨星 語言，是橋樑還是牆？ Netflix 新劇《愛情怎麼翻譯？》（Can This Love Be Translated？）由《德魯納酒店》《還魂》的洪氏姊妹編劇，《契約友情》《紅丹心》的柳英恩導演，2026年1月16日…",
+                article: `<h3>當語言天才遇上國際巨星</h3>
+<p>語言，是橋樑還是牆？</p>
+<p>Netflix 新劇《愛情怎麼翻譯？》（Can This Love Be Translated？）由《德魯納酒店》《還魂》的洪氏姊妹編劇，《契約友情》《紅丹心》的柳英恩導演，2026年1月16日全球首播。演員陣容包括金宣虎、高允貞、福士蒼汰，遠赴日本、加拿大、意大利取景。</p>
+<p>故事講述天才口譯員周浩鎮（金宣虎 飾），精通六種語言，綽號「Papago」，卻是愛情白癡。國際巨星車茂熙（高允貞 飾）因喪屍電影一炮而紅，卻在走紅後陷入公眾人物的孤獨。兩人因為一檔真人秀《浪漫之旅》重新相遇——茂熙與日本演員黑澤博（福士蒼汰 飾）出演戀愛節目，浩鎮受聘擔任翻譯。</p>
+<p>問題來了：當翻譯軟件能即時轉換語言，點解兩個人仍然無法理解彼此？</p>
+<h3>不是童話，是寫實的親密關係</h3>
+<p>《愛情怎麼翻譯？》唔係典型甜寵劇。洪氏姊妹這次沒有寫童話，而是寫了一個關於「無法表達」的故事。</p>
+<p>浩鎮的问题是：他懂得所有語言，卻不懂得怎麼說「我愛你」。茂熙的問題是：她是公眾人物，早已習慣戴上口罩說話。兩人之間隔着的，不只是六種語言，還有創傷、逃避、與自我保護。</p>
+<p>劇評普遍認為，這部劇觸及了「創傷」「語言隔閡」「公眾人物的異化」以及「迴避型依附」等心理層面。有評價指它「最甜也最寂寞」，甜戲不多，但每一場對話都有重量。</p>
+<h3>演員火花與拍攝美學</h3>
+<p>金宣虎與高允貞的螢幕化學反應獲得一致讚賞，被形容為「神顏CP」。劇組遠赴鎌倉、意大利等風景優美的地方拍攝，每一幀都可以截圖做wallpaper。但風景再美，都唔夠兩個人的眼神交戲好看。</p>
+<p>值得一讚的是福士蒼汰扮演的日本演員黑澤博——呢個角色並非簡單的情敵，而係映照出兩位主角內心的一面鏡子。</p>
+<h3>結語：翻譯不了的，就靠感覺</h3>
+<p>如果要用一句話總結《愛情怎麼翻譯？》，我會話：**「語言係工具，愛係選擇。」**</p>
+<p>劇中有一句台詞大概係咁講的：「即使我地語言相通，我地仍然可能係陌生人。」呢個先係最殘忍又最真實嘅地方。</p>
+<p>推介俾：喜歡深度愛情劇、對心理描寫有興趣、願意思考「溝通」真正意思嘅觀眾。</p>
+<p>---
+*資料來源：維基百科、Elle、Vocus、Beauty321、Yahoo新聞（2026年3月）*</p>`
             },
             {
                 id: 7,
-                title: "《足球女將2》— 續作的尷尬與ViuTV的隱憂",
-                platform: "ViuTV",
-                content_type: "tv",
-                date: "2026-03-19",
-                tags: ['ViuTV, 足球劇, 劇評'],
-                preview: "曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。",
-                content: `<p>曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。</p> `
+                title: "《小城大事》— 趙麗穎×黃曉明演活基層奇蹟",
+                platform: "WeTV",
+                date: "2026-03-21",
+                preview: "改革開放最好睇嘅打開方式 如果話2026年1月有邊套陸劇係唔可以錯過，《小城大事》一定係其中之一。 趙麗穎同黃曉明呢對「強強聯手」嘅組合，一文一武、一個留法歸來、一個扎根泥土，喺資源匱乏、沒有國家撥款嘅艱困條件下，帶住小鎮基層幹部同鎮民，「…",
+                article: `<h3>改革開放最好睇嘅打開方式</h3>
+<p>如果話2026年1月有邊套陸劇係唔可以錯過，《小城大事》一定係其中之一。</p>
+<p>趙麗穎同黃曉明呢對「強強聯手」嘅組合，一文一武、一個留法歸來、一個扎根泥土，喺資源匱乏、沒有國家撥款嘅艱困條件下，帶住小鎮基層幹部同鎮民，「集資合夥」一步步起出一座現代城市。</p>
+<p>---</p>
+<h3>角色：唔完美，先至係真人</h3>
+<p>呢套劇最打動我嘅地方，係角色塑造。</p>
+<p>**趙麗穎** 飾演嘅李秋萍唔係典型大女主，唔係完美人設，而係一個會害怕、會猶豫、會犯錯嘅普通人。全素顏、方言原聲演出，為戲增重8公斤，展現基層女幹 部嘅敬業同硬骨頭精神。</p>
+<p>**黃曉明** 為咗角色狠甩15公斤，褪晒「霸總」外殼，以一身土氣但扎實嘅草根氣質回歸。佢飾演嘅鄭德誠唔係正派亦唔係反派，而係一個喺現實中左右為難嘅中年人——呢種灰色地帶先至係我哋身邊真實存在嘅人。</p>
+<p>---</p>
+<h3>演技對決：毀容式演出</h3>
+<p>兩位演員都交出咗「毀容式」演出：</p>
+<p>- 趙麗穎全素顏喺暴雨中搶險，無台詞眼神戲成為加分關鍵
+- 黃曉明「吃紙耍賴」嘅即興表演，展現前所未見嘅演技層次
+- 趙麗穎喺訪問入面笑住話黃曉明「這是毛病吧？」，延續《中餐廳》嘅歡喜冤家化學反應</p>
+<p>---</p>
+<h3>敘事風格：輕喜劇包裝厚重題材</h3>
+<p>呢套劇用輕喜劇形式包裝改革開放呢個厚重主題，係創作者嘅自覺追求——</p>
+<p>&gt; 以「小城」嘅微觀視角承載「大事」嘅時代分量，為主旋律題材煥發出新嘅思想活力同情感溫度。</p>
+<p>跳 出歌頌成就嘅單一框架，係近年陸劇少見嘅膽試。唔洗捱苦情催淚，但睇完會真心覺得：改革開放呢個世代，的確有一班人用血肉之軀創造奇蹟。</p>
+<p>---</p>
+<h3>收視表現</h3>
+<p>隨著口碑發酵，《小城大事》打趴同檔宋威龍主演嘅《驕陽似我》收視奪冠，絕對係實力證明。</p>
+<p>---</p>
+<h3>適合你嗎？</h3>
+<p>✅ 你喜歡《風吹半夏》《幸福到萬家呢類寫實風格
+✅ 你想了解改革開放歷史但又怕悶
+✅ 你想睇演員「毀容式」嘅敬業演出
+✅ 你中意有血肉嘅角色塑造</p>
+<p>❌ 如果你想要愛情線好重嘅偶像劇，就skip呢套</p>
+<p>---</p>
+<p>**總結**：⭐⭐⭐⭐⭐（5/5）</p>
+<p>《小城大事》唔係嗰種你要「追」嘅爆款，而係一套值得靜下心嚟睇、慢慢感受嘅作品。趙麗穎同黃曉明嘅化學反應係驚喜，輕喜劇嘅包裝方式令沉重歷史變得易入口——2026年目前最推薦嘅陸劇，絕對係呢套。</p>`
             },
             {
                 id: 8,
-                title: "《臥底嬌娃》— 市場定位兩邊唔到岸既典型",
-                platform: "TVB",
-                content_type: "tv",
-                date: "2026-03-19",
-                tags: ['TVB, 警匪劇, 劇評'],
-                preview: "《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。",
-                content: `<p>《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。</p> `
+                title: "《訂閱男友》— Jisoo 挑戰虛擬戀愛，係創新定係呃Like？",
+                platform: "Netflix",
+                date: "2026-03-20",
+                preview: "劇情簡介 由 BLACKPINK Jisoo 主演既《訂閱男友》（Boyfriend on Demand）3月6日正式登陸 Netflix。故事講述女主角「徐未來」透過一個「虛擬戀愛訂閱」服務，一次過解鎖八種理想型——霸總、白馬王子、校園初…",
+                article: `<h3>劇情簡介</h3>
+<p>由 BLACKPINK Jisoo 主演既《訂閱男友》（Boyfriend on Demand）3月6日正式登陸 Netflix。故事講述女主角「徐未來」透過一個「虛擬戀愛訂閱」服務，一次過解鎖八種理想型——霸總、白馬王子、校園初戀，乜類型都有。</p>
+<p>呢個設定直頭係為咗我哋呢啲「岩岩失戀」或者「對現實戀愛乸聲」既都市人度身訂造：唔洗付出真心，又可以享受到戀愛既甜——呢個世界到底係進步定係悲哀？</p>
+<h3>Jisoo 表現點樣？</h3>
+<p>老實講，Jisoo 既演技之前大家都會質疑——畢竟「人間 DIOR」做歌手就得，做戲就得唔得？</p>
+<p>今次佢既要應付「一次過約會 9 個男人」既場面，又要展現對「虛擬」同「真實」既掙扎。我覺得佢既進步係明顯既——起碼做唔到死板的「女神」表情，會有啲小女生既扭擰同心事。</p>
+<p>同徐仁國既 Kiss 場戲就最多人討論，網上瘋傳既片段都幾🔥。</p>
+<h3>到底想講乜？</h3>
+<p>呢套劇既核心，其實係探討一個好時代既問題：**「如果愛情可以零風險，你仲使唔使去愛？」**</p>
+<p>編劇最後既選擇幾有意思——Jisoo 唔係揀任何一個「訂閱男友」，而係揀咗現實中既朴慶南。呢個係咪即係話「冇痛既戀愛唔係真正既戀愛」？定係ampion「虛擬野終歸都係假」？</p>
+<h3>係創新定係呃Like？</h3>
+<p>我個人覺得呢套劇「創意有餘，深入不足」。佢提出咗好好既問題（AI 戀愛、虛擬情感），但係用「下飯劇」「輕鬆高甜」既包裝，反而冇咁多位去探討呢啲咁deep既議題。</p>
+<p>如果你鍾意睇靚人靚景、輕鬆呃時間，呢套 OK。但如果你期待好似《黑暗榮耀》咁有深度既 Jisoo，可能要等多幾套。</p>
+<p>**Score: 6.5/10** — 有驚喜，但未夠震撼。</p>
+<p>---</p>
+<p>*有興趣可以留意：Jisoo 現實中既身價已經飆升 HK$9.2億，呢套劇會唔會令佢既演員路更順？*</p>`
             },
             {
                 id: 9,
-                title: "《歲月如歌》— 零討論度背後的系統問題",
-                platform: "HOY TV",
-                content_type: "tv",
+                title: "《足球女將2》— 續作的尷尬與ViuTV的隱憂",
+                platform: "ViuTV",
                 date: "2026-03-19",
-                tags: ['HOY TV, 歌唱節目, 綜藝, 劇評'],
-                preview: "《歲月如歌》——HOY TV年度大型跨平台、跨地區歌唱節目，喺香港著名地標戲曲中心拍攝，仲要拎埋政府「創意智優計劃」主要資助。聽落好似好巴閉？但如果你上網搜尋呢個節目，你會發現——基本上冇人討論。呢個現象唔係單純「節目唔好睇」咁簡單，而係反...",
-                content: `<p>《歲月如歌》——HOY TV年度大型跨平台、跨地區歌唱節目，喺香港著名地標戲曲中心拍攝，仲要拎埋政府「創意智優計劃」主要資助。聽落好似好巴閉？但如果你上網搜尋呢個節目，你會發現——基本上冇人討論。</p><p>呢個現象唔係單純「節目唔好睇」咁簡單，而係反映緊一連串既結構性問題。</p><p>一個節目冇人討論，通常有幾個原因：內容唔夠吸引、宣傳做得差、平台本身冇流量。但《歲月如歌》既問題，似乎特別複雜——佢有政府資助、有戲曲中心呢類靚場地、有歌唱嘉賓既表面架勢，但就偏偏乜都冇。</p><p>《歲月如歌》作為一個歌唱節目，本身就要面對一個激烈既競爭市場。本地歌唱節目唔算多，但要突圍並唔容易——你要同過往既經典歌唱節目比較，要同歌手本身既粉絲基礎掛鈎，仲要同節目本身既製作質素掛鈎。</p><p>如果節目只係「請啲歌手嚟唱幾首歌」，咁就太過單一。觀眾而家想要既，唔係淨係「聽歌」，而係「睇故事」——歌手既背景、選曲既原因、比賽既張力。但從目前既討論度嚟睇，《歲月如歌》似乎冇做到呢啲。</p><p>節目屬於HOY TV高層變動之後推出，呢個時間點好敏感——新管理層上台，通常會有新既策略方向、新既節目理念。但如果節目係「前朝規劃／前團隊製作」，咁就會出現一個尷尬既情況：節目做完之後，新管理層唔會花太多資源去推廣，結果就變成「做完算数」。</p><p>電視台高層變動，對節目既影響可以好大。主要唔係節目本身既質素，而係資源分配、宣傳策略、同定位調整。《歲月如歌》有冇受到呢啲因素影響？我唔知具体內部情況，但從「零討論度」呢個結果反推，呢啲因素「某程度上」應該存在。</p><p>點解「政府資助」既節目，往往反而冇市場關注？原因可能係創作自由度受限、KPI壓力只關注完成項目而非收視、平台配套不足。公帑同市場，佢地既邏輯本身就唔同。用公帑既節目，往往注重「文化價值」多於「商業價值」。但咁樣既結果，就可能係——節目「有心做」，但「冇人睇」。</p><p>《歲月如歌》既問題，唔係「做得差」，而係——佢生唔逢時。一個有政府資助、有戲曲中心靚場地、有歌唱嘉賓既節目，最後變成「冇人討論」，呢個本身就已經說明咗好多嘢。</p><p>如果HOY TV想建立存在感，佢地需要既唔係再做多幾個《歲月如歌》，而係諗清楚——點樣先可以引起觀眾既注意？呢個先係佢地既真正挑戰。</p> `
+                preview: "文章 曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。 …",
+                article: `<h3>文章</h3>
+<p>曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。</p>
+<h3>續作表現：消費情懷還是延續精神？</h3>
+<p>第二季最致命的問題，在於它似乎忘記了第一季成功的核心。第一季之所以能夠引起共鳴，係因為佢將「足球」呢個主題放係第一位——球場上既拼搏、隊友之間既磨合、對夢想既堅持，全部都係靠「波」黎推動。但踏入第二季，劇情明顯偏向人物關係既纠葛，足球反而成為咗陪襯。有觀眾直言：「我想睇波，唔係睇談戀愛。」呢句說話某程度上概括咗第二季既問題——佢失去咗第一季既「魂」。</p>
+<p>更令人失望既係角色發展。第一季既角色之所以立體，係因為佢哋喺球場上成長、衝突、然後和解。但第二季，所有角色似乎停滯咗係一個「安全區」入面，唔少觀眾認為角色既深度唔及前作。呢種「食老本」既做法，短期内可能吸引到原有粉絲，但長遠而言，只會消耗觀眾既耐性。</p>
+<h3>口碑落差：從期待到無奈</h3>
+<p>網絡上既評論方向其實幾一致：第二季既節奏明顯較第一季鬆散，戲劇張力下降明顯。有觀眾形容「睇完第一季覺得熱血，睇完第二季覺得hea」。呢種感嘅落差，唔係因為第二季做得差，而係因為第一季實在做得太好。當你已經建立起一個高標準，任何既「正常發揮」都會被視為退步。</p>
+<p>呢種現象喺本地電視劇市場並唔罕見，但《足球女將2》既問題特別明顯——因為第一季既成功，正正就係靠「唔正常」既高質量。</p>
+<h3>ViuTV的延續能力：一次警號</h3>
+<p>《足球女將2》既表現，折射出ViuTV喺劇集延續上面對既結構性問題。本地電視台既劇集，往往第一季可以花大量時間同資源去打磨，但一到續作，就會因為各種原因——budget、演員檔期、創作團隊更替——而出現質量下滑。呢種「第二季魔咒」，唔只係《足球女將》既問題，亦都係ViuTV需要正視既挑戰。</p>
+<h3>總結</h3>
+<p>《足球女將2》並非一套失敗既作品，但佢絕對稱唔上成功。佢忘記咗自己既根，喺人物關係既安全區入面失去咗足球既熱血。對於ViuTV而言，呢套劇既教訓好清楚：續作唔係靠消費情懷就可以成功——你需要記得當初點解會成功。</p>`
             },
             {
                 id: 10,
-                title: "《戀愛等高線》— 小品綜藝的尷尬與ViuTV的隱憂",
-                platform: "ViuTV",
-                content_type: "tv",
+                title: "《臥底嬌娃》— 市場定位兩邊唔到岸既典型",
+                platform: "TVB",
                 date: "2026-03-19",
-                tags: ['ViuTV, 綜藝, 戀愛真人騷, 劇評'],
-                preview: "近年戀愛真人騷氾濫，觀眾既口味越來越刁鑽——《戀愛等高線》就正正撞正咗呢個市場變化。作為小品式戀愛綜藝，佢既定位注定咗佢唔會有太大既火花，但問題係——連小品應有既「輕鬆有趣」都唔夠。小品綜藝既生存之道，係「易入口」——唔洗花太多心力，唔洗追...",
-                content: `<p>近年戀愛真人騷氾濫，觀眾既口味越來越刁鑽——《戀愛等高線》就正正撞正咗呢個市場變化。作為小品式戀愛綜藝，佢既定位注定咗佢唔會有太大既火花，但問題係——連小品應有既「輕鬆有趣」都唔夠。</p><p>小品綜藝既生存之道，係「易入口」——唔洗花太多心力，唔洗追得好辛苦，但偏偏，《戀愛等高線》就係輸咗喺呢度。佢太過「安全」——每個环节都照住傳統戀愛真人騷既公式，冇驚喜，冇突破。有觀眾話：「睇完一集都唔知想表達咩。」呢句說話雖然有啲夸张，但係的确講中咗呢個節目既問題——佢乜都想講，但乜都講唔深。</p><p>小品既價值唔係「冇內容」，而係「精而簡」。你可以用15分鐘講一個完整既情感故事，但《戀愛等高線》似乎唔係咁諗——佢想乜都啱啱好，結果乜都唔够。</p><p>呢幾年，ViuTV既綜藝比上不足、比下有餘。早期既成功靠既係——真實感同話題性。啲節目敢於觸及社會議題，敢於表現真人既一面。但近排既綜藝，似乎越來越「離地」——《戥愛等高線》就係其中一個例子。</p><p>有觀眾指出：「ViuTV既綜藝越來越似TVB。」呢句說話雖然刻薄，但係反映緊一個事實——ViuTV曾經既「另類」同「創新」，似乎慢慢流失。佢地唔係唔可以做戀愛綜藝，而係要做「有ViuTV特色」既戀愛綜藝。</p><p>從《戀愛等高線》既表現，我哋可以睇到ViuTV既一個趨勢——佢地開始做多啲「安全」既內容。呢個決定唔難理解：本地市場細，做大製作既風險高，做小品起碼唔會大敗。但長遠而言，如果唔再敢於創新，ViuTV既品牌形象就會慢慢模糊。</p><p>《戀愛等高線》並非爛節目，但佢絕對稱唔上「好」。小品綜藝既失敗，通常唔係因為做得差，而係因為——乜都唔够。如果ViuTV想重拾昔日綜藝既光輝，佢地需要既唔係再複製下一個《戀愛等高線》，而係記得——點解當初觀眾會留意ViuTV？</p> `
+                preview: "文章 《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。 班底：有人，…",
+                article: `<h3>文章</h3>
+<p>《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。</p>
+<h3>班底：有人，但未有足夠既說服力</h3>
+<p>張曦雯，陳瀅、羅毓儀呢啲新面孔，顏值OK，亦落力。但當一套劇既成敗取決於「臥底」呢個題材既張力既時候，問題就出現——呢班演員，暫時未有足夠既氣場去 carry 咁複雜既角色設定。你會見到佢地好落力，但畀你既感覺就只係「努力但未夠」。呢個唔係演技問題，而係——TVB 既新一批演員，仲未有足夠既代表作去建立觀眾既信任。</p>
+<h3>市場定位：本地定內地？一个兩邊都唔到岸既選擇</h3>
+<p>呢套劇既「輕」，從製作到卡士都feel 到——佢唔係大製作，明顯係針對本地觀眾既輕喜劇。但與此同時，佢既題材（臥底、警匪）又唔係內地觀眾特別buy 既類型。呢種「想做本地，但又眼金金望住內地市場」既心態，正正就係TVB既死症——唔知自己做緊俾邊個睇。</p>
+<h3>製作野心：有心，但力不足</h3>
+<p>要拍臥底題材，需要足夠既情節張力、人物複雜度，同理應既製作資源。但呢套劇畀人既感覺就係「想做但做唔出」——案件設定偏簡單、人物關係冇乜層次、節奏亦欠缺緊張感。呢啲唔係態度問題，而係—— TVB 既製作資源同班底，暫時未能咁樣燒。</p>
+<h3>總結</h3>
+<p>《臥底嬌娃》既問題，唔係「做得差」，而係「力有不逮」。當平台既班底未夠，當市場定位仍然模糊，呢啲所謂既「新嘗試」，最終只會變成「縮水版既失望」。TVB 而家最需要既，唔係再拍幾多套呢啲「輕裝劇」，而係真真正正諗清楚——邊個先係自己既觀眾？</p>`
             },
             {
                 id: 11,
-                title: "【FLOWERING】— 七年沉澱，終於為自己而開",
-                platform: "Music Streaming",
-                content_type: "kpop",
-                date: "2026-04-08",
-                tags: ["AKMU", "FLOWERING", "Lee Chanhyuk", "Lee Suhyun", "Kpop", "Indie Music", "七年"],
-                preview: "七年沉澱後首張專輯，AKMU用自己節奏做咗一張關於成長同接受自己嘅音樂宣言。唔再係K-pop偶像，係真正嘅音樂人。",
-                content: "<p>七年。係粉絲等咗七年，AKMU 終於帶住《FLOWERING》回歸。</p><p>離開 YG Entertainment 之後，李燦赫同李秀賢唔再需要符市場期待嘅K-pop框架。呢張專輯，係佢哋用自己節奏做出嚟嘅音樂宣言。</p><p>《FLOWERING》唔係嗰種「大hit single帶動整張專輯」嘅套路。每首歌都係一個情緒碎片——關於成長、孤獨、接受自己。整張專輯聽落去，你會感受到七年沉澱嘅重量，但唔會覺得沉重。</p><p>音樂風格方面，AKMU 保持佢哋一貫嘅indie folk底色，但今次加入多咗電子元素，游走於acoustic同experiment之間。Lee Chanhyuk嘅創作出年仍然保持佢嘅「奇怪」——旋律走向唔跟常規，但偏偏又好好聽。Lee Suhyun嘅voice就係穩定劑，温柔但有力。</p><p>最打動我嘅係專輯傳達嘅信息：「成長唔係變老，係學識接受自己所有嘅情緒。」呢個喺K-pop industry特別難得——通常industry都教你如何呈現最好嘅自己，AKMU就教你點接受真實嘅自己。</p><p>七年後嘅AKMU，唔再係「K-pop偶像」，係真正嘅「音樂人」。《FLOWERING》係一張需要時間沉澱嘅專輯，但每一遍聽都會有新發現。</p><p><strong>評分：8.5/10</strong></p><p>💽 AKMU《FLOWERING》(2026)</p>",
+                title: "《歲月如歌》— 零討論度背後的系統問題",
+                platform: "HOY TV",
+                date: "2026-03-19",
+                preview: "文章 《歲月如歌》——HOY TV年度大型跨平台、跨地區歌唱節目，喺香港著名地標戲曲中心拍攝，仲要拎埋政府「創意智優計劃」主要資助。聽落好似好巴閉？但如果你上網搜尋呢個節目，你會發現——基本上冇人討論。 呢個現象唔係單純「節目唔好睇」咁簡單…",
+                article: `<h3>文章</h3>
+<p>《歲月如歌》——HOY TV年度大型跨平台、跨地區歌唱節目，喺香港著名地標戲曲中心拍攝，仲要拎埋政府「創意智優計劃」主要資助。聽落好似好巴閉？但如果你上網搜尋呢個節目，你會發現——基本上冇人討論。</p>
+<p>呢個現象唔係單純「節目唔好睇」咁簡單，而係反映緊一連串既結構性問題。</p>
+<p>一個節目冇人討論，通常有幾個原因：內容唔夠吸引、宣傳做得差、平台本身冇流量。但《歲月如歌》既問題，似乎特別複雜——佢有政府資助、有戲曲中心呢類靚場地、有歌唱嘉賓既表面架勢，但就偏偏乜都冇。</p>
+<p>《歲月如歌》作為一個歌唱節目，本身就要面對一個激烈既競爭市場。本地歌唱節目唔算多，但要突圍並唔容易——你要同過往既經典歌唱節目比較，要同歌手本身既粉絲基礎掛鈎，仲要同節目本身既製作質素掛鈎。</p>
+<p>如果節目只係「請啲歌手嚟唱幾首歌」，咁就太過單一。觀眾而家想要既，唔係淨係「聽歌」，而係「睇故事」——歌手既背景、選曲既原因、比賽既張力。但從目前既討論度嚟睇，《歲月如歌》似乎冇做到呢啲。</p>
+<p>節目屬於HOY TV高層變動之後推出，呢個時間點好敏感——新管理層上台，通常會有新既策略方向、新既節目理念。但如果節目係「前朝規劃／前團隊製作」，咁就會出現一個尷尬既情況：節目做完之後，新管理層唔會花太多資源去推廣，結果就變成「做完算数」。</p>
+<p>電視台高層變動，對節目既影響可以好大。主要唔係節目本身既質素，而係資源分配、宣傳策略、同定位調整。《歲月如歌》有冇受到呢啲因素影響？我唔知具体內部情況，但從「零討論度」呢個結果反推，呢啲因素「某程度上」應該存在。</p>
+<p>點解「政府資助」既節目，往往反而冇市場關注？原因可能係創作自由度受限、KPI壓力只關注完成項目而非收視、平台配套不足。公帑同市場，佢地既邏輯本身就唔同。用公帑既節目，往往注重「文化價值」多於「商業價值」。但咁樣既結果，就可能係——節目「有心做」，但「冇人睇」。</p>
+<p>《歲月如歌》既問題，唔係「做得差」，而係——佢生唔逢時。一個有政府資助、有戲曲中心靚場地、有歌唱嘉賓既節目，最後變成「冇人討論」，呢個本身就已經說明咗好多嘢。</p>
+<p>如果HOY TV想建立存在感，佢地需要既唔係再做多幾個《歲月如歌》，而係諗清楚——點樣先可以引起觀眾既注意？呢個先係佢地既真正挑戰。</p>`
             },
             {
                 id: 12,
-                title: "【SWIM】— 順着自己的節奏，游最適合的速度就夠",
-                platform: "BTS Official",
-                content_type: "kpop",
-                date: "2026-04-03",
-                tags: ["BTS", "SWIM", "ARIRANG", "Jimin", "Kpop", "Dream Pop", "ARMY"],
-                preview: "Jimin話「反映BTS當下狀態」——經歷漫長寒冬後，選擇順着自己節奏繼續前進。呢首唔催迫你，只叫你慢慢游。",
-                content: "<p>「After the long winter, we finally dive into the deep blue together.」</p><p>BTS嘅《SWIM》唔係一首典型嘅「K-pop comeback single」。Jimin話過呢首歌「反映BTS當下狀態」——經歷過漫長寒冬之後，選擇用自己嘅節奏繼續前進。</p><p>呢個「寒冬」唔難理解：兵役令BTS無法以完整體活動、成員相繼入伍、期間種種唔確定性。面對呢啲，佢哋唔選擇催迫自己，而係——游。</p><p>《SWIM》嘅風格係dream pop同alternative R&B嘅混合體。編曲有空靈感，但唔係嗰種離地嘅vibe，反而有一種「就算幾難都要繼續」嘅韌勁。旋律唔算洗腦，但勝在真誠。</p><p>MV就更加係一次視覺詩意——海水、泳池、游向光明。唔需要明言，每個ARMY都知呢個係關於乜。唔催迫自己跑，唔需要比較速度，最緊要係你仲喺度，仲願意繼續。</p><p>作為BTS喺ARIRANG project下嘅作品，《SWIM》成功做到：唔需要完整體，單曲都已經够力量。呢個係成熟音樂人先做到嘅境界。</p><p>如果你嘅人生最近都幾難，試下聽呢首歌——BTS唔會叫你跑，只會叫你慢慢游。</p><p><strong>評分：8/10</strong></p><p>💽 BTS《SWIM》(2026) — ARIRANG Project</p>"
+                title: "《戀愛等高線》— 小品綜藝的尷尬與ViuTV的隱憂",
+                platform: "ViuTV",
+                date: "2026-03-19",
+                preview: "文章 近年戀愛真人騷氾濫，觀眾既口味越來越刁鑽——《戀愛等高線》就正正撞正咗呢個市場變化。作為小品式戀愛綜藝，佢既定位注定咗佢唔會有太大既火花，但問題係——連小品應有既「輕鬆有趣」都唔夠。 小品綜藝既生存之道，係「易入口」——唔洗花太多心力…",
+                article: `<h3>文章</h3>
+<p>近年戀愛真人騷氾濫，觀眾既口味越來越刁鑽——《戀愛等高線》就正正撞正咗呢個市場變化。作為小品式戀愛綜藝，佢既定位注定咗佢唔會有太大既火花，但問題係——連小品應有既「輕鬆有趣」都唔夠。</p>
+<p>小品綜藝既生存之道，係「易入口」——唔洗花太多心力，唔洗追得好辛苦，但偏偏，《戀愛等高線》就係輸咗喺呢度。佢太過「安全」——每個环节都照住傳統戀愛真人騷既公式，冇驚喜，冇突破。有觀眾話：「睇完一集都唔知想表達咩。」呢句說話雖然有啲夸张，但係的确講中咗呢個節目既問題——佢乜都想講，但乜都講唔深。</p>
+<p>小品既價值唔係「冇內容」，而係「精而簡」。你可以用15分鐘講一個完整既情感故事，但《戀愛等高線》似乎唔係咁諗——佢想乜都啱啱好，結果乜都唔够。</p>
+<p>呢幾年，ViuTV既綜藝比上不足、比下有餘。早期既成功靠既係——真實感同話題性。啲節目敢於觸及社會議題，敢於表現真人既一面。但近排既綜藝，似乎越來越「離地」——《戥愛等高線》就係其中一個例子。</p>
+<p>有觀眾指出：「ViuTV既綜藝越來越似TVB。」呢句說話雖然刻薄，但係反映緊一個事實——ViuTV曾經既「另類」同「創新」，似乎慢慢流失。佢地唔係唔可以做戀愛綜藝，而係要做「有ViuTV特色」既戀愛綜藝。</p>
+<p>從《戀愛等高線》既表現，我哋可以睇到ViuTV既一個趨勢——佢地開始做多啲「安全」既內容。呢個決定唔難理解：本地市場細，做大製作既風險高，做小品起碼唔會大敗。但長遠而言，如果唔再敢於創新，ViuTV既品牌形象就會慢慢模糊。</p>
+<p>《戀愛等高線》並非爛節目，但佢絕對稱唔上「好」。小品綜藝既失敗，通常唔係因為做得差，而係因為——乜都唔够。如果ViuTV想重拾昔日綜藝既光輝，佢地需要既唔係再複製下一個《戀愛等高線》，而係記得——點解當初觀眾會留意ViuTV？</p>`
             }
         ];
         
-        let currentType = 'all';
         let currentPlatform = 'all';
         
-        // Get platform text for display
-        function getPlatformLabel(type, platform) {
-            if (platform === 'all') return type === 'all' ? '全部內容' : (type === 'tv' ? 'TV 評論' : 'K-Pop 內容');
-            return platform;
-        }
-        
-        // Render articles
-        function renderArticles(filteredArticles) {
+        function renderArticles() {
             const list = document.getElementById('articleList');
-            const main = document.getElementById('mainContent');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            document.getElementById('totalCount').textContent = articles.length;
             
-            // Update body attribute for styling
-            main.setAttribute('data-type', currentType === 'all' ? 'mixed' : currentType);
+            const filtered = articles.filter(a => {
+                const matchPlatform = currentPlatform === 'all' || a.platform === currentPlatform;
+                const matchSearch = a.title.toLowerCase().includes(searchTerm) || a.preview.toLowerCase().includes(searchTerm);
+                return matchPlatform && matchSearch;
+            });
             
-            if (filteredArticles.length === 0) {
-                list.innerHTML = '<div class="empty-state">暫時未有文章</div>';
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="emoji">😶</div><div>沒有找到評論</div></div>';
                 return;
             }
             
-            list.innerHTML = filteredArticles.map(article => {
-                const isKpop = article.content_type === 'kpop';
-                const typeLabel = isKpop ? '🎤 K-Pop' : '📺 TV';
-                return `
-                <div class="article-card ${isKpop ? 'kpop' : ''}" onclick="showArticle(${article.id})">
-                    <div class="card-meta">
-                        <span class="type-tag ${isKpop ? 'kpop' : ''}">${typeLabel}</span>
-                        <span class="platform-tag">${article.platform}</span>
-                    </div>
-                    <h3>${article.title}</h3>
-                    <div class="date">📅 ${article.date}</div>
-                    <p class="preview">${article.preview}</p>
-                    <span class="read-more">閱讀全文 →</span>
+            list.innerHTML = filtered.map(a => `
+                <div class="article-card" onclick="showArticle(${a.id})">
+                    <span class="platform-tag">${a.platform}</span>
+                    <h3>${a.title}</h3>
+                    <div class="meta">📅 ${a.date}</div>
+                    <p class="preview">${a.preview}</p>
                 </div>
-            `}).join('');
+            `).join('');
+            
+            document.getElementById('totalCount').textContent = filtered.length;
         }
         
-        // Filter by content type
-        function filterByType(type) {
-            currentType = type;
-            currentPlatform = 'all';
-            
-            // Update type buttons
-            document.querySelectorAll('.type-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if ((type === 'all' && btn.textContent.includes('全部')) ||
-                    (type === 'tv' && btn.textContent.includes('TV')) ||
-                    (type === 'kpop' && btn.textContent.includes('K-Pop'))) {
-                    btn.classList.add('active');
-                }
-            });
-            
-            // Update platform buttons
-            updatePlatformFilters();
-            
-            // Apply filter
-            applyFilter();
-        }
-        
-        // Filter by platform
-        function filterByPlatform(platform) {
+        function filterBy(platform) {
             currentPlatform = platform;
-            
-            // Update platform buttons
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if ((platform === 'all' && btn.textContent === '全部') ||
-                    btn.textContent === platform) {
+                if (btn.dataset.platform === platform || (platform === 'all' && btn.textContent === '全部')) {
                     btn.classList.add('active');
                 }
             });
-            
-            applyFilter();
+            renderArticles();
         }
         
-        // Update platform filter buttons based on current type
-        function updatePlatformFilters() {
-            const container = document.getElementById('platformFilter');
-            const availablePlatforms = [...new Set(articles
-                .filter(a => currentType === 'all' || a.content_type === currentType)
-                .map(a => a.platform))];
-            
-            let buttonsHtml = '<button class="filter-btn active" onclick="filterByPlatform(\'all\')">全部</button>';
-            availablePlatforms.forEach(p => {
-                buttonsHtml += '<button class="filter-btn" onclick="filterByPlatform(\'' + p + '\')">' + p + '<\/button>';
-            });
-            container.innerHTML = buttonsHtml;
-        }
-        
-        // Apply current filters
-        function applyFilter() {
-            let filtered = articles;
-            
-            // Filter by type
-            if (currentType !== 'all') {
-                filtered = filtered.filter(a => a.content_type === currentType);
-            }
-            
-            // Filter by platform
-            if (currentPlatform !== 'all') {
-                filtered = filtered.filter(a => a.platform === currentPlatform);
-            }
-            
-            // Update title
-            const title = getPlatformLabel(currentType, currentPlatform);
-            document.getElementById('pageTitle').textContent = title;
-            
-            renderArticles(filtered);
-        }
-        
-        // Show article modal
         function showArticle(id) {
             const article = articles.find(a => a.id === id);
             if (!article) return;
             
-            const platformEl = document.getElementById('modalPlatform');
-            platformEl.textContent = article.platform;
-            platformEl.className = 'modal-platform' + (article.content_type === 'kpop' ? ' kpop' : '');
-            
-            document.getElementById('modalDate').textContent = '📅 ' + article.date;
+            document.getElementById('modalPlatform').textContent = article.platform;
             document.getElementById('modalTitle').textContent = article.title;
-            document.getElementById('modalContent').innerHTML = article.content;
+            document.getElementById('modalMeta').textContent = '📅 ' + article.date;
+            document.getElementById('modalContent').innerHTML = article.article;
             document.getElementById('articleModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
         
-        // Close modal
-        function closeModal(event) {
-            if (event && event.target.id !== 'articleModal') return;
+        function closeModal() {
             document.getElementById('articleModal').classList.remove('active');
+            document.body.style.overflow = '';
         }
         
-        function closeModalDirect() {
-            document.getElementById('articleModal').classList.remove('active');
-        }
-        
-        // Close modal on outside click
-        document.getElementById('articleModal').addEventListener('click', (e) => {
-            if (e.target.id === 'articleModal') closeModal();
-        });
-        
-        // Initial render
-        applyFilter();
+        document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+        renderArticles();
     </script>
 </body>
 </html>
