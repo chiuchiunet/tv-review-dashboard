@@ -9,14 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;600;700&family=Noto+Serif+HK:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #FAFAFA;
+            --bg: #F5F5F0;
             --card-bg: #FFFFFF;
-            --text: #1A1A1A;
+            --text: #2D2D2D;
             --text-muted: #6B7280;
             --accent: #E63946;
-            --accent-light: #FFF0F0;
-            --border: #E5E5E5;
-            --shadow: rgba(0,0,0,0.06);
+            --accent-light: #FFE5E7;
+            --border: #E5E5E0;
+            --shadow: rgba(0,0,0,0.08);
             --font-heading: 'Noto Serif HK', serif;
             --font-body: 'Noto Sans HK', sans-serif;
         }
@@ -28,50 +28,30 @@
             background: var(--bg);
             color: var(--text);
             line-height: 1.7;
-            min-height: 100vh;
-        }
-        
-        .hero {
-            background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
-            color: white;
-            padding: 48px 24px 60px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 50%, rgba(230,57,70,0.15) 0%, transparent 50%);
-            pointer-events: none;
-        }
-        
-        .hero h1 {
-            font-family: var(--font-heading);
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: 3px;
-            position: relative;
-        }
-        
-        .hero .subtitle {
-            color: rgba(255,255,255,0.6);
-            font-size: 0.9rem;
-            position: relative;
         }
         
         .container {
             max-width: 720px;
-            margin: -30px auto 0;
-            padding: 0 20px 60px;
-            position: relative;
-            z-index: 1;
+            margin: 0 auto;
+            padding: 40px 20px 60px;
+        }
+        
+        header {
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+        
+        header .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
         
         .search-box {
@@ -80,40 +60,37 @@
         
         .search-box input {
             width: 100%;
-            padding: 16px 20px;
+            padding: 14px 20px;
             border: 2px solid var(--border);
-            border-radius: 16px;
+            border-radius: 12px;
             font-size: 1rem;
             font-family: var(--font-body);
             background: var(--card-bg);
-            transition: all 0.2s;
-            box-shadow: 0 2px 12px var(--shadow);
+            transition: border-color 0.2s;
         }
         
         .search-box input:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 4px 20px rgba(230,57,70,0.1);
         }
         
         .platform-filter {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             margin-bottom: 24px;
-            flex-wrap: wrap;
             justify-content: center;
+            flex-wrap: wrap;
         }
         
         .filter-btn {
-            padding: 8px 18px;
+            padding: 10px 20px;
             border: 2px solid var(--border);
             background: var(--card-bg);
             color: var(--text-muted);
             border-radius: 24px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 500;
-            font-family: var(--font-body);
             transition: all 0.2s;
         }
         
@@ -126,74 +103,57 @@
             background: var(--accent);
             border-color: var(--accent);
             color: white;
-            box-shadow: 0 4px 12px rgba(230,57,70,0.3);
         }
         
         .article-card {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 24px 28px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 24px var(--shadow);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px var(--shadow);
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: transform 0.2s, box-shadow 0.2s;
             border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .article-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--accent);
-            opacity: 0;
-            transition: opacity 0.2s;
         }
         
         .article-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
         }
         
-        .article-card:hover::before {
-            opacity: 1;
-        }
-        
-        .platform-tag {
+        .platform {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 5px 12px;
+            background: var(--accent-light);
+            color: var(--accent);
             border-radius: 6px;
-            font-size: 0.72rem;
-            font-weight: 700;
+            font-size: 0.75rem;
+            font-weight: 600;
             margin-bottom: 12px;
             letter-spacing: 1px;
-            text-transform: uppercase;
         }
         
         .article-card h3 {
             font-family: var(--font-heading);
-            font-size: 1.15rem;
-            line-height: 1.45;
+            font-size: 1.2rem;
+            line-height: 1.4;
             margin-bottom: 8px;
             color: var(--text);
         }
         
         .article-card .meta {
             color: var(--text-muted);
-            font-size: 0.82rem;
-            margin-bottom: 10px;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
         }
         
         .article-card .preview {
             color: var(--text-muted);
-            font-size: 0.92rem;
-            line-height: 1.65;
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
         
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -201,10 +161,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.6);
             z-index: 1000;
             overflow-y: auto;
-            backdrop-filter: blur(6px);
+            backdrop-filter: blur(4px);
         }
         
         .modal.active {
@@ -213,55 +173,27 @@
         
         .modal-content {
             background: var(--card-bg);
-            max-width: 700px;
+            max-width: 680px;
             margin: 40px auto;
-            border-radius: 24px;
-            padding: 0;
-            box-shadow: 0 24px 80px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-        
-        .modal-header {
-            background: linear-gradient(135deg, #1A1A1A, #2D2D2D);
-            color: white;
-            padding: 32px 36px 28px;
-        }
-        
-        .modal-header .platform-tag {
-            margin-bottom: 16px;
-        }
-        
-        .modal-header h2 {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            line-height: 1.4;
-            margin-bottom: 8px;
-        }
-        
-        .modal-header .meta {
-            color: rgba(255,255,255,0.6);
-            font-size: 0.85rem;
-        }
-        
-        .modal-body {
-            padding: 32px 36px;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
         
         .modal-close {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: white;
+            background: var(--card-bg);
             border: none;
             font-size: 1.5rem;
             width: 44px;
             height: 44px;
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            color: var(--text);
+            box-shadow: 0 4px 12px var(--shadow);
+            color: var(--text-muted);
             transition: all 0.2s;
-            z-index: 1001;
         }
         
         .modal-close:hover {
@@ -269,128 +201,173 @@
             color: white;
         }
         
-        .article-content {
+        .modal .platform {
+            margin-bottom: 16px;
+        }
+        
+        .modal h2 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+        
+        .modal .meta {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .modal .article-content {
             font-size: 1.05rem;
             line-height: 1.9;
             color: var(--text);
         }
         
-        .article-content h3 {
+        .modal .article-content h3 {
             font-family: var(--font-heading);
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             margin: 28px 0 14px;
             color: var(--accent);
         }
         
-        .article-content h4 {
+        .modal .article-content h4 {
             font-family: var(--font-heading);
-            font-size: 1rem;
+            font-size: 1.05rem;
             margin: 22px 0 10px;
         }
         
-        .article-content p {
+        .modal .article-content p {
             margin-bottom: 16px;
-        }
-        
-        .article-content p:last-child {
-            margin-bottom: 0;
         }
         
         .empty-state {
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
             color: var(--text-muted);
-        }
-        
-        .empty-state .emoji {
-            font-size: 3rem;
-            margin-bottom: 16px;
-        }
-        
-        .stats-bar {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .stat {
-            text-align: center;
-        }
-        
-        .stat .num {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: white;
-        }
-        
-        .stat .label {
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.5);
-        }
-        
-        @media (max-width: 600px) {
-            .hero h1 { font-size: 1.6rem; }
-            .container { padding: 0 16px 40px; }
-            .modal-content { margin: 20px 16px; }
-            .modal-header { padding: 24px 24px 20px; }
-            .modal-body { padding: 24px; }
         }
     </style>
 </head>
 <body>
-    <div class="hero">
-        <h1>📺 TV 評論創作室</h1>
-        <div class="subtitle">ccl 哥哥的電視評論收藏</div>
-        <div class="stats-bar">
-            <div class="stat">
-                <div class="num" id="totalCount">12</div>
-                <div class="label">篇文章</div>
-            </div>
-            <div class="stat">
-                <div class="num">7</div>
-                <div class="label">個平台</div>
-            </div>
-        </div>
-    </div>
-    
     <div class="container">
+        <header>
+            <h1>📺 TV 評論創作室</h1>
+            <span class="subtitle">2026年05月06日</span>
+        </header>
+        
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 搜尋劇名…" oninput="renderArticles()">
+            <input type="text" id="searchInput" placeholder="搜尋劇名..." oninput="searchArticles()">
         </div>
         
         <div class="platform-filter">
             <button class="filter-btn active" onclick="filterBy('all')">全部</button>
-            <button class="filter-btn" data-platform="HOY TV" onclick="filterBy('HOY TV')">HOY TV</button><button class="filter-btn" data-platform="Netflix" onclick="filterBy('Netflix')">Netflix</button><button class="filter-btn" data-platform="TVB" onclick="filterBy('TVB')">TVB</button><button class="filter-btn" data-platform="TVB/ViuTV" onclick="filterBy('TVB/ViuTV')">TVB/ViuTV</button><button class="filter-btn" data-platform="ViuTV" onclick="filterBy('ViuTV')">ViuTV</button><button class="filter-btn" data-platform="WeTV" onclick="filterBy('WeTV')">WeTV</button><button class="filter-btn" data-platform="優酷" onclick="filterBy('優酷')">優酷</button>
+            <button class="filter-btn" onclick="filterBy('TVB')">TVB</button>
+            <button class="filter-btn" onclick="filterBy('ViuTV')">ViuTV</button>
         </div>
         
-        <div id="articleList"></div>
+        <div id="articleList">
+                        <div class="article-card" onclick="showArticle(1)">
+                <span class="platform">TVB/ViuTV</span>
+                <h3>《唱錢》與香港音樂節目的十字路口</h3>
+                <div class="meta">📅 2026-03-19</div>
+                <p class="preview">背景：一個遊戲節目揭示的行業曙光 上週 TVB 推出新節目《唱錢》，形式係音樂闖關遊戲——素人唱歌俾 AI 評分系統挑戰，難度分 Monster 級，獎金最高十萬。主持係森美、Eric Kwok、李茵...</p>
+            </div>
+            <div class="article-card" onclick="showArticle(2)">
+                <span class="platform">ViuTV</span>
+                <h3>《IT狗2.0》— 神劇回歸，等你四年</h3>
+                <div class="meta">📅 2026-05-06</div>
+                <p class="preview">評價：7.5/10 時隔四年，《IT狗》終於推出續集《IT狗2.0》（In Geek We Trust 2.0），由 MakerVille 出品，2026年4月27日起逢星期一至五晚21:30 Viu...</p>
+            </div>
+            <div class="article-card" onclick="showArticle(3)">
+                <span class="platform">優酷</span>
+                <h3>《重案解密》— 老土，但老土得未夠狠</h3>
+                <div class="meta">📅 2026-04-18</div>
+                <p class="preview">一套劇最大問題不是題材，而是定位。 《重案解密》打着「改編自香港真實奇案」的旗號，第一集交出的牌是：舊情、誤會、陳年懸案——經典到不能再經典的三寶。警長與女警因舊案反目，再被迫攜手辦案，呢個設定，我阿...</p>
+            </div>
+            <div class="article-card" onclick="showArticle(4)">
+                <span class="platform">Netflix</span>
+                <h3>《逐玉》— 古裝陸劇如何打破韓流壟斷 Netflix？</h3>
+                <div class="meta">📅 2026-03-29</div>
+                <p class="preview">過去幾年，Netflix 和 Disney+ 的亞洲內容版圖幾乎由韓劇主導。從早年的驚悚題材到近期的浪漫喜劇，平台演算法總是偏愛韓國製作。然而，2026 年三月上線的古裝陸劇《逐玉》，卻帶來了一場結結...</p>
+            </div>
+            <div class="article-card" onclick="showArticle(5)">
+                <span class="platform">TVB</span>
+                <h3>《機智女法醫2》— 古裝 forensic 加外交陰謀，TVB外購難得冇仆街</h3>
+                <div class="meta">📅 2026-03-25</div>
+                <p class="preview">黃金檔有門檻　冠名唔減價 《御賜小仵作2》大家都知，內地騰訊播嘅時候熱度2.1萬、播放量1.18億。TVB 3月5日拎咗上翡翠台配音做晚晚9:30外購劇，仲要有**冠名贊助**。 TVB 黃金檔冠名有...</p>
+            </div>
+            <div class="article-card" onclick="showArticle(6)">
+                <span class="platform">TVB</span>
+                <h3>《正義女神》— 從法袍到法袍，佘詩曼這次不放過任何一個「壞孩子」</h3>
+                <div class="meta">📅 2026-03-24</div>
+                <p class="preview">不是《新聞女王》2.0，是TVB少見的「法官視角」 《正義女神》（Themis）2026年3月16日率先登陸優酷，3月30日翡翠台接力播出。最大賣點當然係**佘詩曼**——視后闊別TVB一段時間後強勢...</p>
+            </div>
+            <div class="article-card" onclick="showArticle(7)">
+                <span class="platform">Netflix</span>
+                <h3>《愛情怎麼翻譯？》— 語言天才與國際巨星，愛能跨越幾多語言？</h3>
+                <div class="meta">📅 2026-03-22</div>
+                <p class="preview">當語言天才遇上國際巨星 語言，是橋樑還是牆？ Netflix 新劇《愛情怎麼翻譯？》（Can This Love Be Translated？）由《德魯納酒店》《還魂》的洪氏姊妹編劇，《契約友情》《紅...</p>
+            </div>
+            <div class="article-card" onclick="showArticle(8)">
+                <span class="platform">WeTV</span>
+                <h3>《小城大事》— 趙麗穎×黃曉明演活基層奇蹟</h3>
+                <div class="meta">📅 2026-03-21</div>
+                <p class="preview">改革開放最好睇嘅打開方式 如果話2026年1月有邊套陸劇係唔可以錯過，《小城大事》一定係其中之一。 趙麗穎同黃曉明呢對「強強聯手」嘅組合，一文一武、一個留法歸來、一個扎根泥土，喺資源匱乏、沒有國家撥款...</p>
+            </div>
+            <div class="article-card" onclick="showArticle(9)">
+                <span class="platform">Netflix</span>
+                <h3>《訂閱男友》— Jisoo 挑戰虛擬戀愛，係創新定係呃Like？</h3>
+                <div class="meta">📅 2026-03-20</div>
+                <p class="preview">劇情簡介 由 BLACKPINK Jisoo 主演既《訂閱男友》（Boyfriend on Demand）3月6日正式登陸 Netflix。故事講述女主角「徐未來」透過一個「虛擬戀愛訂閱」服務，一次過...</p>
+            </div>
+            <div class="article-card" onclick="showArticle(10)">
+                <span class="platform">ViuTV</span>
+                <h3>《足球女將2》— 續作的尷尬與ViuTV的隱憂</h3>
+                <div class="meta">📅 2026-03-19</div>
+                <p class="preview">曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是Viu...</p>
+            </div>
+            <div class="article-card" onclick="showArticle(11)">
+                <span class="platform">TVB</span>
+                <h3>《臥底嬌娃》— 市場定位兩邊唔到岸既典型</h3>
+                <div class="meta">📅 2026-03-19</div>
+                <p class="preview">《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，...</p>
+            </div>
+            <div class="article-card" onclick="showArticle(12)">
+                <span class="platform">HOY TV</span>
+                <h3>《歲月如歌》— 零討論度背後的系統問題</h3>
+                <div class="meta">📅 2026-03-19</div>
+                <p class="preview">《歲月如歌》——HOY TV年度大型跨平台、跨地區歌唱節目，喺香港著名地標戲曲中心拍攝，仲要拎埋政府「創意智優計劃」主要資助。聽落好似好巴閉？但如果你上網搜尋呢個節目，你會發現——基本上冇人討論。 呢...</p>
+            </div>
+            <div class="article-card" onclick="showArticle(13)">
+                <span class="platform">ViuTV</span>
+                <h3>《戀愛等高線》— 小品綜藝的尷尬與ViuTV的隱憂</h3>
+                <div class="meta">📅 2026-03-19</div>
+                <p class="preview">近年戀愛真人騷氾濫，觀眾既口味越來越刁鑽——《戀愛等高線》就正正撞正咗呢個市場變化。作為小品式戀愛綜藝，佢既定位注定咗佢唔會有太大既火花，但問題係——連小品應有既「輕鬆有趣」都唔夠。 小品綜藝既生存之...</p>
+            </div>
+        </div>
     </div>
     
     <div class="modal" id="articleModal" onclick="if(event.target === this) closeModal()">
         <button class="modal-close" onclick="closeModal()">×</button>
         <div class="modal-content">
-            <div class="modal-header">
-                <span class="platform-tag" id="modalPlatform" style="color:white;border:1px solid rgba(255,255,255,0.3)"></span>
-                <h2 id="modalTitle"></h2>
-                <div class="meta" id="modalMeta"></div>
-            </div>
-            <div class="modal-body">
-                <div class="article-content" id="modalContent"></div>
-            </div>
+            <span class="platform" id="modalPlatform"></span>
+            <h2 id="modalTitle"></h2>
+            <div class="meta" id="modalMeta"></div>
+            <div class="article-content" id="modalContent"></div>
         </div>
     </div>
     
     <script>
         const articles = [
-                        {
+            {
                 id: 1,
                 title: "《唱錢》與香港音樂節目的十字路口",
                 platform: "TVB/ViuTV",
-                date: "2026-03-28",
-                preview: "背景：一個遊戲節目揭示的行業曙光 上週 TVB 推出新節目《唱錢》，形式係音樂闖關遊戲——素人唱歌俾 AI 評分系統挑戰，難度分 Monster 級，獎金最高十萬。主持係森美、Eric Kwok、李茵彤。嘉賓有側田呢種出道多年嘅歌手，佢自己…",
+                date: "2026-03-19",
+                preview: "背景：一個遊戲節目揭示的行業曙光 上週 TVB 推出新節目《唱錢》，形式係音樂闖關遊戲——素人唱歌俾 AI 評分系統挑戰，難度分 Monster 級，獎金最高十萬。主持係森美、Eric Kwok、李茵...",
                 article: `<h3>背景：一個遊戲節目揭示的行業曙光</h3>
 <p>上週 TVB 推出新節目《唱錢》，形式係音樂闖關遊戲——素人唱歌俾 AI 評分系統挑戰，難度分 Monster 級，獎金最高十萬。主持係森美、Eric Kwok、李茵彤。嘉賓有側田呢種出道多年嘅歌手，佢自己都話：「唱歌從此變得有對錯。」</p>
 <p>呢個節目嘅出現，其實係香港音樂節目多年收縮之後，少有嘅「原創音樂遊戲節目」。</p>
@@ -434,15 +411,34 @@
 <p>ViuTV 靠 MIRROR 效應同《Chill Club》建立咗自己嘅音樂地盤，但 2025-2026 年廣告收益倒退，反映單靠偶像經濟唔係長遠之计。TVB 靠《新聞女王 2》止血轉賺，但音樂節目依然係弱勢。</p>
 <p>《唱錢》嘅出現，證明 **觀眾對有質素嘅原創音樂節目依然有需求**——關鍵係 TVB 願唔願意持續投資，仲係只係當佢係一次性嘅收視實驗？</p>
 <p>香港樂壇要真正復甦，需要嘅唔止係一個《唱錢》，係成個工業鏈——從培訓、製作、宣傳到變現——都需要重新梳理。而電視節目，只係呢個生態入面其中一個環節。</p>
-<p>---</p>
 <p>*延伸話題：MIRROR 效應到底帶動咗幾多本地音樂工業投資？ViuTV 2026 年嘅「團體演唱會」規劃係咪能夠逆轉？香港樂壇係咪需要一個新嘅「電視黃金時代」定係壓根兒就唔再需要電視？呢啲問題，值得繼續觀察。*</p>`
             },
-            {
+                {
                 id: 2,
+                title: "《IT狗2.0》— 神劇回歸，等你四年",
+                platform: "ViuTV",
+                date: "2026-05-06",
+                preview: "評價：7.5/10 時隔四年，《IT狗》終於推出續集《IT狗2.0》（In Geek We Trust 2.0），由 MakerVille 出品，2026年4月27日起逢星期一至五晚21:30 Viu...",
+                article: `<h3>評價：7.5/10</h3>
+<p>時隔四年，《IT狗》終於推出續集《IT狗2.0》（In Geek We Trust 2.0），由 MakerVille 出品，2026年4月27日起逢星期一至五晚21:30 ViuTV 播出。</p>
+<h4>亮点</h4>
+<p>1. **成功延續荒誕風格** — 第一季最叻既係笑中有sell，sell得自然，第二季keep到呢種「荒誕但貼地」既平衡，唔會話為咗搞笑而甩beat。
+2. **Jeffrey回歸呢鋪幾好** — 第5集「零死角男神」魏浚笙（Jeffrey）飾演既Jayden驚喜現身，事隔4年強勢回歸引爆全城熱話，粉絲期待值拉滿！
+3. **議題夠貼題** — 全面進軍NFT、元宇宙、Web3、人工智能(AI)等尖端科技領域，都係近年香港人關心既話題，唔係求其sell Technology。
+4. **MakerVille願意投資** — 等咗4年先出第二季，唔似啲「一次性」劇集，願意投資做大佢，幾有誠意。</p>
+<h4>值得留意</h4>
+<p>- **劇情承接** — 第一季講創業，第二季講守業。導演簡君晉話：「第一季好明顯就係創業，第二季就係佢哋點樣守業。原來係咁難既。」呢個主題幾引起共鳴。
+- **游學修爭議** — 有傳劇集疑似影射「試當真」NFT事件，引發游學修公開批評但反被網民圍剿，最後要刪除Threads。話題性夠，有花生睇。</p>
+<h4>綜合</h4>
+<p>《IT狗2.0》算係近年ViuTV最具話題性既作品之一。如果你鍾意第一季荒誕既笑同sell technology既風格，第二季既係延續得好好既選擇。</p>
+<p>**推薦度：** 🌕🌕🌕🌕🌑</p>`
+            },
+                {
+                id: 3,
                 title: "《重案解密》— 老土，但老土得未夠狠",
                 platform: "優酷",
                 date: "2026-04-18",
-                preview: "一套劇最大問題不是題材，而是定位。 《重案解密》打着「改編自香港真實奇案」的旗號，第一集交出的牌是：舊情、誤會、陳年懸案——經典到不能再經典的三寶。警長與女警因舊案反目，再被迫攜手辦案，呢個設定，我阿媽細個都睇過起碼三套。 問題不在演員，而…",
+                preview: "一套劇最大問題不是題材，而是定位。 《重案解密》打着「改編自香港真實奇案」的旗號，第一集交出的牌是：舊情、誤會、陳年懸案——經典到不能再經典的三寶。警長與女警因舊案反目，再被迫攜手辦案，呢個設定，我阿...",
                 article: `<p>一套劇最大問題不是題材，而是定位。</p>
 <p>《重案解密》打着「改編自香港真實奇案」的旗號，第一集交出的牌是：舊情、誤會、陳年懸案——經典到不能再經典的三寶。警長與女警因舊案反目，再被迫攜手辦案，呢個設定，我阿媽細個都睇過起碼三套。</p>
 <p>問題不在演員，而在角色。</p>
@@ -453,73 +449,62 @@
 <p>優酷港劇場最近密密試緊呢種「中港合拍」犯罪懸疑配方，《重案解密》同《正義女神》路線相似，但後者有佘詩曼林峯呢張皇牌，前者只能靠「真實個案」呢個標籤硬食。12集嘅篇幅，唔算長，但如果頭幾集建立唔到追看動力的話，後半段就好難谷上嚟。</p>
 <p>結論：你當然可以繼續追——但期望值建議放喺「及格」水平，唔好諗住一嚟就係《踩過界》或《EU超時任務嗰種格局。</p>`
             },
-            {
-                id: 3,
+                {
+                id: 4,
                 title: "《逐玉》— 古裝陸劇如何打破韓流壟斷 Netflix？",
                 platform: "Netflix",
                 date: "2026-03-29",
-                preview: "過去幾年，Netflix 和 Disney+ 的亞洲內容版圖幾乎由韓劇主導。從早年的驚悚題材到近期的浪漫喜劇，平台演算法總是偏愛韓國製作。然而，2026 年三月上線的古裝陸劇《逐玉》，卻帶來了一場結結實實的突圍戰。 根據官方最新公布的數據，…",
+                preview: "過去幾年，Netflix 和 Disney+ 的亞洲內容版圖幾乎由韓劇主導。從早年的驚悚題材到近期的浪漫喜劇，平台演算法總是偏愛韓國製作。然而，2026 年三月上線的古裝陸劇《逐玉》，卻帶來了一場結結...",
                 article: `<p>過去幾年，Netflix 和 Disney+ 的亞洲內容版圖幾乎由韓劇主導。從早年的驚悚題材到近期的浪漫喜劇，平台演算法總是偏愛韓國製作。然而，2026 年三月上線的古裝陸劇《逐玉》，卻帶來了一場結結實實的突圍戰。</p>
 <p>根據官方最新公布的數據，這部劇集單週觀看次數高達 **190 萬**，一口氣打進 **9 個國家和地區的熱門前十名**，成為史上首部登上 Netflix 全球非英語週榜的陸劇。能在以歐美及韓流為主的串流戰場中殺出一條血路，這份成績單對華語影視圈而言，絕對是一個重要里程碑。</p>
-<p>---</p>
 <h3>大熱原因一：顔值即正義</h3>
 <p>《逐玉》的視覺美學獲得極高讚譽，導演精準捕捉張凌赫那種「清冷與破碎感交織」的美。觀眾評價道：「每一幀畫面都像是寫給張凌赫的一封情書」，並讚嘆導演透過女主角的視角帶領觀眾沉溺於這份美貌衝擊。</p>
 <p>男神張凌赫在劇中飾演落難侯爺謝征，角色設定層次豐富——從隱忍低調到狠戾反擊，雙面性格精準拿捏，演技備受肯定。</p>
-<p>---</p>
 <h3>大熱原因二：最强反差 CP</h3>
 <p>田曦薇飾演的屠戶女樊長玉，一改觀眾對她「甜妹」的既定印象，武力值爆燈之餘，更在社交平台引爆熱議——她輕鬆背起 190cm 高的張凌赫，有趣場面讓網友大呼「最强反差 CP」。</p>
 <p>兩人「假婚真爱」的設定，由最初的互相利用，到後來真心交付，甜虐節奏掌握得恰到好處，觀眾黏著度極高。</p>
-<p>---</p>
 <h3>大熱原因三：製作精良・爽感充足</h3>
 <p>《逐玉》另一成功關鍵，在於「極致雕花」般的精緻服化道。從演員妝容到場景陳設，每個細節都一絲不苟，成功營造出亂世古裝的史詩感。配合「先婚後愛」的清晰框架，觀眾能快速投入劇情，獲得源源不絕的「爽感」。</p>
-<p>---</p>
 <h3>爭議與批評：完美並不存在</h3>
 <h4>結局洩露風波</h4>
 <p>《逐玉》尚未播畢，結局高清片源已在網上瘋傳。劇組及三大串流平台（騰訊視頻、愛奇藝、優酷）聯合發表聲明，強調將追查洩露源頭，依法追究法律責任。</p>
 <h4>劇情節奏爭議</h4>
 <p>部分觀眾指出劇情推進稍慢，權謀線交代稍嫌混亂；另有觀眾吐槽「冬天拿着扇子」等邏輯漏洞。先甜後虐的轉折，亦有觀眾認為來得過於突然，情緒準備不足。</p>
-<p>---</p>
 <h3>總結：陸劇出海的代表作</h3>
 <p>《逐玉》的成功，證明瞭優質製作與精準市場定位，足以打破語言與文化壁壘。張凌赫與田曦薇這對「最强反差 CP」，以顔值與化學反應成功攻陷海外觀眾，為陸劇出海寫下重要一章。儘管爭議難免，但作為現象級作品，《逐玉》足以在 2026 年的華語劇集中佔據一席之地。</p>
 <p>**必看指數：⭐⭐⭐⭐⭐（5/5）**</p>`
             },
-            {
-                id: 4,
+                {
+                id: 5,
                 title: "《機智女法醫2》— 古裝 forensic 加外交陰謀，TVB外購難得冇仆街",
                 platform: "TVB",
                 date: "2026-03-25",
-                preview: "黃金檔有門檻　冠名唔減價 《御賜小仵作2》大家都知，內地騰訊播嘅時候熱度2.1萬、播放量1.18億。TVB 3月5日拎咗上翡翠台配音做晚晚9:30外購劇，仲要有**冠名贊助**。 TVB 黃金檔冠名有門檻，唔係有錢就上到，係要節目有一定質素…",
+                preview: "黃金檔有門檻　冠名唔減價 《御賜小仵作2》大家都知，內地騰訊播嘅時候熱度2.1萬、播放量1.18億。TVB 3月5日拎咗上翡翠台配音做晚晚9:30外購劇，仲要有**冠名贊助**。 TVB 黃金檔冠名有...",
                 article: `<h3>黃金檔有門檻　冠名唔減價</h3>
 <p>《御賜小仵作2》大家都知，內地騰訊播嘅時候熱度2.1萬、播放量1.18億。TVB 3月5日拎咗上翡翠台配音做晚晚9:30外購劇，仲要有**冠名贊助**。</p>
 <p>TVB 黃金檔冠名有門檻，唔係有錢就上到，係要節目有一定質素先會有廣告商願意用自己品牌命名呢個時段。呢個門檻唔會減價sell，變相係幫呢套劇嘅**內地口碑已驗證**——有基本收視保證，贊助商先肯入紙。</p>
-<p>---</p>
 <h3>全部起點　都係楚楚驗到嘅一具屍</h3>
 <p>《機智女法醫2》改編自小說《名捕夫人》，背景唐中晚期，延續上一季設定——楚楚已係御賜仵作，嫁咗郡王蕭瑾瑜，婚後育有一仔。今季主線「血色玉韘案」——由一具佩戴血色玉韘嘅屍體開始，逐步揭發南趙意圖入侵大唐嘅陰謀，層層加碼到18年前先帝暴斃舊案。</p>
 <p>**重點係：全部破解起點，都係楚楚驗到嘅一具屍。**</p>
 <p>最新第15集大反轉——楚楚發現宮中聲稱死亡嘅南趙二王子祐辰安，「遺體」上舊傷特徵與真人唔符，**確定：那具屍體根本唔係佢**。南趙王派佢出使，不過一早當佢係棋子。 forensic 角度嘅妙處就喺呢度——用驗屍破解外交陰謀，呢個就係TVB自己拍唔出嘅格局。</p>
-<p>---</p>
 <h3>TVB配音今次冇仆街</h3>
 <p>以前外購古裝成日被彈「配音怪」——演員嘴型對唔上、配樂突兀、節奏慢咗幾拍。《機智女法醫2》今次**TVB配音**大致過關，演員語氣冇甩beat，至少聽落唔會令人想轉台。對唔鍾意配音、慣咗睇字幕嘅後生仔係加分位。</p>
-<p>---</p>
 <h3>人物有嘢做</h3>
 <p>蕭瑾瑜染上疳霉瘡但繼續瞞病情救老婆，典型霸總今次有眼濕位。景翊 × 冷月由歡喜冤家升到相依相守，感情線自然唔催淚——唔會為咗催谷收視硬加一段三角戀。南趙二王子祐辰安以為係普通使者，原來另有目的，劇情走向取決於佢係友係敵。</p>
-<p>---</p>
 <h3>一句到尾</h3>
 <p>過去TVB外購古裝多數水土不服，但今次有內地口碑打底、題材夠獨特（香港少見 forensic）、配音過關、節奏唔拖，每集有爆點唔會為咗拖集數加無謂感情線。**88萬觀眾捧場**，師奶界應該幾收貨。</p>
 <p>**forensic 加外交陰謀，楚楚驗嘅唔止係屍，係成個朝代嘅真相。**</p>
-<p>---</p>
 <p>*📺 TVB翡翠台外購 / 原版：《御賜小仵作2》/ 👤 王子奇、蘇曉彤、楊廷東、趙堯珂 / 🎤 TVB粵語配音 / 💰 冠名贊助（黃金檔門檻）/ 📅 播出中，大結局4月3日*</p>`
             },
-            {
-                id: 5,
+                {
+                id: 6,
                 title: "《正義女神》— 從法袍到法袍，佘詩曼這次不放過任何一個「壞孩子」",
                 platform: "TVB",
                 date: "2026-03-24",
-                preview: "不是《新聞女王》2.0，是TVB少見的「法官視角」 《正義女神》（Themis）2026年3月16日率先登陸優酷，3月30日翡翠台接力播出。最大賣點當然係**佘詩曼**——視后闊別TVB一段時間後強勢回歸，而且**首次披上法官袍**，飾演高…",
+                preview: "不是《新聞女王》2.0，是TVB少見的「法官視角」 《正義女神》（Themis）2026年3月16日率先登陸優酷，3月30日翡翠台接力播出。最大賣點當然係**佘詩曼**——視后闊別TVB一段時間後強勢...",
                 article: `<h3>不是《新聞女王》2.0，是TVB少見的「法官視角」</h3>
 <p>《正義女神》（Themis）2026年3月16日率先登陸優酷，3月30日翡翠台接力播出。最大賣點當然係**佘詩曼**——視后闊別TVB一段時間後強勢回歸，而且**首次披上法官袍**，飾演高等法院法官言惠知。</p>
 <p>一開場，佘詩曼已經唔同晒。不是「Man姐」的霸氣，是另一種——**柔肩擔道義，法庭上殺人不見血**。一個案件，足以令她放棄高等法院的大好前途，主動申請降職去少年法庭。呢個決定，本身就已經係一種宣言。</p>
-<p>---</p>
 <h3>大陸網友點睇？微博熱議三大方向</h3>
 <p>**1. 視后再次封帝討論**</p>
 <p>「佘詩曼演活咗個角色，好希望《正義女神》熱度爆出來」、「感覺後面繼續下去如果劇情和角色更好，大機會再拿5封」——大陸網民對佘詩曼嘅演技幾乎零負評，認為她把「果断、正義、強硬、溫柔又善良」四種特質融為一體。</p>
@@ -534,26 +519,22 @@
 | 法官形象 | 厭惡少年犯、親自調查 | 理想主義、願意犧牲前途 |
 | 結局取向 | 系統無力感重 | 偏向「影響改變」的可能性 |</p>
 <p>香港版多了份**溫情**——即使面對「惡魔少年」，言惠知選擇的係「從源頭拯救」而非單純懲罰。但呢個取向，亦係部分大陸網友批評的地方：**「太理想化」、「現實邊會咁童話」**。</p>
-<p>---</p>
 <h3>文頌嫻隔19年回歸：十場有九場喊</h3>
 <p>值得一提的是**文頌嫻**的演出。相隔19年重返TVB，一出场儿子就死了——呢個角色極度悲劇，需要素顏上陣、刻意弄得憔悴。導演透露，十場戲有九場都係喊戲。呢個係觀眾另一個討論焦點：「文頌嫻真係好慘，但係佢嘅悲劇唔會令人覺得厭」。</p>
-<p>---</p>
 <h3>許紹雄的告别作</h3>
 <p>此劇是許紹雄的**熒幕遺作**。佢飾演洪法官——即將退休、看似吊兒郎當但其實經驗老到的主任裁判官。呢個角色某程度上代表住上一代法官的價值觀，與言惠知的理想主義形成對照。有網民話：「感覺佢彷彿從未離開」。</p>
-<p>---</p>
 <h3>總結：TVB少有的「有溫度的法律劇」</h3>
 <p>《正義女神》稱唔稱得上神劇？現在定論太早。但佢做到咗一件事：**令香港觀眾願意認真思考「少年犯」呢個議題**。</p>
 <p>比起《少年法庭》那種令人窒息的無力感，《正義女神》選擇了更困難的路——**相信改變仍然可能**。即使天真，呢個信念本身已經係一種聲音。</p>
 <p>**一句到尾：視后狀態依然，題材有勇有謀，但香港版本地化係咪成功，仍待觀眾驗證。**</p>
-<p>---</p>
 <p>*平台：TVB（優酷先行）/ 演員：佘詩曼、譚耀文、陳煒、周嘉洛、許紹雄、文頌嫻 / 風格：法律+成長+社會反思*</p>`
             },
-            {
-                id: 6,
+                {
+                id: 7,
                 title: "《愛情怎麼翻譯？》— 語言天才與國際巨星，愛能跨越幾多語言？",
                 platform: "Netflix",
                 date: "2026-03-22",
-                preview: "當語言天才遇上國際巨星 語言，是橋樑還是牆？ Netflix 新劇《愛情怎麼翻譯？》（Can This Love Be Translated？）由《德魯納酒店》《還魂》的洪氏姊妹編劇，《契約友情》《紅丹心》的柳英恩導演，2026年1月16日…",
+                preview: "當語言天才遇上國際巨星 語言，是橋樑還是牆？ Netflix 新劇《愛情怎麼翻譯？》（Can This Love Be Translated？）由《德魯納酒店》《還魂》的洪氏姊妹編劇，《契約友情》《紅...",
                 article: `<h3>當語言天才遇上國際巨星</h3>
 <p>語言，是橋樑還是牆？</p>
 <p>Netflix 新劇《愛情怎麼翻譯？》（Can This Love Be Translated？）由《德魯納酒店》《還魂》的洪氏姊妹編劇，《契約友情》《紅丹心》的柳英恩導演，2026年1月16日全球首播。演員陣容包括金宣虎、高允貞、福士蒼汰，遠赴日本、加拿大、意大利取景。</p>
@@ -570,54 +551,47 @@
 <p>如果要用一句話總結《愛情怎麼翻譯？》，我會話：**「語言係工具，愛係選擇。」**</p>
 <p>劇中有一句台詞大概係咁講的：「即使我地語言相通，我地仍然可能係陌生人。」呢個先係最殘忍又最真實嘅地方。</p>
 <p>推介俾：喜歡深度愛情劇、對心理描寫有興趣、願意思考「溝通」真正意思嘅觀眾。</p>
-<p>---
-*資料來源：維基百科、Elle、Vocus、Beauty321、Yahoo新聞（2026年3月）*</p>`
+<p>*資料來源：維基百科、Elle、Vocus、Beauty321、Yahoo新聞（2026年3月）*</p>`
             },
-            {
-                id: 7,
+                {
+                id: 8,
                 title: "《小城大事》— 趙麗穎×黃曉明演活基層奇蹟",
                 platform: "WeTV",
                 date: "2026-03-21",
-                preview: "改革開放最好睇嘅打開方式 如果話2026年1月有邊套陸劇係唔可以錯過，《小城大事》一定係其中之一。 趙麗穎同黃曉明呢對「強強聯手」嘅組合，一文一武、一個留法歸來、一個扎根泥土，喺資源匱乏、沒有國家撥款嘅艱困條件下，帶住小鎮基層幹部同鎮民，「…",
+                preview: "改革開放最好睇嘅打開方式 如果話2026年1月有邊套陸劇係唔可以錯過，《小城大事》一定係其中之一。 趙麗穎同黃曉明呢對「強強聯手」嘅組合，一文一武、一個留法歸來、一個扎根泥土，喺資源匱乏、沒有國家撥款...",
                 article: `<h3>改革開放最好睇嘅打開方式</h3>
 <p>如果話2026年1月有邊套陸劇係唔可以錯過，《小城大事》一定係其中之一。</p>
 <p>趙麗穎同黃曉明呢對「強強聯手」嘅組合，一文一武、一個留法歸來、一個扎根泥土，喺資源匱乏、沒有國家撥款嘅艱困條件下，帶住小鎮基層幹部同鎮民，「集資合夥」一步步起出一座現代城市。</p>
-<p>---</p>
 <h3>角色：唔完美，先至係真人</h3>
 <p>呢套劇最打動我嘅地方，係角色塑造。</p>
 <p>**趙麗穎** 飾演嘅李秋萍唔係典型大女主，唔係完美人設，而係一個會害怕、會猶豫、會犯錯嘅普通人。全素顏、方言原聲演出，為戲增重8公斤，展現基層女幹 部嘅敬業同硬骨頭精神。</p>
 <p>**黃曉明** 為咗角色狠甩15公斤，褪晒「霸總」外殼，以一身土氣但扎實嘅草根氣質回歸。佢飾演嘅鄭德誠唔係正派亦唔係反派，而係一個喺現實中左右為難嘅中年人——呢種灰色地帶先至係我哋身邊真實存在嘅人。</p>
-<p>---</p>
 <h3>演技對決：毀容式演出</h3>
 <p>兩位演員都交出咗「毀容式」演出：</p>
 <p>- 趙麗穎全素顏喺暴雨中搶險，無台詞眼神戲成為加分關鍵
 - 黃曉明「吃紙耍賴」嘅即興表演，展現前所未見嘅演技層次
 - 趙麗穎喺訪問入面笑住話黃曉明「這是毛病吧？」，延續《中餐廳》嘅歡喜冤家化學反應</p>
-<p>---</p>
 <h3>敘事風格：輕喜劇包裝厚重題材</h3>
 <p>呢套劇用輕喜劇形式包裝改革開放呢個厚重主題，係創作者嘅自覺追求——</p>
 <p>&gt; 以「小城」嘅微觀視角承載「大事」嘅時代分量，為主旋律題材煥發出新嘅思想活力同情感溫度。</p>
 <p>跳 出歌頌成就嘅單一框架，係近年陸劇少見嘅膽試。唔洗捱苦情催淚，但睇完會真心覺得：改革開放呢個世代，的確有一班人用血肉之軀創造奇蹟。</p>
-<p>---</p>
 <h3>收視表現</h3>
 <p>隨著口碑發酵，《小城大事》打趴同檔宋威龍主演嘅《驕陽似我》收視奪冠，絕對係實力證明。</p>
-<p>---</p>
 <h3>適合你嗎？</h3>
 <p>✅ 你喜歡《風吹半夏》《幸福到萬家呢類寫實風格
 ✅ 你想了解改革開放歷史但又怕悶
 ✅ 你想睇演員「毀容式」嘅敬業演出
 ✅ 你中意有血肉嘅角色塑造</p>
 <p>❌ 如果你想要愛情線好重嘅偶像劇，就skip呢套</p>
-<p>---</p>
 <p>**總結**：⭐⭐⭐⭐⭐（5/5）</p>
 <p>《小城大事》唔係嗰種你要「追」嘅爆款，而係一套值得靜下心嚟睇、慢慢感受嘅作品。趙麗穎同黃曉明嘅化學反應係驚喜，輕喜劇嘅包裝方式令沉重歷史變得易入口——2026年目前最推薦嘅陸劇，絕對係呢套。</p>`
             },
-            {
-                id: 8,
+                {
+                id: 9,
                 title: "《訂閱男友》— Jisoo 挑戰虛擬戀愛，係創新定係呃Like？",
                 platform: "Netflix",
                 date: "2026-03-20",
-                preview: "劇情簡介 由 BLACKPINK Jisoo 主演既《訂閱男友》（Boyfriend on Demand）3月6日正式登陸 Netflix。故事講述女主角「徐未來」透過一個「虛擬戀愛訂閱」服務，一次過解鎖八種理想型——霸總、白馬王子、校園初…",
+                preview: "劇情簡介 由 BLACKPINK Jisoo 主演既《訂閱男友》（Boyfriend on Demand）3月6日正式登陸 Netflix。故事講述女主角「徐未來」透過一個「虛擬戀愛訂閱」服務，一次過...",
                 article: `<h3>劇情簡介</h3>
 <p>由 BLACKPINK Jisoo 主演既《訂閱男友》（Boyfriend on Demand）3月6日正式登陸 Netflix。故事講述女主角「徐未來」透過一個「虛擬戀愛訂閱」服務，一次過解鎖八種理想型——霸總、白馬王子、校園初戀，乜類型都有。</p>
 <p>呢個設定直頭係為咗我哋呢啲「岩岩失戀」或者「對現實戀愛乸聲」既都市人度身訂造：唔洗付出真心，又可以享受到戀愛既甜——呢個世界到底係進步定係悲哀？</p>
@@ -632,17 +606,15 @@
 <p>我個人覺得呢套劇「創意有餘，深入不足」。佢提出咗好好既問題（AI 戀愛、虛擬情感），但係用「下飯劇」「輕鬆高甜」既包裝，反而冇咁多位去探討呢啲咁deep既議題。</p>
 <p>如果你鍾意睇靚人靚景、輕鬆呃時間，呢套 OK。但如果你期待好似《黑暗榮耀》咁有深度既 Jisoo，可能要等多幾套。</p>
 <p>**Score: 6.5/10** — 有驚喜，但未夠震撼。</p>
-<p>---</p>
 <p>*有興趣可以留意：Jisoo 現實中既身價已經飆升 HK$9.2億，呢套劇會唔會令佢既演員路更順？*</p>`
             },
-            {
-                id: 9,
+                {
+                id: 10,
                 title: "《足球女將2》— 續作的尷尬與ViuTV的隱憂",
                 platform: "ViuTV",
                 date: "2026-03-19",
-                preview: "文章 曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。 …",
-                article: `<h3>文章</h3>
-<p>曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。</p>
+                preview: "曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是Viu...",
+                article: `<p>曾幾何時，《足球女將》第一季以「熱血」與「真實感」殺出一條血路，成為近年本地足球劇的代表作。然而，當第二季千呼萬喚始出來，換來的卻是「期望越大，失望越大」的普遍評價。這不僅是一套續集的失敗，更是ViuTV在劇集延續能力上的一次檢驗。</p>
 <h3>續作表現：消費情懷還是延續精神？</h3>
 <p>第二季最致命的問題，在於它似乎忘記了第一季成功的核心。第一季之所以能夠引起共鳴，係因為佢將「足球」呢個主題放係第一位——球場上既拼搏、隊友之間既磨合、對夢想既堅持，全部都係靠「波」黎推動。但踏入第二季，劇情明顯偏向人物關係既纠葛，足球反而成為咗陪襯。有觀眾直言：「我想睇波，唔係睇談戀愛。」呢句說話某程度上概括咗第二季既問題——佢失去咗第一季既「魂」。</p>
 <p>更令人失望既係角色發展。第一季既角色之所以立體，係因為佢哋喺球場上成長、衝突、然後和解。但第二季，所有角色似乎停滯咗係一個「安全區」入面，唔少觀眾認為角色既深度唔及前作。呢種「食老本」既做法，短期内可能吸引到原有粉絲，但長遠而言，只會消耗觀眾既耐性。</p>
@@ -654,14 +626,13 @@
 <h3>總結</h3>
 <p>《足球女將2》並非一套失敗既作品，但佢絕對稱唔上成功。佢忘記咗自己既根，喺人物關係既安全區入面失去咗足球既熱血。對於ViuTV而言，呢套劇既教訓好清楚：續作唔係靠消費情懷就可以成功——你需要記得當初點解會成功。</p>`
             },
-            {
-                id: 10,
+                {
+                id: 11,
                 title: "《臥底嬌娃》— 市場定位兩邊唔到岸既典型",
                 platform: "TVB",
                 date: "2026-03-19",
-                preview: "文章 《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。 班底：有人，…",
-                article: `<h3>文章</h3>
-<p>《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。</p>
+                preview: "《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，...",
+                article: `<p>《臥底嬌娃》（前名《特勤女團》），由方駿钊監製、邵麗瓊編審，張曦雯，陳瀅、羅毓儀、馬貫東等主演。題材本身有啲諗頭——臥底女團、輕鬆動作喜劇，方向擺明係想吸年輕觀眾。但睇完成套劇，你會發現問題唔係方向，而係——班底撐唔起。</p>
 <h3>班底：有人，但未有足夠既說服力</h3>
 <p>張曦雯，陳瀅、羅毓儀呢啲新面孔，顏值OK，亦落力。但當一套劇既成敗取決於「臥底」呢個題材既張力既時候，問題就出現——呢班演員，暫時未有足夠既氣場去 carry 咁複雜既角色設定。你會見到佢地好落力，但畀你既感覺就只係「努力但未夠」。呢個唔係演技問題，而係——TVB 既新一批演員，仲未有足夠既代表作去建立觀眾既信任。</p>
 <h3>市場定位：本地定內地？一个兩邊都唔到岸既選擇</h3>
@@ -671,14 +642,13 @@
 <h3>總結</h3>
 <p>《臥底嬌娃》既問題，唔係「做得差」，而係「力有不逮」。當平台既班底未夠，當市場定位仍然模糊，呢啲所謂既「新嘗試」，最終只會變成「縮水版既失望」。TVB 而家最需要既，唔係再拍幾多套呢啲「輕裝劇」，而係真真正正諗清楚——邊個先係自己既觀眾？</p>`
             },
-            {
-                id: 11,
+                {
+                id: 12,
                 title: "《歲月如歌》— 零討論度背後的系統問題",
                 platform: "HOY TV",
                 date: "2026-03-19",
-                preview: "文章 《歲月如歌》——HOY TV年度大型跨平台、跨地區歌唱節目，喺香港著名地標戲曲中心拍攝，仲要拎埋政府「創意智優計劃」主要資助。聽落好似好巴閉？但如果你上網搜尋呢個節目，你會發現——基本上冇人討論。 呢個現象唔係單純「節目唔好睇」咁簡單…",
-                article: `<h3>文章</h3>
-<p>《歲月如歌》——HOY TV年度大型跨平台、跨地區歌唱節目，喺香港著名地標戲曲中心拍攝，仲要拎埋政府「創意智優計劃」主要資助。聽落好似好巴閉？但如果你上網搜尋呢個節目，你會發現——基本上冇人討論。</p>
+                preview: "《歲月如歌》——HOY TV年度大型跨平台、跨地區歌唱節目，喺香港著名地標戲曲中心拍攝，仲要拎埋政府「創意智優計劃」主要資助。聽落好似好巴閉？但如果你上網搜尋呢個節目，你會發現——基本上冇人討論。 呢...",
+                article: `<p>《歲月如歌》——HOY TV年度大型跨平台、跨地區歌唱節目，喺香港著名地標戲曲中心拍攝，仲要拎埋政府「創意智優計劃」主要資助。聽落好似好巴閉？但如果你上網搜尋呢個節目，你會發現——基本上冇人討論。</p>
 <p>呢個現象唔係單純「節目唔好睇」咁簡單，而係反映緊一連串既結構性問題。</p>
 <p>一個節目冇人討論，通常有幾個原因：內容唔夠吸引、宣傳做得差、平台本身冇流量。但《歲月如歌》既問題，似乎特別複雜——佢有政府資助、有戲曲中心呢類靚場地、有歌唱嘉賓既表面架勢，但就偏偏乜都冇。</p>
 <p>《歲月如歌》作為一個歌唱節目，本身就要面對一個激烈既競爭市場。本地歌唱節目唔算多，但要突圍並唔容易——你要同過往既經典歌唱節目比較，要同歌手本身既粉絲基礎掛鈎，仲要同節目本身既製作質素掛鈎。</p>
@@ -689,14 +659,13 @@
 <p>《歲月如歌》既問題，唔係「做得差」，而係——佢生唔逢時。一個有政府資助、有戲曲中心靚場地、有歌唱嘉賓既節目，最後變成「冇人討論」，呢個本身就已經說明咗好多嘢。</p>
 <p>如果HOY TV想建立存在感，佢地需要既唔係再做多幾個《歲月如歌》，而係諗清楚——點樣先可以引起觀眾既注意？呢個先係佢地既真正挑戰。</p>`
             },
-            {
-                id: 12,
+                {
+                id: 13,
                 title: "《戀愛等高線》— 小品綜藝的尷尬與ViuTV的隱憂",
                 platform: "ViuTV",
                 date: "2026-03-19",
-                preview: "文章 近年戀愛真人騷氾濫，觀眾既口味越來越刁鑽——《戀愛等高線》就正正撞正咗呢個市場變化。作為小品式戀愛綜藝，佢既定位注定咗佢唔會有太大既火花，但問題係——連小品應有既「輕鬆有趣」都唔夠。 小品綜藝既生存之道，係「易入口」——唔洗花太多心力…",
-                article: `<h3>文章</h3>
-<p>近年戀愛真人騷氾濫，觀眾既口味越來越刁鑽——《戀愛等高線》就正正撞正咗呢個市場變化。作為小品式戀愛綜藝，佢既定位注定咗佢唔會有太大既火花，但問題係——連小品應有既「輕鬆有趣」都唔夠。</p>
+                preview: "近年戀愛真人騷氾濫，觀眾既口味越來越刁鑽——《戀愛等高線》就正正撞正咗呢個市場變化。作為小品式戀愛綜藝，佢既定位注定咗佢唔會有太大既火花，但問題係——連小品應有既「輕鬆有趣」都唔夠。 小品綜藝既生存之...",
+                article: `<p>近年戀愛真人騷氾濫，觀眾既口味越來越刁鑽——《戀愛等高線》就正正撞正咗呢個市場變化。作為小品式戀愛綜藝，佢既定位注定咗佢唔會有太大既火花，但問題係——連小品應有既「輕鬆有趣」都唔夠。</p>
 <p>小品綜藝既生存之道，係「易入口」——唔洗花太多心力，唔洗追得好辛苦，但偏偏，《戀愛等高線》就係輸咗喺呢度。佢太過「安全」——每個环节都照住傳統戀愛真人騷既公式，冇驚喜，冇突破。有觀眾話：「睇完一集都唔知想表達咩。」呢句說話雖然有啲夸张，但係的确講中咗呢個節目既問題——佢乜都想講，但乜都講唔深。</p>
 <p>小品既價值唔係「冇內容」，而係「精而簡」。你可以用15分鐘講一個完整既情感故事，但《戀愛等高線》似乎唔係咁諗——佢想乜都啱啱好，結果乜都唔够。</p>
 <p>呢幾年，ViuTV既綜藝比上不足、比下有餘。早期既成功靠既係——真實感同話題性。啲節目敢於觸及社會議題，敢於表現真人既一面。但近排既綜藝，似乎越來越「離地」——《戥愛等高線》就係其中一個例子。</p>
@@ -706,44 +675,45 @@
             }
         ];
         
-        let currentPlatform = 'all';
+        let currentFilter = 'all';
         
         function renderArticles() {
             const list = document.getElementById('articleList');
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            document.getElementById('totalCount').textContent = articles.length;
             
             const filtered = articles.filter(a => {
-                const matchPlatform = currentPlatform === 'all' || a.platform === currentPlatform;
-                const matchSearch = a.title.toLowerCase().includes(searchTerm) || a.preview.toLowerCase().includes(searchTerm);
-                return matchPlatform && matchSearch;
+                const matchFilter = currentFilter === 'all' || a.platform === currentFilter;
+                const matchSearch = a.title.toLowerCase().includes(searchTerm);
+                return matchFilter && matchSearch;
             });
             
             if (filtered.length === 0) {
-                list.innerHTML = '<div class="empty-state"><div class="emoji">😶</div><div>沒有找到評論</div></div>';
+                list.innerHTML = '<div class="empty-state">沒有找到評論</div>';
                 return;
             }
             
             list.innerHTML = filtered.map(a => `
                 <div class="article-card" onclick="showArticle(${a.id})">
-                    <span class="platform-tag">${a.platform}</span>
+                    <span class="platform">${a.platform}</span>
                     <h3>${a.title}</h3>
                     <div class="meta">📅 ${a.date}</div>
                     <p class="preview">${a.preview}</p>
                 </div>
             `).join('');
-            
-            document.getElementById('totalCount').textContent = filtered.length;
         }
         
         function filterBy(platform) {
-            currentPlatform = platform;
+            currentFilter = platform;
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.classList.remove('active');
-                if (btn.dataset.platform === platform || (platform === 'all' && btn.textContent === '全部')) {
+                if (btn.textContent.includes(platform) || (platform === 'all' && btn.textContent === '全部')) {
                     btn.classList.add('active');
                 }
             });
+            renderArticles();
+        }
+        
+        function searchArticles() {
             renderArticles();
         }
         
@@ -764,7 +734,6 @@
             document.body.style.overflow = '';
         }
         
-        document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
         renderArticles();
     </script>
 </body>
