@@ -628,8 +628,19 @@ def generate_html(all_articles):
         }}
         
         // Filter by platform
-        function filterByPlatform(platform) {{
+        function filterByPlatform(type, platform) {{
+            currentType = type;
             currentPlatform = platform;
+            
+            // Update type buttons
+            document.querySelectorAll('.type-btn').forEach(btn => {{
+                btn.classList.remove('active');
+                if ((type === 'all' && btn.textContent.includes('全部')) ||
+                    (type === 'tv' && btn.textContent.includes('TV')) ||
+                    (type === 'kpop' && btn.textContent.includes('K-Pop'))) {{
+                    btn.classList.add('active');
+                }}
+            }});
             
             // Update platform buttons
             document.querySelectorAll('.filter-btn').forEach(btn => {{
@@ -652,7 +663,7 @@ def generate_html(all_articles):
             
             let buttonsHtml = '<button class="filter-btn active" onclick="filterByPlatform(\\'all\\')">全部</button>';
             availablePlatforms.forEach(p => {{
-                buttonsHtml += '<button class="filter-btn" onclick="filterByPlatform(\'' + p + '\')">' + p + '<\/button>';
+                buttonsHtml += '<button class="filter-btn" onclick="filterByPlatform(\'' + currentType + '\', \'' + p + '\')">' + p + '<\/button>';
             }});
             container.innerHTML = buttonsHtml;
         }}
