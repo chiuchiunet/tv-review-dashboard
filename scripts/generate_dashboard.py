@@ -80,12 +80,19 @@ def get_reviews(content_type="tv"):
         preview = preview_text[:120] + '...' if len(preview_text) > 120 else preview_text
         
         # Extract date from filename or frontmatter
-        date_match = re.match(r'(\d{4}-\d{2}-\d{2})', filename)
+        date = None
+        fn_match = re.match(r'(\d{4}-\d{2}-\d{2})', filename)
+        if fn_match:
+            date = fn_match.group(1)
         for line in lines[:10]:
             if line.startswith('date:'):
-                date_match = re.match(r'(\d{4}-\d{2}-\d{2})', line)
+                date_part = line.split('date:')[1].strip()
+                dm = re.match(r'(\d{4}-\d{2}-\d{2})', date_part)
+                if dm:
+                    date = dm.group(1)
                 break
-        date = date_match.group(1) if date_match else datetime.now().strftime('%Y-%m-%d')
+        if not date:
+            date = datetime.now().strftime('%Y-%m-%d')
         
         reviews.append({
             'id': i,
