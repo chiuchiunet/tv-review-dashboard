@@ -14,51 +14,75 @@ OUTPUT_PATH = "/home/ubuntu/.openclaw/workspace-creation/web/index.html"
 
 def clean_markdown(text):
     """Convert markdown to HTML properly"""
-    # HTML escape first (except our markup)
-    text = html_module.escape(text)
-    
-    # Headers
-    text = re.sub(r'^### (.+)$', r'<h4>\1</h4>', text, flags=re.MULTILINE)
-    text = re.sub(r'^## (.+)$', r'<h3>\1</h3>', text, flags=re.MULTILINE)
-    text = re.sub(r'^# (.+)$', r'<h2>\1</h2>', text, flags=re.MULTILINE)
-    
-    # Bold/Italic
-    text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
-    text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
-    
-    # Lists - convert to HTML
     lines = text.split('\n')
-    new_lines = []
+    result = []
+    in_table = False
     in_list = False
     
     for line in lines:
-        if re.match(r'^[\-\*] ', line):
+        stripped = line.strip()
+        
+        # Tables
+        if '|' in stripped and re.match(r'^\|?[\s\-:|]+\|', stripped):
+            if not in_table:
+                # Table header row
+                cells = [c.strip() for c in stripped.split('|') if c.strip() and c.strip() != '-']
+                if cells:
+                    result.append('<table class="md-table"><tr>' + ''.join([f'<th>{c}</th>' for c in cells]) + '</tr>')
+                    in_table = True
+            else:
+                # Table data row
+                cells = [c.strip() for c in stripped.split('|') if c.strip()]
+                if cells:
+                    result.append('<tr>' + ''.join([f'<td>{c}</td>' for c in cells]) + '</tr>')
+            continue
+        else:
+            if in_table:
+                result.append('</table>')
+                in_table = False
+        
+        # List items
+        if stripped.startswith('- ') or stripped.startswith('* '):
             if not in_list:
-                new_lines.append('<ul>')
+                result.append('<ul>')
                 in_list = True
-            new_lines.append('<li>' + re.sub(r'^[\-\*] ', '', line) + '</li>')
+            item_text = stripped[2:]
+            result.append(f'<li>{item_text}</li>')
+            continue
         else:
             if in_list:
-                new_lines.append('</ul>')
+                result.append('</ul>')
                 in_list = False
-            new_lines.append(line)
+        
+        # Headers
+        if stripped.startswith('### '):
+            result.append(f'<h4>{stripped[4:]}</h4>')
+        elif stripped.startswith('## '):
+            result.append(f'<h3>{stripped[3:]}</h3>')
+        elif stripped.startswith('# '):
+            result.append(f'<h2>{stripped[2:]}</h2>')
+        else:
+            result.append(line)
     
+    if in_table:
+        result.append('</table>')
     if in_list:
-        new_lines.append('</ul>')
+        result.append('</ul>')
     
-    text = '\n'.join(new_lines)
+    text = '\n'.join(result)
     
-    # Checkboxes
-    text = re.sub(r'- \[x\] ', r'<input type="checkbox" checked disabled> ', text)
-    text = re.sub(r'- \[ \] ', r'<input type="checkbox" disabled> ', text)
+    # Bold
+    text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
+    text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
     
-    # Line breaks to paragraphs
+    # Line breaks
     text = re.sub(r'\n\n+', '</p><p>', text)
+    text = re.sub(r'\n', '<br>', text)
     
     # Code
     text = re.sub(r'`(.+?)`', r'<code>\1</code>', text)
     
-    return f'<p>{text}</p>'
+    return f'<div class="article">{text}</div>'
 
 def get_reviews(content_type="tv"):
     dir_path = TV_REVIEWS_DIR if content_type == "tv" else KPOP_POSTS_DIR
@@ -107,10 +131,10 @@ def get_reviews(content_type="tv"):
             article = re.sub(r'^## .+\n', '', article, flags=re.MULTILINE)
             article = article.strip()
         
-        # Clean markdown to HTML
+        # Clean markdown
         article = clean_markdown(article)
         
-        # Preview - first 120 chars
+        # Preview
         preview_text = re.sub('<[^>]+>', '', article)
         preview = preview_text[:120] + '...' if len(preview_text) > 120 else preview_text
         
@@ -294,11 +318,11 @@ def generate_static_html(all_articles):
             line-height: 1.7;
         }}
         
-        .article-content p {{
+        .article-content .article {{
             margin-bottom: 12px;
         }}
         
-        .article-content h3, .article-content h4 {{
+        .article-content h2, .article-content h3, .article-content h4 {{
             margin: 16px 0 8px;
             font-family: 'Noto Serif HK', serif;
         }}
@@ -310,6 +334,22 @@ def generate_static_html(all_articles):
         
         .article-content li {{
             margin-bottom: 4px;
+        }}
+        
+        .article-content table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+        }}
+        
+        .article-content th, .article-content td {{
+            border: 1px solid #e4e4e7;
+            padding: 8px;
+            text-align: left;
+        }}
+        
+        .article-content th {{
+            background: #f4f4f5;
         }}
         
         .tags {{
