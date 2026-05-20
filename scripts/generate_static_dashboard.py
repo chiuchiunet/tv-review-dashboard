@@ -5,20 +5,60 @@ Static Dashboard Generator - 不需要 JavaScript，直接 HTML render曬
 
 import os
 import re
+import html as html_module
 from datetime import datetime
 
 TV_REVIEWS_DIR = "/home/ubuntu/.openclaw/workspace-creation/tv-reviews"
 KPOP_POSTS_DIR = "/home/ubuntu/.openclaw/workspace-kpop/posts"
 OUTPUT_PATH = "/home/ubuntu/.openclaw/workspace-creation/web/index.html"
 
-def escape_html(text):
-    """HTML escape"""
-    return (str(text)
-        .replace('&', '&amp;')
-        .replace('<', '&lt;')
-        .replace('>', '&gt;')
-        .replace('"', '&quot;')
-        .replace("'", '&#39;'))
+def clean_markdown(text):
+    """Convert markdown to HTML properly"""
+    # HTML escape first (except our markup)
+    text = html_module.escape(text)
+    
+    # Headers
+    text = re.sub(r'^### (.+)$', r'<h4>\1</h4>', text, flags=re.MULTILINE)
+    text = re.sub(r'^## (.+)$', r'<h3>\1</h3>', text, flags=re.MULTILINE)
+    text = re.sub(r'^# (.+)$', r'<h2>\1</h2>', text, flags=re.MULTILINE)
+    
+    # Bold/Italic
+    text = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
+    text = re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
+    
+    # Lists - convert to HTML
+    lines = text.split('\n')
+    new_lines = []
+    in_list = False
+    
+    for line in lines:
+        if re.match(r'^[\-\*] ', line):
+            if not in_list:
+                new_lines.append('<ul>')
+                in_list = True
+            new_lines.append('<li>' + re.sub(r'^[\-\*] ', '', line) + '</li>')
+        else:
+            if in_list:
+                new_lines.append('</ul>')
+                in_list = False
+            new_lines.append(line)
+    
+    if in_list:
+        new_lines.append('</ul>')
+    
+    text = '\n'.join(new_lines)
+    
+    # Checkboxes
+    text = re.sub(r'- \[x\] ', r'<input type="checkbox" checked disabled> ', text)
+    text = re.sub(r'- \[ \] ', r'<input type="checkbox" disabled> ', text)
+    
+    # Line breaks to paragraphs
+    text = re.sub(r'\n\n+', '</p><p>', text)
+    
+    # Code
+    text = re.sub(r'`(.+?)`', r'<code>\1</code>', text)
+    
+    return f'<p>{text}</p>'
 
 def get_reviews(content_type="tv"):
     dir_path = TV_REVIEWS_DIR if content_type == "tv" else KPOP_POSTS_DIR
@@ -67,11 +107,8 @@ def get_reviews(content_type="tv"):
             article = re.sub(r'^## .+\n', '', article, flags=re.MULTILINE)
             article = article.strip()
         
-        # Clean article - convert markdown to HTML
-        article = article.replace('\n\n', '</p><p>')
-        article = f'<p>{article}</p>'
-        article = re.sub(r'### (.+)', r'<h4>\1</h4>', article)
-        article = re.sub(r'## (.+)', r'<h3>\1</h3>', article)
+        # Clean markdown to HTML
+        article = clean_markdown(article)
         
         # Preview - first 120 chars
         preview_text = re.sub('<[^>]+>', '', article)
@@ -90,6 +127,9 @@ def get_reviews(content_type="tv"):
     return reviews
 
 def generate_static_html(all_articles):
+    # Sort by date - newest first
+    all_articles = sorted(all_articles, key=lambda x: x['date'], reverse=True)
+    
     tv_articles = [a for a in all_articles if a['content_type'] == 'tv']
     kpop_articles = [a for a in all_articles if a['content_type'] == 'kpop']
     
@@ -100,7 +140,7 @@ def generate_static_html(all_articles):
         tags_html = ''.join([f'<span class="tag">{tag}</span>' for tag in article['tags']])
         
         cards_html += f'''
-        <details class="article-card {is_kpop and 'kpop' or ''}">
+        <details class="article-card {'kpop' if is_kpop else ''}">
             <summary>
                 <span class="type-badge">{type_label}</span>
                 <span class="platform">{article['platform']}</span>
@@ -261,6 +301,15 @@ def generate_static_html(all_articles):
         .article-content h3, .article-content h4 {{
             margin: 16px 0 8px;
             font-family: 'Noto Serif HK', serif;
+        }}
+        
+        .article-content ul {{
+            margin: 8px 0;
+            padding-left: 20px;
+        }}
+        
+        .article-content li {{
+            margin-bottom: 4px;
         }}
         
         .tags {{
