@@ -80,19 +80,12 @@ def get_reviews(content_type="tv"):
         preview = preview_text[:120] + '...' if len(preview_text) > 120 else preview_text
         
         # Extract date from filename or frontmatter
-        date = None
-        fn_match = re.match(r'(\d{4}-\d{2}-\d{2})', filename)
-        if fn_match:
-            date = fn_match.group(1)
+        date_match = re.match(r'(\d{4}-\d{2}-\d{2})', filename)
         for line in lines[:10]:
             if line.startswith('date:'):
-                date_part = line.split('date:')[1].strip()
-                dm = re.match(r'(\d{4}-\d{2}-\d{2})', date_part)
-                if dm:
-                    date = dm.group(1)
+                date_match = re.match(r'(\d{4}-\d{2}-\d{2})', line)
                 break
-        if not date:
-            date = datetime.now().strftime('%Y-%m-%d')
+        date = date_match.group(1) if date_match else datetime.now().strftime('%Y-%m-%d')
         
         reviews.append({
             'id': i,
@@ -628,19 +621,8 @@ def generate_html(all_articles):
         }}
         
         // Filter by platform
-        function filterByPlatform(type, platform) {{
-            currentType = type;
+        function filterByPlatform(platform) {{
             currentPlatform = platform;
-            
-            // Update type buttons
-            document.querySelectorAll('.type-btn').forEach(btn => {{
-                btn.classList.remove('active');
-                if ((type === 'all' && btn.textContent.includes('全部')) ||
-                    (type === 'tv' && btn.textContent.includes('TV')) ||
-                    (type === 'kpop' && btn.textContent.includes('K-Pop'))) {{
-                    btn.classList.add('active');
-                }}
-            }});
             
             // Update platform buttons
             document.querySelectorAll('.filter-btn').forEach(btn => {{
@@ -663,7 +645,7 @@ def generate_html(all_articles):
             
             let buttonsHtml = '<button class="filter-btn active" onclick="filterByPlatform(\\'all\\')">全部</button>';
             availablePlatforms.forEach(p => {{
-                buttonsHtml += '<button class="filter-btn" onclick="filterByPlatform(\'' + currentType + '\', \'' + p + '\')">' + p + '<\/button>';
+                buttonsHtml += '<button class="filter-btn" onclick="filterByPlatform(\'' + p + '\')">' + p + '<\/button>';
             }});
             container.innerHTML = buttonsHtml;
         }}
