@@ -27,8 +27,14 @@ except ImportError:  # pragma: no cover - fallback keeps the generator runnable
     _MD = None
     HAVE_MARKDOWN = False
 
+# Published articles live in the public repo (tv-review-dashboard). Unpublished
+# ones live in the private drafts repo (tv-review-drafts) so their bodies are
+# never readable by anyone who visits the public site.
 TV_REVIEWS_DIR = "/home/ubuntu/.openclaw/workspace-creation/tv-reviews"
 KPOP_POSTS_DIR = "/home/ubuntu/.openclaw/workspace-kpop/posts"
+DRAFTS_DIR = "/home/ubuntu/.openclaw/workspace-creation-drafts"
+DRAFTS_TV_REVIEWS_DIR = os.path.join(DRAFTS_DIR, "tv-reviews")
+DRAFTS_KPOP_DIR = os.path.join(DRAFTS_DIR, "kpop")
 OUTPUT_PATH = "/home/ubuntu/.openclaw/workspace-creation/web/index.html"
 # Full (local management) build. Never committed; the deployed site serves
 # OUTPUT_PATH, which is generated in public-safe mode by default.
@@ -300,11 +306,20 @@ def _file_updated_date(filepath):
         return ''
 
 
-def _source_url(content_type, filename):
-    """GitHub blob link for TV articles; K-Pop lives outside the public repo."""
-    if content_type == 'tv':
-        return f'{GITHUB_BLOB_BASE}/tv-reviews/{filename}'
-    return ''
+def _source_url(content_type, filename, filepath=''):
+    """GitHub blob link for articles that live in the public repo.
+
+    Only published articles are in the public repo, so only they get a blob
+    link. Drafts live in the private drafts repo and must not be linked from
+    the public site (the link would 404 for visitors and would disclose that
+    a draft exists). K-Pop lives outside the public repo entirely.
+    """
+    if content_type != 'tv':
+        return ''
+    if filepath and not os.path.abspath(filepath).startswith(
+            os.path.abspath(TV_REVIEWS_DIR) + os.sep):
+        return ''
+    return f'{GITHUB_BLOB_BASE}/tv-reviews/{filename}'
 
 
 def build_article(raw_dict):
@@ -361,7 +376,7 @@ def build_article(raw_dict):
         'article': article_html,
         'cover': cover,
         'sourcePath': filepath,
-        'sourceUrl': _source_url(content_type, filename),
+        'sourceUrl': _source_url(content_type, filename, filepath),
     }
 
 
@@ -388,31 +403,45 @@ def summary_counts(all_articles):
 
 def get_reviews(content_type="tv"):
     """從 md files 讀取內容
-    """
-    dir_path = TV_REVIEWS_DIR if content_type == "tv" else KPOP_POSTS_DIR
 
-    if not os.path.exists(dir_path):
-        print(f"   ⚠️ Directory not found: {dir_path}")
-        return []
+    Reads the published source directory first, then the private drafts
+    directory. Drafts are included so the dashboard can still show and count
+    unpublished work; the public build then locks their bodies.
+    """
+    if content_type == "tv":
+        dirs = [TV_REVIEWS_DIR, DRAFTS_TV_REVIEWS_DIR]
+    else:
+        dirs = [KPOP_POSTS_DIR, DRAFTS_KPOP_DIR]
 
     reviews = []
-    files = sorted(os.listdir(dir_path), reverse=True)
-
-    for i, filename in enumerate(files, 1):
-        if not filename.endswith('.md'):
+    seen = set()
+    for dir_path in dirs:
+        if not os.path.exists(dir_path):
+            print(f"   ⚠️ Directory not found: {dir_path}")
             continue
 
-        filepath = os.path.join(dir_path, filename)
-        with open(filepath, 'r', encoding='utf-8') as f:
-            content = f.read()
+        files = sorted(os.listdir(dir_path), reverse=True)
 
-        reviews.append(build_article({
-            'id': i,
-            'filename': filename,
-            'filepath': filepath,
-            'content': content,
-            'content_type': content_type,
-        }))
+        for i, filename in enumerate(files, 1):
+            if not filename.endswith('.md'):
+                continue
+            # A file may exist in both the published dir and the drafts dir;
+            # keep the first one seen (published wins) instead of duplicating.
+            if filename in seen:
+                continue
+            seen.add(filename)
+
+            filepath = os.path.join(dir_path, filename)
+            with open(filepath, 'r', encoding='utf-8') as f:
+                content = f.read()
+
+            reviews.append(build_article({
+                'id': i,
+                'filename': filename,
+                'filepath': filepath,
+                'content': content,
+                'content_type': content_type,
+            }))
 
     return reviews
 
@@ -2079,15 +2108,10 @@ __DRAWER_FILTERS__
             kpop: {
                 title: '新增 K-Pop 內容',
                 dir: 'posts/',
-                note: IS_PUBLIC_BUILD
-                    ? 'K-Pop 內容放喺另一個內容庫，唔喺呢個 repo 入面。'
-                    : 'K-Pop 內容放喺另一個 repo（workspace-kpop），唔喺呢個 repo 入面。',
+                note: 'K-Pop 內容放喺另一個內容庫，唔喺呢個 repo 入面。',
                 body: function () {
-                    const where = IS_PUBLIC_BUILD
-                        ? '另一個內容庫嘅 <code>' + this.dir + '</code>'
-                        : 'workspace-kpop 嘅 <code>' + this.dir + '</code>';
-                    return '<p>' + this.note + ' 喺 ' + where
-                        + ' 新增一個 .md 檔，然後重新執行 generator。</p>'
+                    return '<p>' + this.note + ' 喺另一個內容庫嘅 <code>' + this.dir
+                        + '</code> 新增一個 .md 檔，然後重新執行 generator。</p>'
                         + '<pre class="frontmatter-template"><code>---\\n'
                         + 'title: 藝人 — 專輯\\n'
                         + 'platform: Spotify|YouTube\\n'
