@@ -1289,13 +1289,21 @@ __DRAWER_FILTERS__
             const sort = params.get('sort');
             if (SORT_OPTIONS.indexOf(sort) !== -1) next.sort = sort;
 
-            // Comma-separated canonical ids; unknown ids are simply dropped.
+            // Comma-separated canonical ids. Ids that do not exist anywhere in
+            // the data are dropped, so a junk `?platform=nope` falls back to the
+            // default (no platform filter) instead of hiding every article.
             const rawPlatform = params.get('platform');
             if (rawPlatform) {
+                const known = [];
+                ARTICLES.forEach((article) => {
+                    (article.platforms || []).forEach((pid) => {
+                        if (known.indexOf(pid) === -1) known.push(pid);
+                    });
+                });
                 const valid = [];
                 rawPlatform.split(',').forEach((pid) => {
                     const id = pid.trim();
-                    if (id && valid.indexOf(id) === -1) valid.push(id);
+                    if (id && known.indexOf(id) !== -1 && valid.indexOf(id) === -1) valid.push(id);
                 });
                 next.platform = valid;
             }
