@@ -395,7 +395,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
             --text: #18181B;
             --text-muted: #52525B;
             --border: #E4E4E7;
-            --border-strong: #A1A1AA;
+            --border-strong: #71717A;
             --card-bg: #FFFFFF;
             --accent: #1D4ED8;
             --accent-text: #1E40AF;
