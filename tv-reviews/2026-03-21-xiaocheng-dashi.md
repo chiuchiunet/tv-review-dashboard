@@ -1,6 +1,7 @@
 ---
 title: 《小城大事》— 趙麗穎×黃曉明演活基層奇蹟
 platform: WeTV
+status: published
 date: 2026-03-21
 tags: [陸劇, 年代劇, 改革開放, 趙麗穎, 黃曉明, 評測]
 ---

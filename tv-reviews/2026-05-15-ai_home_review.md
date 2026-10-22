@@ -1,6 +1,7 @@
 ---
 title: 《愛·回家之開心速遞》— 香港最長壽處境劇的時代終結
 platform: TVB
+status: published
 date: 2026-05-15
 tags: [TVB, 處境劇, 香港電視, 愛回家, 行業分析]
 ---
