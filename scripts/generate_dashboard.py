@@ -417,6 +417,10 @@ def get_reviews(content_type="tv"):
     seen = set()
     for dir_path in dirs:
         if not os.path.exists(dir_path):
+            # The drafts directory is optional: a content type may have no
+            # unpublished articles yet, which is not an error.
+            if dir_path.startswith(DRAFTS_DIR):
+                continue
             print(f"   ⚠️ Directory not found: {dir_path}")
             continue
 
