@@ -892,6 +892,21 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
             margin-top: auto;
             padding-top: .75rem;
             flex-wrap: wrap;
+            position: relative;
+        }
+
+        /* The card clips its cover, so the 「更多」 menu must escape that clip:
+           anchor to the actions row and render above the card edge. */
+        .card-actions .menu {
+            top: auto;
+            bottom: calc(100% + .25rem);
+            left: auto;
+            right: 0;
+        }
+
+        /* Keep a 14rem menu inside narrow (1-column) viewports. */
+        @media (max-width: 639px) {
+            .card-actions .menu { min-width: min(14rem, calc(100vw - 3rem)); }
         }
 
         .card-actions button, .card-actions a {
