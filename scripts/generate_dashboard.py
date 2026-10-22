@@ -7,6 +7,7 @@
 import json
 import os
 import re
+import sys
 from collections import OrderedDict
 from datetime import datetime
 
@@ -29,6 +30,18 @@ except ImportError:  # pragma: no cover - fallback keeps the generator runnable
 TV_REVIEWS_DIR = "/home/ubuntu/.openclaw/workspace-creation/tv-reviews"
 KPOP_POSTS_DIR = "/home/ubuntu/.openclaw/workspace-kpop/posts"
 OUTPUT_PATH = "/home/ubuntu/.openclaw/workspace-creation/web/index.html"
+# Full (local management) build. Never committed; the deployed site serves
+# OUTPUT_PATH, which is generated in public-safe mode by default.
+OUTPUT_FULL_PATH = "/home/ubuntu/.openclaw/workspace-creation/web/index.full.html"
+
+# Body shown in place of an unpublished article's text in the public build.
+LOCKED_CONTENT_HTML = (
+    '<div class="locked-note">'
+    '<span class="locked-glyph" aria-hidden="true">🔒</span>'
+    '<p><strong>此文章尚未公開</strong></p>'
+    '<p>草稿內容只保留喺本地創作空間，唔會出現喺公開版 Dashboard。</p>'
+    '</div>'
+)
 
 # GitHub repo that hosts the TV reviews. K-Pop posts live in a separate repo
 # that is NOT public, so kpop articles only expose `sourcePath`.
@@ -1192,6 +1205,24 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
         .modal-body strong { font-weight: 600; }
         .modal-body a { color: var(--accent); text-decoration: underline; }
 
+        /* Locked notice shown in place of an unpublished article's body. */
+        .locked-note {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .5rem;
+            margin: 1.5rem 0;
+            padding: 2rem 1.25rem;
+            text-align: center;
+            border: 1px dashed var(--border-strong);
+            border-radius: .75rem;
+            background: var(--bg-subtle);
+            color: var(--text-muted);
+        }
+        .locked-note p { margin: 0; }
+        .locked-note strong { color: var(--text); }
+        .locked-glyph { font-size: 1.5rem; line-height: 1; }
+
         .modal-body .table-wrap {
             margin: 0 0 1rem;
             overflow-x: auto;
@@ -1433,6 +1464,11 @@ __DRAWER_FILTERS__
         /* Cover placeholder palette per content type. */
         const COVER_THEMES = __COVER_THEMES_JSON__;
         const COVER_THEME_DEFAULT = __COVER_THEME_DEFAULT_JSON__;
+
+        /* True in the deployed build. The repository is private, so the public
+           site must not offer "edit on GitHub" links (they would 404 for
+           visitors) and must not expose local filesystem paths. */
+        const IS_PUBLIC_BUILD = __IS_PUBLIC_BUILD__;
 
         /* ------------------------------------------------------------------
          * ONE place for every status definition (label, badge class, KPI id).
@@ -1681,11 +1717,26 @@ __DRAWER_FILTERS__
                 badges += '<span class="artist-badge">🎤 ' + escapeHtml(article.artist) + '</span>';
             }
 
+            // The repository is private, so the deployed build must not link
+            // visitors to GitHub (it would 404 for anyone without access).
             const menuItems = '<button type="button" class="menu-item" role="menuitem" data-menu-action="copy">複製連結</button>'
-                + (hasSource
-                    ? '<a class="menu-item" role="menuitem" data-menu-action="github" href="'
-                        + escapeHtml(article.sourceUrl) + '" target="_blank" rel="noopener noreferrer">開 GitHub 檔案</a>'
-                    : '<button type="button" class="menu-item" role="menuitem" data-menu-action="copypath">複製源檔路徑</button>');
+                + (IS_PUBLIC_BUILD
+                    ? ''
+                    : (hasSource
+                        ? '<a class="menu-item" role="menuitem" data-menu-action="github" href="'
+                            + escapeHtml(article.sourceUrl) + '" target="_blank" rel="noopener noreferrer">開 GitHub 檔案</a>'
+                        : '<button type="button" class="menu-item" role="menuitem" data-menu-action="copypath">複製源檔路徑</button>'));
+
+            // The repository is private, so the deployed build omits the edit
+            // affordances entirely instead of linking visitors to a 404.
+            const editAction = IS_PUBLIC_BUILD
+                ? ''
+                : (hasSource
+                    ? '<a class="btn btn-ghost" data-action="edit" href="' + escapeHtml(editHref) + '"'
+                        + ' target="_blank" rel="noopener noreferrer"'
+                        + ' title="' + escapeHtml(editTitle) + '">編輯</a>'
+                    : '<button class="btn btn-ghost" data-action="copypath" type="button"'
+                        + ' title="複製源檔路徑：' + escapeHtml(editTitle) + '">編輯</button>');
 
             return '<article class="article-card" data-id="' + article.id + '" tabindex="0" role="button"'
                 + ' aria-label="打開文章：' + escapeHtml(article.title) + '">'
@@ -1697,9 +1748,7 @@ __DRAWER_FILTERS__
                 + '<div class="card-meta">更新於 ' + escapeHtml(article.updated || article.date)
                 + ' · 發布 ' + escapeHtml(article.date) + '</div>'
                 + '<div class="card-actions">'
-                + '<a class="btn btn-ghost" data-action="edit" href="' + escapeHtml(editHref) + '"'
-                    + (hasSource ? ' target="_blank" rel="noopener noreferrer"' : '')
-                    + ' title="' + escapeHtml(editTitle) + '">編輯</a>'
+                + editAction
                 + '<button class="btn btn-ghost" data-action="preview" type="button">預覽</button>'
                 + '<button class="btn btn-ghost btn-more" data-action="more" type="button"'
                     + ' aria-label="更多操作" aria-haspopup="true" aria-expanded="false">更多</button>'
@@ -2030,10 +2079,15 @@ __DRAWER_FILTERS__
             kpop: {
                 title: '新增 K-Pop 內容',
                 dir: 'posts/',
-                note: 'K-Pop 內容放喺另一個 repo（workspace-kpop），唔喺呢個 repo 入面。',
+                note: IS_PUBLIC_BUILD
+                    ? 'K-Pop 內容放喺另一個內容庫，唔喺呢個 repo 入面。'
+                    : 'K-Pop 內容放喺另一個 repo（workspace-kpop），唔喺呢個 repo 入面。',
                 body: function () {
-                    return '<p>' + this.note + ' 喺 workspace-kpop 嘅 <code>' + this.dir
-                        + '</code> 新增一個 .md 檔，然後重新執行 generator。</p>'
+                    const where = IS_PUBLIC_BUILD
+                        ? '另一個內容庫嘅 <code>' + this.dir + '</code>'
+                        : 'workspace-kpop 嘅 <code>' + this.dir + '</code>';
+                    return '<p>' + this.note + ' 喺 ' + where
+                        + ' 新增一個 .md 檔，然後重新執行 generator。</p>'
                         + '<pre class="frontmatter-template"><code>---\\n'
                         + 'title: 藝人 — 專輯\\n'
                         + 'platform: Spotify|YouTube\\n'
@@ -2145,6 +2199,11 @@ __DRAWER_FILTERS__
                         toggleMoreMenu(card.dataset.id, action);
                     } else if (kind === 'preview') {
                         openArticleModal(card.dataset.id, action);
+                    } else if (kind === 'copypath') {
+                        const art = findArticle(card.dataset.id);
+                        if (art && art.sourcePath) {
+                            copyText(art.sourcePath);
+                        }
                     } else if (kind === 'edit' && !articleHasSource(card)) {
                         event.preventDefault();
                     }
@@ -2391,12 +2450,39 @@ def render_skeletons(count=8):
     return '\n'.join(cards)
 
 
-def generate_html(all_articles):
+def _public_safe_article(article):
+    """Return a copy of an article safe to ship in the public build.
+
+    Unpublished articles (draft / review / scheduled) keep their metadata so
+    the dashboard can still show and count them, but their body text is
+    replaced with a locked notice and the absolute local filesystem path is
+    removed. The public build is served by Vercel as static files, so anything
+    left in it is readable by anyone.
+    """
+    safe = dict(article)
+    status = article.get('status', DEFAULT_STATUS)
+    if status != 'published':
+        # `article` is the key generate_article_js reads the body from.
+        safe['article'] = LOCKED_CONTENT_HTML
+        safe['preview'] = '此文章尚未公開，草稿內容只保留喺本地創作空間。'
+    # Absolute local paths disclose the server's filesystem layout.
+    safe['sourcePath'] = ''
+    return safe
+
+
+def generate_html(all_articles, public_safe=True):
     """Assemble the dashboard by substituting placeholders into PAGE_TEMPLATE.
 
     Deliberately `.replace()`-based (not an f-string / .format()) so the CSS and
     JS braces in the template stay literal.
+
+    With `public_safe=True` (the default) unpublished article bodies are
+    replaced by a locked notice and local filesystem paths are stripped before
+    the payload is embedded.
     """
+    if public_safe:
+        all_articles = [_public_safe_article(a) for a in all_articles]
+
     counts = summary_counts(all_articles)
     total = counts['total']
 
@@ -2415,6 +2501,7 @@ def generate_html(all_articles):
     html = html.replace('__SUMMARY_JSON__', summary_json)
     html = html.replace('__COVER_THEMES_JSON__', json.dumps(COVER_THEMES, ensure_ascii=False))
     html = html.replace('__COVER_THEME_DEFAULT_JSON__', json.dumps(COVER_THEME_DEFAULT, ensure_ascii=False))
+    html = html.replace('__IS_PUBLIC_BUILD__', 'true' if public_safe else 'false')
     html = html.replace('__TOTAL_COUNT__', str(total))
     html = html.replace('__KPI_CARDS__', render_kpi_cards(counts))
     html = html.replace('__TYPE_CHIPS__', '\n'.join(
@@ -2432,6 +2519,11 @@ def generate_html(all_articles):
 
 def main():
     print("🎬 Generating Creation Studio Dashboard (Full Width)...")
+
+    # --full writes the complete local management build (all article bodies,
+    # local source paths) to OUTPUT_FULL_PATH. The default build is the
+    # public-safe one that gets committed and deployed.
+    full = '--full' in sys.argv
 
     tv_articles = get_reviews(content_type="tv")
     print(f"   📺 Found {len(tv_articles)} TV reviews")
@@ -2456,12 +2548,23 @@ def main():
         type_icon = "🎤" if a['content_type'] == 'kpop' else "📺"
         print(f"   {type_icon} {a['date']} - {a['title'][:50]}")
 
-    html = generate_html(all_articles)
+    if full:
+        # Local management build: keep every body and path.
+        full_html = generate_html(all_articles, public_safe=False)
+        with open(OUTPUT_FULL_PATH, 'w', encoding='utf-8') as f:
+            f.write(full_html)
+        print(f"   ✅ Full build written to {OUTPUT_FULL_PATH} (NOT for deployment)")
+
+    # Public build: unpublished bodies locked, local paths stripped.
+    safe_html = generate_html(all_articles, public_safe=True)
 
     with open(OUTPUT_PATH, 'w', encoding='utf-8') as f:
-        f.write(html)
+        f.write(safe_html)
 
     print(f"   ✅ Written to {OUTPUT_PATH}")
+    if not full:
+        locked = sum(1 for a in all_articles if a.get('status', DEFAULT_STATUS) != 'published')
+        print(f"   🔒 {locked} unpublished article(s) locked in the public build")
 
 if __name__ == "__main__":
     main()
