@@ -10,6 +10,22 @@ import re
 from collections import OrderedDict
 from datetime import datetime
 
+try:
+    # Python-Markdown is used instead of markdown-it-py because CommonMark's
+    # CJK punctuation flanking rule refuses to close `**bold**` when the
+    # closing delimiter follows a full-width character (e.g. 「...。**呢啲」),
+    # which left raw `**` on the page. Python-Markdown handles that correctly.
+    import markdown as _pymarkdown
+
+    _MD = _pymarkdown.Markdown(
+        extensions=['tables', 'fenced_code', 'sane_lists', 'nl2br'],
+        output_format='html',
+    )
+    HAVE_MARKDOWN = True
+except ImportError:  # pragma: no cover - fallback keeps the generator runnable
+    _MD = None
+    HAVE_MARKDOWN = False
+
 TV_REVIEWS_DIR = "/home/ubuntu/.openclaw/workspace-creation/tv-reviews"
 KPOP_POSTS_DIR = "/home/ubuntu/.openclaw/workspace-kpop/posts"
 OUTPUT_PATH = "/home/ubuntu/.openclaw/workspace-creation/web/index.html"
@@ -22,6 +38,14 @@ CONTENT_TYPE_LABELS = {
     'tv': '電視劇',
     'kpop': 'K-Pop',
 }
+
+# Cover placeholder palette per content type. The gradient makes the card
+# look designed even when no real cover image exists yet.
+COVER_THEMES = {
+    'tv': {'a': '#1E3A8A', 'b': '#0B1220', 'glyph': '📺'},
+    'kpop': {'a': '#6D28D9', 'b': '#160B27', 'glyph': '🎤'},
+}
+COVER_THEME_DEFAULT = {'a': '#3F3F46', 'b': '#18181B', 'glyph': '📄'}
 
 # Single source of truth for platform ids + display labels.
 # Ordered so filter chips / KPI legends render in a stable, deliberate order.
@@ -175,7 +199,13 @@ def _parse_frontmatter(frontmatter_text):
 
 
 def _extract_article_html(content):
-    """Extract + lightly format the article body. Logic preserved from before."""
+    """Extract the article body and render it as HTML.
+
+    Uses a real Markdown parser (markdown-it-py) so that bold, tables, lists,
+    blockquotes and horizontal rules render as markup instead of leaking raw
+    `**`, `|---|` and `---` into the page. Falls back to the previous
+    line-based conversion when the library is unavailable.
+    """
     article_match = re.search(r'##\s*文章\s*\n+(.+?)(?=^##\s|\Z)', content, re.MULTILINE | re.DOTALL)
 
     if article_match:
@@ -190,6 +220,13 @@ def _extract_article_html(content):
         article = re.sub(r'^## .+\n', '', article, flags=re.MULTILINE)
         article = article.strip()
 
+    if HAVE_MARKDOWN:
+        # The Markdown instance keeps state between conversions, so reset it.
+        _MD.reset()
+        return _wrap_tables(_MD.convert(article))
+
+    # Fallback: previous behaviour, kept so the generator still runs without
+    # the markdown library installed.
     article = article.replace('\n\n', '</p><p>')
     article = f'<p>{article}</p>'
     article = re.sub(r'### (.+)', r'<h4>\1</h4>', article)
@@ -198,9 +235,33 @@ def _extract_article_html(content):
     return article
 
 
+def _wrap_tables(html):
+    """Wrap every rendered <table> in a scroll container.
+
+    Wide tables would otherwise stretch the modal past the viewport instead of
+    scrolling inside it.
+    """
+    return re.sub(
+        r'(<table>.*?</table>)',
+        r'<div class="table-wrap">\1</div>',
+        html,
+        flags=re.DOTALL,
+    )
+
+
 def _make_preview(article_html):
-    preview_text = re.sub('<[^>]+>', '', article_html)
-    return preview_text[:120] + '...' if len(preview_text) > 120 else preview_text
+    """Plain-text excerpt for the card.
+
+    The rendered HTML now contains tables, blockquotes and lists, so the text
+    is flattened and whitespace-collapsed before truncation; otherwise the
+    excerpt is mostly blank lines and stray pipes.
+    """
+    # Drop block-level wrappers that carry no text, then flatten the rest.
+    text = re.sub(r'<(script|style)\b.*?</\1>', ' ', article_html, flags=re.DOTALL | re.IGNORECASE)
+    text = re.sub(r'<[^>]+>', ' ', text)
+    text = text.replace('&nbsp;', ' ').replace('&amp;', '&').replace('&lt;', '<').replace('&gt;', '>')
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text[:120] + '...' if len(text) > 120 else text
 
 
 def _resolve_date(fm, filename):
@@ -700,9 +761,18 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
             display: flex;
             gap: .5rem;
             overflow-x: auto;
-            padding-bottom: .25rem;
-            scrollbar-width: thin;
+            overflow-y: hidden;
+            scrollbar-width: none;
             min-width: 0;
+        }
+
+        /* Hide the horizontal scrollbar: in a flex row the scrollbar renders over
+           the chips (the row's content box is exactly the chips' height), which
+           looked like a grey bar cutting through the chip labels. The row still
+           scrolls with a trackpad / touch drag. */
+        .chip-row::-webkit-scrollbar {
+            display: none;
+            height: 0;
         }
 
         .chip {
@@ -804,6 +874,80 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
         .cover-icon {
             font-size: 2rem;
             line-height: 1;
+        }
+
+        /* Placeholder cover: a designed gradient plate instead of a lone
+           icon floating in empty space. Real covers replace it entirely. */
+        .cover-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: .5rem;
+            padding: 1rem;
+            text-align: center;
+            background:
+                radial-gradient(120% 90% at 50% 0%,
+                    rgba(255, 255, 255, .16), transparent 62%),
+                linear-gradient(140deg,
+                    var(--cover-a, #3f3f46) 0%,
+                    var(--cover-b, #18181b) 100%);
+        }
+
+        .cover-placeholder::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+            background-size: 2rem 2rem;
+            mask-image: radial-gradient(100% 100% at 50% 50%, #000 20%, transparent 78%);
+            -webkit-mask-image: radial-gradient(100% 100% at 50% 50%, #000 20%, transparent 78%);
+            pointer-events: none;
+        }
+
+        .cover-glyph {
+            position: relative;
+            z-index: 1;
+            width: 3rem;
+            height: 3rem;
+            display: grid;
+            place-items: center;
+            border-radius: .875rem;
+            background: rgba(255, 255, 255, .14);
+            border: 1px solid rgba(255, 255, 255, .22);
+            backdrop-filter: blur(2px);
+            font-size: 1.375rem;
+            line-height: 1;
+        }
+
+        .cover-word {
+            position: relative;
+            z-index: 1;
+            font-size: .8125rem;
+            font-weight: 600;
+            letter-spacing: .08em;
+            color: rgba(255, 255, 255, .92);
+            text-transform: uppercase;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .cover-sub {
+            position: relative;
+            z-index: 1;
+            font-size: .6875rem;
+            color: rgba(255, 255, 255, .66);
+            letter-spacing: .04em;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .cover-type {
@@ -1024,6 +1168,58 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
         .modal-body h4 { font-size: 1rem; margin: 1rem 0 .5rem; }
         .modal-body p { margin: 0 0 .875rem; }
 
+        /* Markdown-rendered blocks: tables, lists, quotes, rules. */
+        .modal-body h2 { font-size: 1.25rem; margin: 1.5rem 0 .625rem; }
+        .modal-body h5 { font-size: .9375rem; margin: .875rem 0 .375rem; }
+        .modal-body h6 { font-size: .875rem; margin: .875rem 0 .375rem; }
+        .modal-body ul, .modal-body ol { margin: 0 0 .875rem; padding-inline-start: 1.375rem; }
+        .modal-body li { margin: 0 0 .375rem; }
+        .modal-body li > ul, .modal-body li > ol { margin-top: .375rem; }
+        .modal-body blockquote {
+            margin: 0 0 .875rem;
+            padding: .5rem .875rem;
+            border-inline-start: 3px solid var(--border-strong);
+            background: var(--bg-subtle);
+            color: var(--text-muted);
+            border-radius: 0 .375rem .375rem 0;
+        }
+        .modal-body blockquote p:last-child { margin-bottom: 0; }
+        .modal-body hr {
+            border: 0;
+            border-top: 1px solid var(--border);
+            margin: 1.25rem 0;
+        }
+        .modal-body strong { font-weight: 600; }
+        .modal-body a { color: var(--accent); text-decoration: underline; }
+
+        .modal-body .table-wrap {
+            margin: 0 0 1rem;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            border-radius: .5rem;
+        }
+        .modal-body table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .875rem;
+            line-height: 1.5;
+        }
+        .modal-body th, .modal-body td {
+            border-bottom: 1px solid var(--border);
+            border-inline-end: 1px solid var(--border);
+            padding: .5rem .75rem;
+            text-align: start;
+            vertical-align: top;
+        }
+        .modal-body th:last-child, .modal-body td:last-child { border-inline-end: 0; }
+        .modal-body tbody tr:last-child td { border-bottom: 0; }
+        .modal-body thead th {
+            background: var(--bg-subtle);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .modal-body tbody tr:nth-child(even) { background: var(--bg-subtle); }
+
         .modal-body pre, .frontmatter-template {
             background: var(--bg-subtle);
             border: 1px solid var(--border);
@@ -1067,6 +1263,12 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
         .drawer-head h2 { margin: 0; font-size: 1.125rem; }
 
         /* ---------- Responsive ---------- */
+        @media (min-width: 1024px) {
+            /* Desktop = full filter bar: let the chip groups wrap onto more lines
+               so every platform is visible without a scrollbar. */
+            .filter-bar .chip-row { flex-wrap: wrap; overflow: visible; }
+        }
+
         @media (max-width: 1279px) {
             .article-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         }
@@ -1227,6 +1429,10 @@ __DRAWER_FILTERS__
     <script>
         const ARTICLES = __ARTICLES_JSON__;
         const SUMMARY = __SUMMARY_JSON__;
+
+        /* Cover placeholder palette per content type. */
+        const COVER_THEMES = __COVER_THEMES_JSON__;
+        const COVER_THEME_DEFAULT = __COVER_THEME_DEFAULT_JSON__;
 
         /* ------------------------------------------------------------------
          * ONE place for every status definition (label, badge class, KPI id).
@@ -1450,9 +1656,18 @@ __DRAWER_FILTERS__
                 cover = '<img src="' + escapeHtml(article.cover) + '"'
                     + ' alt="《' + escapeHtml(article.title) + '》封面">';
             } else {
-                cover = '<span class="cover-icon" aria-hidden="true">'
-                    + (article.contentType === 'kpop' ? '🎤' : '📺')
-                    + '</span><span class="cover-type">'
+                const theme = COVER_THEMES[article.contentType] || COVER_THEME_DEFAULT;
+                const word = (article.artist || article.contentTypeLabel || '');
+                const sub = (article.platformLabels && article.platformLabels.length)
+                    ? article.platformLabels.slice(0, 3).join(' · ')
+                    : (article.date || '');
+                cover = '<div class="cover-placeholder" aria-hidden="true"'
+                    + ' style="--cover-a:' + theme.a + ';--cover-b:' + theme.b + '">'
+                    + '<span class="cover-glyph">' + theme.glyph + '</span>'
+                    + '<span class="cover-word">' + escapeHtml(word) + '</span>'
+                    + '<span class="cover-sub">' + escapeHtml(sub) + '</span>'
+                    + '</div>'
+                    + '<span class="cover-type">'
                     + escapeHtml(article.contentTypeLabel) + '</span>';
             }
 
@@ -2198,6 +2413,8 @@ def generate_html(all_articles):
     html = PAGE_TEMPLATE
     html = html.replace('__ARTICLES_JSON__', articles_js)
     html = html.replace('__SUMMARY_JSON__', summary_json)
+    html = html.replace('__COVER_THEMES_JSON__', json.dumps(COVER_THEMES, ensure_ascii=False))
+    html = html.replace('__COVER_THEME_DEFAULT_JSON__', json.dumps(COVER_THEME_DEFAULT, ensure_ascii=False))
     html = html.replace('__TOTAL_COUNT__', str(total))
     html = html.replace('__KPI_CARDS__', render_kpi_cards(counts))
     html = html.replace('__TYPE_CHIPS__', '\n'.join(
