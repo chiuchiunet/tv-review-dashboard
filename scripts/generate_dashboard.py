@@ -1540,7 +1540,11 @@ __DRAWER_FILTERS__
         function chipIsActive(chip) {
             const group = chip.dataset.group;
             const value = chip.dataset.value;
-            if (group === 'platform') return state.platform.indexOf(value) !== -1;
+            // platform is multi-select; the single 「全部」 chip stands for "none selected"
+            if (group === 'platform') {
+                if (value === 'all') return state.platform.length === 0;
+                return state.platform.indexOf(value) !== -1;
+            }
             return state[group] === value;
         }
 
